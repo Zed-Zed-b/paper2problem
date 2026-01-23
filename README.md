@@ -1,0 +1,2 @@
+- 运行 python main.py 即可
+- scoring.py 暂时没有使用

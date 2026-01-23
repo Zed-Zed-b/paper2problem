@@ -1,0 +1,250 @@
+{
+  "paper_id": "D201980076",
+  "title": "二维范德华薄晶片-金复合结构近场光学特性研究",
+  "domain": "光学与纳米光子学，聚焦于二维材料中的近场光-物质相互作用及其在片上光子学中的应用",
+  "problem": {
+    "object": [
+      {
+        "name": "二维范德华材料（WS₂和α-MoO₃）与金复合结构",
+        "evidence": {
+          "section": "摘要",
+          "quote": "本文选取了二硫化钨(WS₂)和α相三氧化钼(α-MoO₃)两种二维材料为研究对象"
+        }
+      }
+    ],
+    "scenario": [
+      {
+        "name": "中红外传感、纳米成像与片上光子学",
+        "industry": "光电子器件、集成光子芯片",
+        "evidence": {
+          "section": "摘要",
+          "quote": "初步探索了在红外传感，纳米成像和片上光子学的应用"
+        }
+      }
+    ],
+    "constraints": [
+      {
+        "constraint": "小尺寸样品受限于衍射极限，难以实现高分辨率光学表征",
+        "type": "测量精度",
+        "evidence": {
+          "section": "摘要",
+          "quote": "因为样品的尺寸通常低于或接近探测光的衍射极限"
+        }
+      },
+      {
+        "constraint": "传统贵金属光学器件在中红外波段响应弱，且难以实现动态调谐",
+        "type": "材料性能",
+        "evidence": {
+          "section": "3.4.4",
+          "quote": "当依靠金属作为本构材料时，操作范围仅限于紫外到近红外光谱范围"
+        }
+      }
+    ],
+    "key_questions": [
+      {
+        "question": "如何定量测定小尺寸二维vdW晶体的完整介电常数张量？",
+        "why_industry_matters": "实现高精度光学参数测量是设计紧凑型光子器件的基础",
+        "evidence": {
+          "section": "摘要",
+          "quote": "使得我们能够定量地确定WS₂薄片的完整介电常数张量"
+        }
+      },
+      {
+        "question": "如何在纳米尺度上实现中红外声子极化激元的可调谐聚焦与折射？",
+        "why_industry_matters": "为片上红外光学系统提供无源调控元件",
+        "evidence": {
+          "section": "3.4.2",
+          "quote": "通过改变圆形金孔直径和入射光频率可以实现从800 nm到7 μm范围内的焦距变化"
+        }
+      },
+      {
+        "question": "如何提升超窄波导中声子极化激元的激发效率？",
+        "why_industry_matters": "解决纳米波导低耦合效率瓶颈，推动高密度集成",
+        "evidence": {
+          "section": "4.3",
+          "quote": "在220 nm的超窄波导中，有扩展端口波导中HPhPs的激发效率比没有扩展端口的波导提高了大约三倍"
+        }
+      }
+    ]
+  },
+  "method": {
+    "technical_route": [
+      {
+        "step": "利用s-SNOM和PiFM技术对WS₂和α-MoO₃与金复合结构进行近场光学成像",
+        "evidence": {
+          "section": "摘要",
+          "quote": "通过散射式扫描近场光学显微镜(s-SNOM)和光诱导力显微镜(PiFM)两种近场光学探测技术"
+        }
+      },
+      {
+        "step": "构建α-MoO₃/金孔和α-MoO₃/金狭缝复合结构，调控声子极化激元传播",
+        "evidence": {
+          "section": "4.1",
+          "quote": "通过构建完全覆盖金狭缝的α-MoO₃薄片组成的复合结构"
+        }
+      },
+      {
+        "step": "结合数值模拟（COMSOL）与实验数据，验证极化激元行为并提取色散关系",
+        "evidence": {
+          "section": "4.3",
+          "quote": "通过对波导截面进行二维模拟，计算出了不同w的波导色散关系"
+        }
+      }
+    ],
+    "innovations": [
+      {
+        "point": "提出α-MoO₃/金狭缝复合结构以实现HPhPs波长压缩比从35%到8.6%的连续调控",
+        "category": "新器件结构",
+        "evidence": {
+          "section": "摘要",
+          "quote": "通过改变金狭缝的宽度从3 μm到220 nm，HPhPs波长相对于入射光波长的压缩比可以分别从35%调整到8.6%"
+        }
+      },
+      {
+        "point": "设计带扩展端口的纳米波导结构，显著提升超窄波导中HPhPs激发效率",
+        "category": "新器件结构",
+        "evidence": {
+          "section": "4.3",
+          "quote": "在220 nm的超窄波导中，有扩展端口波导中HPhPs的激发效率比没有扩展端口的波导提高了大约三倍"
+        }
+      },
+      {
+        "point": "利用α-MoO₃在RB1和RB2中的正交传输特性，实现Y型波导中HPhPs的定向路由",
+        "category": "新控制逻辑",
+        "evidence": {
+          "section": "摘要",
+          "quote": "利用α-MoO₃中HPhPs在RB1和RB2中的正交传输特性，实现了HPhPs在Y型波导中的定向路由"
+        }
+      }
+    ],
+    "assumptions_or_dependencies": [
+      {
+        "item": "α-MoO₃的介电响应可用洛伦兹模型描述，且声子参数稳定",
+        "evidence": {
+          "section": "3.3.1",
+          "quote": "声子频率和寿命与样品的厚度无关。为了计算α-MoO₃的相对介电常数，声子频率直接采用了文献值"
+        }
+      }
+    ]
+  },
+  "results": {
+    "items": [
+      {
+        "metric_name": "WS₂面内/面外折射率",
+        "value": "4.96/3.01",
+        "unit": "无量纲",
+        "delta": "",
+        "baseline_or_comparator": "理论计算与实验成像结合",
+        "condition": "可见光波段（671 nm），s-SNOM测量",
+        "significance": "",
+        "evidence": {
+          "section": "摘要",
+          "quote": "最终确定了WS₂晶体折射率为4.96/3.01（面内/面外）"
+        }
+      },
+      {
+        "metric_name": "WS₂双折射率",
+        "value": "1.95",
+        "unit": "无量纲",
+        "delta": "",
+        "baseline_or_comparator": "传统晶体（如方解石0.17，液晶0.7）",
+        "condition": "可见光区域",
+        "significance": "",
+        "evidence": {
+          "section": "2.4",
+          "quote": "WS₂的双折射值(Δn=ne−no)达到了1.95"
+        }
+      },
+      {
+        "metric_name": "HPhPs波长压缩比调控范围",
+        "value": "8.6%–35%",
+        "unit": "%",
+        "delta": "",
+        "baseline_or_comparator": "金衬底与空气衬底之间",
+        "condition": "α-MoO₃/Au狭缝结构，中红外波段（870–920 cm⁻¹）",
+        "significance": "",
+        "evidence": {
+          "section": "4.3",
+          "quote": "能够操控HPhPs波长相对于入射光波长的压缩比在8.6%～35%之间"
+        }
+      },
+      {
+        "metric_name": "扩展端口对HPhPs激发效率提升",
+        "value": "3",
+        "unit": "倍",
+        "delta": "+200%",
+        "baseline_or_comparator": "无扩展端口波导",
+        "condition": "220 nm宽金狭缝，入射频率890 cm⁻¹",
+        "significance": "",
+        "evidence": {
+          "section": "4.3",
+          "quote": "在220 nm的超窄波导中，有扩展端口波导中HPhPs的激发效率比没有扩展端口的波导提高了大约三倍"
+        }
+      },
+      {
+        "metric_name": "HPhPs焦距调控范围",
+        "value": "800 nm – 7 μm",
+        "unit": "nm",
+        "delta": "",
+        "baseline_or_comparator": "圆形金孔直径与入射频率可调",
+        "condition": "α-MoO₃/圆形金孔复合结构，900–940 cm⁻¹",
+        "significance": "",
+        "evidence": {
+          "section": "3.4.2",
+          "quote": "通过改变圆形金孔直径和入射光频率可以实现从800 nm到7 μm范围内的焦距变化"
+        }
+      }
+    ],
+    "results_kv": {
+      "折射率@可见光/s-SNOM": "4.96/3.01；—；实验测定",
+      "双折射率@可见光": "1.95；—；远高于传统材料",
+      "波长压缩比@中红外/α-MoO₃-Au狭缝": "8.6%–35%；—；衬底工程调控",
+      "激发效率提升@220nm波导": "3倍；+200%；无扩展端口",
+      "焦距调控范围@圆形金孔": "800 nm – 7 μm；—；结构与频率协同调谐"
+    }
+  },
+  "application": {
+    "near_term": [
+      {
+        "direction": "基于α-MoO₃的中红外平面聚焦透镜，用于片上红外传感与成像",
+        "evidence": {
+          "section": "3.4.2",
+          "quote": "开发了一种中红外区域的可调谐平面聚焦装置"
+        }
+      }
+    ],
+    "mid_term": [
+      {
+        "direction": "极化激元Y型波导用于片上光路由与信号分离",
+        "evidence": {
+          "section": "4.4",
+          "quote": "实现了HPhPs在Y型波导中的定向路由"
+        }
+      }
+    ],
+    "long_term": [
+      {
+        "direction": "构建基于天然双曲材料的亚波长光子集成电路",
+        "evidence": {
+          "section": "摘要",
+          "quote": "为集成平面亚波长光学铺平了道路"
+        }
+      }
+    ]
+  },
+  "trl": {
+    "level_range": "L4-L6",
+    "rationale": "研究基于实验室制备的复合结构，实现了中红外极化激元的聚焦、折射与路由，具备原型样机特征，但尚未集成至产品系统",
+    "evidence": [
+      {
+        "section": "3.4.2",
+        "quote": "通过改变圆形金孔直径和入射光频率可以实现从800 nm到7 μm范围内的焦距变化"
+      },
+      {
+        "section": "4.4",
+        "quote": "实现了HPhPs在Y型波导中的定向路由"
+      }
+    ],
+    "uncertain": false
+  }
+}

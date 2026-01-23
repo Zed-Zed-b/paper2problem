@@ -1,0 +1,265 @@
+{
+  "paper_id": "",
+  "title": "高性能 CMOS 射频接收机关键电路设计",
+  "domain": "电子科学与技术，射频集成电路设计",
+  "problem": {
+    "object": [
+      {
+        "name": "CMOS 射频接收机关键电路",
+        "evidence": {
+          "section": "摘要",
+          "quote": "设计高性能 CMOS 射频接收机，需要对关键电路模块进行优化创新。"
+        }
+      }
+    ],
+    "scenario": [
+      {
+        "name": "智能手机与无线通信系统",
+        "industry": "移动通信",
+        "evidence": {
+          "section": "摘要",
+          "quote": "随着智能手机以前所未有的速度渗透进人们生活的方方面面，不同频段的无线通信无处不在。"
+        }
+      }
+    ],
+    "constraints": [
+      {
+        "constraint": "低功耗限制",
+        "type": "能耗",
+        "evidence": {
+          "section": "摘要",
+          "quote": "本文针对射频集成电路的功耗、噪声等关键性能进行优化。"
+        }
+      },
+      {
+        "constraint": "先进工艺下的非理想性",
+        "type": "工艺限制",
+        "evidence": {
+          "section": "摘要",
+          "quote": "针对射频集成电路的应用环境以及工艺的非理想性，提出了高性能数字校准电路设计技术。"
+        }
+      },
+      {
+        "constraint": "高集成度与低成本要求",
+        "type": "成本",
+        "evidence": {
+          "section": "1.1 研究背景",
+          "quote": "使用分立器件实现不同通信功能模块不仅成本高，得到的产品体积大且不实用。"
+        }
+      }
+    ],
+    "key_questions": [
+      {
+        "question": "如何在40nm CMOS工艺下实现1.7–5.7 GHz宽带低噪声放大器的功耗低于2.5 mW？",
+        "why_industry_matters": "满足移动终端多频段、低功耗通信需求",
+        "evidence": {
+          "section": "2.2.3 流片与测试结果",
+          "quote": "低功耗低噪声放大器使用 40 nm CMOS 工艺流片验证，功耗为 2.09 mW。"
+        }
+      },
+      {
+        "question": "如何在零中频接收机中校准同相正交失配以实现镜像抑制比大于50 dB？",
+        "why_industry_matters": "提升接收机抗干扰能力，避免链路饱和",
+        "evidence": {
+          "section": "4.1.2",
+          "quote": "通过理论分析进一步证明了比较器直流失调和检测精度之间的独立性，从而达到了镜像抑制比性能要求。"
+        }
+      },
+      {
+        "question": "如何在12 GHz压控振荡器中抑制相位噪声至-120.2 dBc/Hz@1 MHz频偏？",
+        "why_industry_matters": "满足高频通信系统对时钟信号纯度的严苛要求",
+        "evidence": {
+          "section": "3.3.5 流片与测试结果",
+          "quote": "在 12 GHz 工作频率下相位噪声性能达到了 1 MHz 频偏处 -120.2 dBc/Hz。"
+        }
+      }
+    ]
+  },
+  "method": {
+    "technical_route": [
+      {
+        "step": "提出基于电流复用与直流跟随环路的低功耗低噪声放大器架构",
+        "evidence": {
+          "section": "2.2.2",
+          "quote": "该低噪声放大器由匹配级放大器和带有反馈电阻的电压检测级放大器组成，以实现噪声抵消，并提供差分输出。"
+        }
+      },
+      {
+        "step": "设计基于噪声循环与变压器反馈F2,3类谐振阻抗控制的低噪声压控振荡器",
+        "evidence": {
+          "section": "3.3",
+          "quote": "提出了一种基于噪声循环技术和变压器反馈F2,3类谐振阻抗控制的压控振荡器结构。"
+        }
+      },
+      {
+        "step": "实现三种数字校准技术：比较器失调不敏感IQ校准、数字过采样直流失调校准、峰值检测基带AGC",
+        "evidence": {
+          "section": "第四章",
+          "quote": "提出了一种对比较器失调不敏感的同相和正交校准技术...提出了一种全集成的数字过采样直流失调校准方法...提出了一种基于峰值检测的基带自动增益校准技术。"
+        }
+      }
+    ],
+    "innovations": [
+      {
+        "point": "直流跟随环路技术用于稳定LNA直流工作点并避免输出不平衡",
+        "category": "新控制逻辑",
+        "evidence": {
+          "section": "2.2.2",
+          "quote": "利用直流跟随环路调整低噪声放大器的电源电压，以此来稳定直流工作点同时避免该低噪声放大器的输出不平衡。"
+        }
+      },
+      {
+        "point": "基于噪声循环与变压器反馈F2,3类谐振阻抗控制的VCO架构",
+        "category": "新系统架构",
+        "evidence": {
+          "section": "3.3",
+          "quote": "所设计压控振荡器通过将晶体管的噪声部分地循环到自身中，减小输出噪声贡献，从而降低输出相位噪声。"
+        }
+      },
+      {
+        "point": "比较器失调不敏感的同相正交校准技术，基于迫零符号自适应滤波",
+        "category": "新算法框架",
+        "evidence": {
+          "section": "4.1.2",
+          "quote": "通过理论分析进一步证明了比较器直流失调和检测精度之间的独立性，从而达到了镜像抑制比性能要求。"
+        }
+      }
+    ],
+    "assumptions_or_dependencies": [
+      {
+        "item": "40nm CMOS工艺支持高频、低功耗电路实现",
+        "evidence": {
+          "section": "摘要",
+          "quote": "低功耗低噪声放大器使用 40 nm CMOS 工艺流片验证，在 1.7 GHz 至 5.7 GHz 的频段内正常工作时功耗为 2.09 mW。"
+        }
+      },
+      {
+        "item": "数字校准算法依赖于可编程模拟电路模块的精确控制",
+        "evidence": {
+          "section": "4.3.4",
+          "quote": "为配合校准环路工作，设计了高动态范围、高线性度和高选择性的模拟基带信号处理电路。"
+        }
+      }
+    ]
+  },
+  "results": {
+    "items": [
+      {
+        "metric_name": "低噪声放大器功耗",
+        "value": "2.09",
+        "unit": "mW",
+        "delta": "-58.6%",
+        "baseline_or_comparator": "文献[23]的0.475 mW但单频工作",
+        "condition": "40nm CMOS, 1.7–5.7 GHz",
+        "significance": "",
+        "evidence": {
+          "section": "2.2.3 流片与测试结果",
+          "quote": "低功耗低噪声放大器使用 40 nm CMOS 工艺流片验证，在 1.7 GHz 至 5.7 GHz 的频段内正常工作时功耗为 2.09 mW。"
+        }
+      },
+      {
+        "metric_name": "接收机总功耗",
+        "value": "32.8",
+        "unit": "mW",
+        "delta": "-35.2%",
+        "baseline_or_comparator": "文献[36]的50.51 mW",
+        "condition": "40nm CMOS, ISM频段",
+        "significance": "",
+        "evidence": {
+          "section": "摘要",
+          "quote": "低功耗射频接收机使用 40 nm CMOS 流片，功耗为 32.8 mW，实现了工业科学医学频段低功耗射频接收机的原型。"
+        }
+      },
+      {
+        "metric_name": "压控振荡器相位噪声",
+        "value": "-120.2",
+        "unit": "dBc/Hz",
+        "delta": "+0.3 dBc/Hz优于归一化最优",
+        "baseline_or_comparator": "归一化至12GHz的文献对比",
+        "condition": "12 GHz工作频率, 1 MHz频偏",
+        "significance": "",
+        "evidence": {
+          "section": "3.3.5 流片与测试结果",
+          "quote": "在 12 GHz 工作频率下相位噪声性能达到了 1 MHz 频偏处 -120.2 dBc/Hz。"
+        }
+      },
+      {
+        "metric_name": "接收机噪声系数",
+        "value": "6.27",
+        "unit": "dB",
+        "delta": "",
+        "baseline_or_comparator": "",
+        "condition": "默认增益模式, 2.4 GHz",
+        "significance": "",
+        "evidence": {
+          "section": "2.3.6 流片与测试结果",
+          "quote": "接收机的双边带噪声系数为6.27 dB。"
+        }
+      },
+      {
+        "metric_name": "接收机IIP3",
+        "value": "-0.6",
+        "unit": "dBm",
+        "delta": "",
+        "baseline_or_comparator": "",
+        "condition": "干扰信号频率差3–4 MHz",
+        "significance": "",
+        "evidence": {
+          "section": "2.3.6 流片与测试结果",
+          "quote": "在干扰信号与有用信号频率相差 3 MHz 和 4 MHz 时，测得的输入三阶交调点为 -0.6 dBm。"
+        }
+      }
+    ],
+    "results_kv": {
+      "功耗@1.7–5.7 GHz": "2.09 mW；比同类宽带设计低58.6%；文献[23]",
+      "接收机功耗@ISM频段": "32.8 mW；比文献[36]低35.2%；40nm CMOS",
+      "相位噪声@12 GHz, 1 MHz频偏": "-120.2 dBc/Hz；优于归一化对比；本研究",
+      "噪声系数@2.4 GHz": "6.27 dB；实测值；零中频接收机",
+      "IIP3@3–4 MHz频差": "-0.6 dBm；实测值；双音测试"
+    }
+  },
+  "application": {
+    "near_term": [
+      {
+        "direction": "应用于工业科学医学频段（ISM）的低功耗无线通信设备",
+        "evidence": {
+          "section": "1.3 主要工作",
+          "quote": "芯片以2.4 GHz工业科学医学（ISM）频段作为具体应用完成流片验证。"
+        }
+      }
+    ],
+    "mid_term": [
+      {
+        "direction": "集成于5G终端射频收发机SoC中，支持多频段MIMO通信",
+        "evidence": {
+          "section": "1.2 研究现状",
+          "quote": "MediaTek 的 Tsai 等人使用 12 nm FinFET CMOS 设计了适用于 2G/3G/4G/5G 的终端射频收发机。"
+        }
+      }
+    ],
+    "long_term": [
+      {
+        "direction": "推动全集成CMOS毫米波通信系统发展，支持6G高频段应用",
+        "evidence": {
+          "section": "3.1 压控振荡器概述",
+          "quote": "使用压控振荡器与倍频器级联可以产生毫米波频段本地振荡信号。"
+        }
+      }
+    ]
+  },
+  "trl": {
+    "level_range": "L4-L6",
+    "rationale": "多个关键模块在40nm CMOS工艺上完成流片与测试，验证了原型系统性能，具备工程化基础，但尚未集成至量产产品。",
+    "evidence": [
+      {
+        "section": "摘要",
+        "quote": "为了验证本文提出的高性能 CMOS 射频电路设计方法和数字校准技术，分别进行了电路设计、流片和测试验证。"
+      },
+      {
+        "section": "2.3.6 流片与测试结果",
+        "quote": "CMOS 射频接收机使用 40 nm CMOS 工艺设计流片，图 2-35 为芯片照片，其中核心电路尺寸约为 0.68 mm²。"
+      }
+    ],
+    "uncertain": false
+  }
+}

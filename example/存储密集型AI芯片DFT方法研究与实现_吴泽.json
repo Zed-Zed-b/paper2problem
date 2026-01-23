@@ -1,0 +1,301 @@
+{
+  "paper_id": "",
+  "title": "存储密集型 AI 芯片 DFT 方法研究与实现",
+  "domain": "集成电路设计与可测性技术",
+  "problem": {
+    "object": [
+      {
+        "name": "存储密集型 AI 芯片",
+        "evidence": {
+          "section": "摘要",
+          "quote": "本文基于 40nm 工艺完成了一款存储密集型 AI 芯片的可测性设计"
+        }
+      }
+    ],
+    "scenario": [
+      {
+        "name": "AI 芯片量产测试",
+        "industry": "半导体制造与人工智能硬件",
+        "evidence": {
+          "section": "1.1 课题研究背景及意义",
+          "quote": "AI 芯片规模的增大……测试成本高、测试功耗高、有限的 I/O 管脚"
+        }
+      }
+    ],
+    "constraints": [
+      {
+        "constraint": "测试时间随寄存器和存储器数量增加而上升，导致测试成本高",
+        "type": "成本",
+        "evidence": {
+          "section": "1.1 课题研究背景及意义",
+          "quote": "芯片中寄存器数量的增加，扫描链的向量数量也相应增多……增加测试时间，带来更高的测试成本"
+        }
+      },
+      {
+        "constraint": "并行测试导致测试峰值功耗过高，可能引起芯片过热失效",
+        "type": "功耗",
+        "evidence": {
+          "section": "1.1 课题研究背景及意义",
+          "quote": "测试时为降低测试成本往往使用并行测试……导致了较大的测试峰值功耗"
+        }
+      },
+      {
+        "constraint": "先进工艺下 I/O 管脚资源有限，难以满足大量测试数据传输需求",
+        "type": "资源",
+        "evidence": {
+          "section": "1.1 课题研究背景及意义",
+          "quote": "更先进的工艺和更高的工作频率同时也需要更多的测试项目……需要研究如何通过有限的 I/O 管脚高效地输入数据"
+        }
+      },
+      {
+        "constraint": "高频计算核心与低频控制核心并存，测试模式需兼顾不同频率要求",
+        "type": "时延",
+        "evidence": {
+          "section": "1.1 课题研究背景及意义",
+          "quote": "计算核心工作在高频，控制核心工作在低频，两者采用的测试方法不尽相同"
+        }
+      }
+    ],
+    "key_questions": [
+      {
+        "question": "如何在保证故障覆盖率的前提下减少 MBIST 测试时间与功耗？",
+        "why_industry_matters": "直接影响芯片测试成本与良率控制能力",
+        "evidence": {
+          "section": "3.1.5 存储器分组优化算法设计",
+          "quote": "采用贪心算法完成对存储器的分组……综合考虑测试时间和测试功耗"
+        }
+      },
+      {
+        "question": "如何在有限 I/O 条件下实现高覆盖率扫描链测试？",
+        "why_industry_matters": "决定测试向量压缩效率与ATE资源占用",
+        "evidence": {
+          "section": "3.2.2 扫描链压缩比例",
+          "quote": "本设计中对不同的压缩比例进行了详细分析……将压缩比例确定为5"
+        }
+      },
+      {
+        "question": "如何协调异步时钟域下的 DFT 控制信号以确保测试可控性？",
+        "why_industry_matters": "保障复杂 SoC 架构下测试流程的稳定性与完整性",
+        "evidence": {
+          "section": "4.4.2 时钟信号控制",
+          "quote": "高频时钟域需要做扫描链 stuck-at、at-speed 和 MBIST 测试，需要用到高频时钟和 ATE 低频时钟"
+        }
+      }
+    ]
+  },
+  "method": {
+    "technical_route": [
+      {
+        "step": "基于 NVDLA 和蜂鸟 E203 构建存储密集型 AI SoC 架构",
+        "evidence": {
+          "section": "4.1 基于 NVDLA 的 AI 芯片架构",
+          "quote": "SoC的处理器为基于RISC-V的处理器Hummingbirdv2 E203……挂载了深度学习加速器NVDLA"
+        }
+      },
+      {
+        "step": "设计异步桥接的 ICB-AXI 总线结构以支持多时钟域访问",
+        "evidence": {
+          "section": "4.2.2 ICB-AXI 异步桥设计",
+          "quote": "ICB-AXI 异步桥中有两路数据缓存……避免亚稳态需对两侧间的数据进行异步处理"
+        }
+      },
+      {
+        "step": "提出基于硬/软约束的贪心算法进行 MBIST 存储器分组",
+        "evidence": {
+          "section": "3.1.5 存储器分组优化算法设计",
+          "quote": "先根据硬约束划分初始组，然后对每一个存储器，找到同一个初始组中最近的存储器"
+        }
+      },
+      {
+        "step": "采用 DFT MAX 实现扫描链压缩并优化压缩比例至5倍",
+        "evidence": {
+          "section": "3.2.2 扫描链压缩比例",
+          "quote": "综合考虑测试覆盖率和测试向量数，将压缩比例确定为5"
+        }
+      },
+      {
+        "step": "通过 Innovus 完成物理实现，包括布局规划、CTS 与布线",
+        "evidence": {
+          "section": "5.6 芯片物理实现",
+          "quote": "采用 Innovus 工具进行物理设计，包括布局规划、时钟树综合和信号线绕线等步骤"
+        }
+      }
+    ],
+    "innovations": [
+      {
+        "point": "提出一种结合硬约束（时钟域、类型）与软约束（距离、功耗）的贪心式存储器分组算法",
+        "category": "新算法框架",
+        "evidence": {
+          "section": "3.1.5 存储器分组优化算法设计",
+          "quote": "采用贪心算法，完成了对存储器的分组……防止产生零散存储器"
+        }
+      },
+      {
+        "point": "设计支持 at-speed 测试的 OCC 控制器以实现高频时钟自主生成",
+        "category": "新控制逻辑",
+        "evidence": {
+          "section": "4.4.2.1 OCC (On-Chip Clocking)",
+          "quote": "OCC 控制器……在 At-speed 模式下，系统会产生高速时钟"
+        }
+      },
+      {
+        "point": "实现基于 Python 脚本的存储器库文件批量自动化生成流程",
+        "category": "新工艺流程",
+        "evidence": {
+          "section": "5.1.1 存储器库文件批量生成",
+          "quote": "用 Python 脚本 write_spec.py 生成相应 spec 文件……调用 Memory Compiler 生成相关文件"
+        }
+      }
+    ],
+    "assumptions_or_dependencies": [
+      {
+        "item": "MBISTArchitect 支持多算法联合配置以提升故障覆盖率",
+        "evidence": {
+          "section": "3.1.1 MBIST 算法",
+          "quote": "可以采用 march2 和 retentionCB 这两种算法来设计 MBIST……提升 MBIST 的故障覆盖率"
+        }
+      },
+      {
+        "item": "Synopsys DFT 工具链支持扫描链压缩与增量综合",
+        "evidence": {
+          "section": "5.5.1 扫描链插入流程",
+          "quote": "使用 Synopsys 公司的集成到 Design Compiler 的 DFT Compiler 组件进行扫描链插入"
+        }
+      }
+    ]
+  },
+  "results": {
+    "items": [
+      {
+        "metric_name": "MBIST 后单元总面积",
+        "value": "4371318.012334",
+        "unit": "μm²",
+        "delta": "+2.37%",
+        "baseline_or_comparator": "MBIST 前单元总面积",
+        "condition": "40nm 工艺，MBIST 插入后网表",
+        "significance": "",
+        "evidence": {
+          "section": "表 5-8 MBIST 前后网表面积表",
+          "quote": "MBIST 后单元总面积 4371318.012334 μm²"
+        }
+      },
+      {
+        "metric_name": "扫描链插入后总面积增加",
+        "value": "1.560%",
+        "unit": "%",
+        "delta": "+1.560%",
+        "baseline_or_comparator": "插入前单元总面积",
+        "condition": "扫描链插入后网表，40nm 工艺",
+        "significance": "",
+        "evidence": {
+          "section": "表 5-10 插入扫描链前后网表面积",
+          "quote": "单元总面积增加1.560%"
+        }
+      },
+      {
+        "metric_name": "非组合逻辑标准单元面积增幅",
+        "value": "19.409%",
+        "unit": "%",
+        "delta": "+19.409%",
+        "baseline_or_comparator": "插入前非组合逻辑面积",
+        "condition": "扫描链插入后",
+        "significance": "",
+        "evidence": {
+          "section": "表 5-10 插入扫描链前后网表面积",
+          "quote": "非组合逻辑面积增加19.409%"
+        }
+      },
+      {
+        "metric_name": "扫描链压缩比例",
+        "value": "5",
+        "unit": "x",
+        "delta": "",
+        "baseline_or_comparator": "未压缩扫描链",
+        "condition": "ATPG 测试向量分析，Synopsys DFT MAX",
+        "significance": "",
+        "evidence": {
+          "section": "3.2.2 扫描链压缩比例",
+          "quote": "综合考虑测试覆盖率和测试向量数，将压缩比例确定为5"
+        }
+      },
+      {
+        "metric_name": "时钟树 skew",
+        "value": "0.30",
+        "unit": "ns",
+        "delta": "",
+        "baseline_or_comparator": "目标最大 skew",
+        "condition": "dla_core_clk，CTS 后 Innovus 实现",
+        "significance": "",
+        "evidence": {
+          "section": "5.6.2 时钟树综合",
+          "quote": "生成的时钟树质量良好，dla_core_clk 的 latency 为 2.41ns，skew 为 0.30ns"
+        }
+      },
+      {
+        "metric_name": "时钟树 latency",
+        "value": "2.41",
+        "unit": "ns",
+        "delta": "",
+        "baseline_or_comparator": "目标延迟",
+        "condition": "dla_core_clk，CTS 后",
+        "significance": "",
+        "evidence": {
+          "section": "5.6.2 时钟树综合",
+          "quote": "dla_core_clk 的 latency 为 2.41ns，skew 为 0.30ns"
+        }
+      }
+    ],
+    "results_kv": {
+      "MBIST后单元总面积@40nm工艺": "4371318.012334 μm²；+2.37%；MBIST前",
+      "扫描链插入总面积增加@扫描链设计": "1.560%；+1.560%；插入前",
+      "非组合逻辑面积增幅@扫描链插入": "19.409%；+19.409%；插入前",
+      "扫描链压缩比例@ATPG测试": "5x；—；未压缩",
+      "时钟树skew@dla_core_clk": "0.30 ns；—；目标",
+      "时钟树latency@dla_core_clk": "2.41 ns；—；目标"
+    }
+  },
+  "application": {
+    "near_term": [
+      {
+        "direction": "应用于基于 NVDLA 架构的边缘 AI 加速芯片的可测性设计",
+        "evidence": {
+          "section": "4.1.2 NVDLA 架构",
+          "quote": "NVDLA 是 NVIDIA 公司的一个开源深度学习加速项目……具备高度可拓展性、可配置性"
+        }
+      }
+    ],
+    "mid_term": [
+      {
+        "direction": "集成至多核异构 AI SoC 中，支持异步总线与多电源域测试管理",
+        "evidence": {
+          "section": "4.2 SoC 总线设计",
+          "quote": "E203 通过 ICB 总线访问外设及存储，NVDLA 通过 AXI 总线访问存储"
+        }
+      }
+    ],
+    "long_term": [
+      {
+        "direction": "推广至支持 DDR、DSP 等复杂宏单元的超大规模 AI 芯片 DFT 平台",
+        "evidence": {
+          "section": "6.2 未来工作展望",
+          "quote": "在更大规模的 AI 芯片中，需要调用更多宏单元，如 DSP、DDR 以及其他复杂的计算单元"
+        }
+      }
+    ]
+  },
+  "trl": {
+    "level_range": "L4-L6",
+    "rationale": "已完成基于 40nm 工艺的完整 DFT 设计与物理实现，包含 MBIST、扫描链、边界扫描等模块，并实现时序收敛，但尚未提及流片验证或量产应用",
+    "evidence": [
+      {
+        "section": "摘要",
+        "quote": "本文基于 40nm 工艺完成了一款存储密集型 AI 芯片的可测性设计……实现了时序收敛"
+      },
+      {
+        "section": "5.6 芯片物理实现",
+        "quote": "通过寄生参数提取、时序分析和优化，实现了时序收敛"
+      }
+    ],
+    "uncertain": false
+  }
+}

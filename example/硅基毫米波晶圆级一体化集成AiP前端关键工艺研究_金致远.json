@@ -1,0 +1,307 @@
+{
+  "paper_id": "8300055-2025-S02",
+  "title": "硅基毫米波晶圆级一体化集成 AiP 前端 关键工艺研究",
+  "domain": "微电子学与固体电子学，聚焦硅基三维集成与毫米波相控阵前端工艺",
+  "problem": {
+    "object": [
+      {
+        "name": "硅基毫米波晶圆级一体化集成AiP收发前端阵列",
+        "evidence": {
+          "section": "摘要",
+          "quote": "晶圆级毫米波一体化集成AiP收发前端阵列是将晶圆级三维集成技术与有源相控阵设计技术相结合，实现高集成度的晶圆级毫米波收发前端阵列"
+        }
+      }
+    ],
+    "scenario": [
+      {
+        "name": "毫米波相控阵雷达系统",
+        "industry": "雷达与无线通信",
+        "evidence": {
+          "section": "摘要",
+          "quote": "毫米波相控阵雷达具备高分辨率、宽工作频带等优点，被广泛应用于各类探测系统中"
+        }
+      }
+    ],
+    "constraints": [
+      {
+        "constraint": "高集成密度下布线复杂度、传输线带载能力、工艺可靠性要求高",
+        "type": "集成密度与可靠性",
+        "evidence": {
+          "section": "摘要",
+          "quote": "晶圆上每个子单元质量都会影响整体性能，因此对布线复杂度、集成密度、工艺可靠性和传输线带载能力有更高的要求"
+        }
+      },
+      {
+        "constraint": "互连路径短、链路传输损耗小、体积小、成本低、一致性好",
+        "type": "性能与成本",
+        "evidence": {
+          "section": "摘要",
+          "quote": "与传统收发阵列相比，具有互连路径短、链路传输损耗小、体积小、半导体批量制造成本低、一致性好等特点"
+        }
+      }
+    ],
+    "key_questions": [
+      {
+        "question": "如何实现晶圆级256阵列一体化集成AiP前端架构以满足高密度与小型化需求",
+        "why_industry_matters": "探测系统对毫米波有源前端阵列提出更高集成度、更小体积、更轻重量的要求",
+        "evidence": {
+          "section": "摘要",
+          "quote": "本论文针对晶圆级毫米波一体化集成AiP收发前端的多功能化一体化及阵列规模化应用需求，在架构、工艺、测试方面开展了一系列研究"
+        }
+      },
+      {
+        "question": "如何开发高可靠、高带载能力的TSV转接板布线工艺以支撑整晶圆系统级集成",
+        "why_industry_matters": "以整晶圆作为一个完整系统，任一子单元失效将影响整体性能",
+        "evidence": {
+          "section": "摘要",
+          "quote": "晶圆上每个子单元质量都会影响整体性能，因此对布线复杂度、集成密度、工艺可靠性和传输线带载能力有更高的要求"
+        }
+      },
+      {
+        "question": "如何在无高温高压真空条件下实现高密度集成电容以兼容TSV工艺",
+        "why_industry_matters": "传统MIM电容工艺需高温或高真空，难以与低温工艺兼容",
+        "evidence": {
+          "section": "3.3.1",
+          "quote": "该工艺方案复杂度低、与TSV晶圆工艺兼容性好、易于实现无源器件高密度集成"
+        }
+      }
+    ]
+  },
+  "method": {
+    "technical_route": [
+      {
+        "step": "提出芯片级异构集成与硅基晶圆级三维一体化集成相结合的256阵列AiP前端架构",
+        "evidence": {
+          "section": "摘要",
+          "quote": "提出了通过芯片级异构集成与硅基晶圆级三维一体化集成相结合实现晶圆级256阵列一体化集成AiP前端架构的方案"
+        }
+      },
+      {
+        "step": "开发高精度柱状金凸点、TSV转接板厚Cu大马士革布线、集成电容、PBO多层布线四大关键工艺",
+        "evidence": {
+          "section": "摘要",
+          "quote": "针对这些要求，本论文开发了以下4个关键工艺"
+        }
+      },
+      {
+        "step": "通过电学仿真优化类同轴TSV传输结构与阻抗匹配设计",
+        "evidence": {
+          "section": "2.2",
+          "quote": "对所提出的收发前段架构的关键射频传输结构进行了仿真与优化"
+        }
+      }
+    ],
+    "innovations": [
+      {
+        "point": "高精度柱状金凸点工艺：通过厚胶电镀与精磨实现高度收束在41±0.2μm的陡直金凸点",
+        "category": "新工艺流程",
+        "evidence": {
+          "section": "摘要",
+          "quote": "通过厚胶电镀与精磨工艺相结合在CMOS晶圆上实现了侧壁陡直且高度收束在41±0.2μm的柱状金凸点"
+        }
+      },
+      {
+        "point": "TSV转接板厚Cu大马士革布线工艺：采用浅槽刻蚀+平坦化切削解决dishing导致的布线断裂问题",
+        "category": "新工艺流程",
+        "evidence": {
+          "section": "摘要",
+          "quote": "提出TSV晶圆表面电镀Cu平坦化方案，解决了电镀Cu凸起CMP中dishing效应导致的布线断裂问题"
+        }
+      },
+      {
+        "point": "常温阳极氧化制备Ta2O5集成电容：全程无高温高压真空，电容密度达1.1nF/mm²，65V下漏电流≤1μA",
+        "category": "新材料体系",
+        "evidence": {
+          "section": "摘要",
+          "quote": "通过常温阳极氧化Ta2O5薄膜在转接板上制备集成电容……电容密度1.1nF/mm²，该工艺方案复杂度低、与TSV晶圆工艺兼容性好"
+        }
+      },
+      {
+        "point": "基于PBO的多层布线工艺：以PBO替代Si化合物作为绝缘层，提升介电性能与可靠性",
+        "category": "新材料体系",
+        "evidence": {
+          "section": "摘要",
+          "quote": "以PBO作为布线间的绝缘隔离层实现转接板复杂电学传输网络多层布线，并通过改善过孔形貌增强了互连可靠性"
+        }
+      }
+    ],
+    "assumptions_or_dependencies": [
+      {
+        "item": "TSV转接板工艺与CMOS、GaAs工艺兼容",
+        "evidence": {
+          "section": "3.3.1",
+          "quote": "该工艺方案复杂度低、与TSV晶圆工艺兼容性好"
+        }
+      },
+      {
+        "item": "Au-In低温共晶键合可实现高可靠三维互连",
+        "evidence": {
+          "section": "4.2",
+          "quote": "通过Au-In低温键合实现L1与L2L3键合片的集成"
+        }
+      }
+    ]
+  },
+  "results": {
+    "items": [
+      {
+        "metric_name": "金凸点高度一致性",
+        "value": "41",
+        "unit": "μm",
+        "delta": "±0.2μm",
+        "baseline_or_comparator": "目标高度40μm",
+        "condition": "CMOS晶圆上电镀后经精磨处理",
+        "significance": "",
+        "evidence": {
+          "section": "摘要",
+          "quote": "在CMOS晶圆上实现了侧壁陡直且高度收束在41±0.2μm的柱状金凸点"
+        }
+      },
+      {
+        "metric_name": "50μm线宽传输线极限电流",
+        "value": "3",
+        "unit": "A",
+        "delta": "+200%",
+        "baseline_or_comparator": "传统细线宽布线（约1A）",
+        "condition": "TSV转接板正面厚Cu大马士革布线",
+        "significance": "",
+        "evidence": {
+          "section": "摘要",
+          "quote": "使50μm线宽传输线极限电流可达3A"
+        }
+      },
+      {
+        "metric_name": "集成电容密度",
+        "value": "1.1",
+        "unit": "nF/mm²",
+        "delta": "×3",
+        "baseline_or_comparator": "同尺寸Si3N4电容",
+        "condition": "Ta2O5/Si3N4复合介质，65V偏压",
+        "significance": "",
+        "evidence": {
+          "section": "摘要",
+          "quote": "电容密度1.1nF/mm²，该电容的电容密度为同尺寸的Si3N4电容的3倍"
+        }
+      },
+      {
+        "metric_name": "集成电容耐压能力",
+        "value": "65",
+        "unit": "V",
+        "delta": "漏电流≤1μA",
+        "baseline_or_comparator": "传统工艺电容",
+        "condition": "Ta2O5/Si3N4复合介质",
+        "significance": "",
+        "evidence": {
+          "section": "摘要",
+          "quote": "该电容在加电压65V时电流≤1μA，电容密度1.1nF/mm²"
+        }
+      },
+      {
+        "metric_name": "输出功率",
+        "value": "22",
+        "unit": "dBm",
+        "delta": "≥",
+        "baseline_or_comparator": "设计指标",
+        "condition": "33GHz~37GHz，256通道全通道测试",
+        "significance": "",
+        "evidence": {
+          "section": "摘要",
+          "quote": "全通道满足输出功率≥22dBm"
+        }
+      },
+      {
+        "metric_name": "接收噪声系数",
+        "value": "6",
+        "unit": "dB",
+        "delta": "≤",
+        "baseline_or_comparator": "设计指标",
+        "condition": "33GHz~37GHz",
+        "significance": "",
+        "evidence": {
+          "section": "摘要",
+          "quote": "接收噪声系数≤6dB"
+        }
+      },
+      {
+        "metric_name": "接收/发射VSWR",
+        "value": "2.2",
+        "unit": "",
+        "delta": "≤",
+        "baseline_or_comparator": "设计指标",
+        "condition": "33GHz~37GHz",
+        "significance": "",
+        "evidence": {
+          "section": "摘要",
+          "quote": "接收/发射VSWR≤2.2"
+        }
+      },
+      {
+        "metric_name": "接收/发射增益",
+        "value": "20",
+        "unit": "dB",
+        "delta": "≥",
+        "baseline_or_comparator": "设计指标",
+        "condition": "33GHz~37GHz",
+        "significance": "",
+        "evidence": {
+          "section": "摘要",
+          "quote": "接收/发射增益≥20dB"
+        }
+      }
+    ],
+    "results_kv": {
+      "金凸点高度@CMOS晶圆": "41±0.2μm；高度一致性提升；目标40μm",
+      "传输线极限电流@50μm线宽": "3A；提升200%；传统布线",
+      "电容密度@Ta2O5/Si3N4": "1.1nF/mm²；3倍于Si3N4；同尺寸",
+      "电容耐压@漏电流≤1μA": "65V；无失效；传统工艺",
+      "输出功率@33-37GHz": "≥22dBm；满足指标；设计要求",
+      "接收噪声系数@33-37GHz": "≤6dB；满足指标；设计要求",
+      "VSWR@33-37GHz": "≤2.2；满足指标；设计要求",
+      "增益@33-37GHz": "≥20dB；满足指标；设计要求"
+    }
+  },
+  "application": {
+    "near_term": [
+      {
+        "direction": "毫米波相控阵雷达收发前端模组",
+        "evidence": {
+          "section": "摘要",
+          "quote": "大幅压缩有源相控阵的体积与重量"
+        }
+      }
+    ],
+    "mid_term": [
+      {
+        "direction": "晶圆级一体化集成AiP前端与天线层、馈电层集成",
+        "evidence": {
+          "section": "5.2",
+          "quote": "后续可以在将毫米波晶圆级收发前端阵列与阵列天线网络层、综合馈电层完成一体化集成"
+        }
+      }
+    ],
+    "long_term": [
+      {
+        "direction": "1024阵列大规模毫米波晶圆级前端阵列系统",
+        "evidence": {
+          "section": "5.2",
+          "quote": "通过4个256阵列组合形成1024阵列集成毫米波晶圆级前端阵列"
+        }
+      }
+    ]
+  },
+  "trl": {
+    "level_range": "L4-L6",
+    "rationale": "已完成256通道样件制作与射频测试，验证了关键工艺与系统性能，但尚未与天线层集成或进行环境可靠性验证，处于原型样机级",
+    "evidence": [
+      {
+        "section": "摘要",
+        "quote": "制作了毫米波晶圆级256通道收发阵列前端样件，并测得在33GHz~37GHz范围内，全通道满足输出功率≥22dBm"
+      },
+      {
+        "section": "5.2",
+        "quote": "对于完整AiP系统并没有进行相关实验"
+      }
+    ],
+    "uncertain": false
+  }
+}

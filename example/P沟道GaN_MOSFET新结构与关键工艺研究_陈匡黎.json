@@ -1,0 +1,357 @@
+{
+  "paper_id": "202011022832",
+  "title": "P 沟道 GaN MOSFET 新结构与关键工艺研究",
+  "domain": "电子科学与技术，半导体功率器件",
+  "problem": {
+    "object": [
+      {
+        "name": "增强型p沟道GaN MOSFET",
+        "evidence": {
+          "section": "摘要",
+          "quote": "要实现满足CMOS单片集成需求的高性能增强型p沟道GaN MOSFET"
+        }
+      }
+    ],
+    "scenario": [
+      {
+        "name": "全GaN单片集成芯片中的互补逻辑电路",
+        "industry": "功率电子、集成电路",
+        "evidence": {
+          "section": "摘要",
+          "quote": "全GaN单片集成技术旨在将高压功率器件与低压控制、驱动、监测与保护等模块进行集成"
+        }
+      }
+    ],
+    "constraints": [
+      {
+        "constraint": "与n沟道GaN HEMT器件集成的结构与工艺兼容性",
+        "type": "工艺兼容性",
+        "evidence": {
+          "section": "摘要",
+          "quote": "与n沟道GaN HEMT器件集成的结构与工艺兼容性问题"
+        }
+      },
+      {
+        "constraint": "栅介质/III-V族半导体界面特性差导致栅控能力弱",
+        "type": "界面质量",
+        "evidence": {
+          "section": "摘要",
+          "quote": "刻蚀后介质/III-V族半导体界面特性差导致器件栅控能力弱与稳定性差"
+        }
+      },
+      {
+        "constraint": "GaN材料空穴载流子低迁移率与低激活率导致导通能力弱",
+        "type": "材料本征限制",
+        "evidence": {
+          "section": "摘要",
+          "quote": "GaN材料空穴载流子低迁移率与低激活率导致器件导通电流能力弱"
+        }
+      }
+    ],
+    "key_questions": [
+      {
+        "question": "如何在不牺牲导通电流的前提下实现增强型p沟道GaN MOSFET的高阈值电压与低亚阈值斜率",
+        "why_industry_matters": "高阈值电压与低SS是实现低静态功耗CMOS逻辑的关键",
+        "evidence": {
+          "section": "第四章",
+          "quote": "传统凹槽栅结构存在阈值电压对刻蚀深度的高度依赖性，以及导通电流、亚阈值斜率与阈值电压等参数间的限制关系"
+        }
+      },
+      {
+        "question": "如何规避凹槽栅MOS界面陷阱对栅控能力与稳定性的负面影响",
+        "why_industry_matters": "界面陷阱导致电流回滞与阈值漂移，影响逻辑电路可靠性",
+        "evidence": {
+          "section": "第五章",
+          "quote": "2DEG埋栅能够规避凹槽栅MOS界面陷阱产生的负面影响"
+        }
+      },
+      {
+        "question": "如何实现高精度、低损伤的p-GaN凹槽栅刻蚀以控制阈值电压",
+        "why_industry_matters": "刻蚀深度直接影响阈值电压，损伤会劣化载流子输运",
+        "evidence": {
+          "section": "第三章",
+          "quote": "实现适用于p沟道GaN MOSFET凹槽栅结构的慢速（~5.8 nm/min）低功率的Cl基ICP刻蚀"
+        }
+      }
+    ]
+  },
+  "method": {
+    "technical_route": [
+      {
+        "step": "开展凹槽栅p沟道GaN MOSFET关键工艺技术研究，包括低接触电阻欧姆接触、高精度低损伤刻蚀与栅介质沉积",
+        "evidence": {
+          "section": "摘要",
+          "quote": "围绕凹槽栅p沟道GaN MOSFET器件制备涉及的三大关键工艺技术开展研究"
+        }
+      },
+      {
+        "step": "研究H等离子体钝化与氧化数字刻蚀两种阈值电压调控方法",
+        "evidence": {
+          "section": "摘要",
+          "quote": "提出了分别基于H等离子体钝化与氧化数字刻蚀两种工艺技术的阈值电压调控方法"
+        }
+      },
+      {
+        "step": "提出基于2DEG埋栅的双栅协同控制新结构以提升栅控能力与稳定性",
+        "evidence": {
+          "section": "摘要",
+          "quote": "提出了一种基于2DEG埋栅的增强型p沟道GaN MOSFET（BBG p-MOSFET）"
+        }
+      }
+    ],
+    "innovations": [
+      {
+        "point": "提出基于2DEG埋栅的双栅协同控制结构（BBG p-MOSFET），实现背部栅控",
+        "category": "新系统架构",
+        "evidence": {
+          "section": "第五章",
+          "quote": "通过双异质结结构的本征2DEG埋栅实现从p沟道背部进行栅控，建立‘MOS顶栅-2DEG埋栅’双栅协同控制体系"
+        }
+      },
+      {
+        "point": "采用氧化数字刻蚀技术实现亚纳米级精度的凹槽深度控制与低损伤刻蚀",
+        "category": "新工艺流程",
+        "evidence": {
+          "section": "第四章",
+          "quote": "引入氧化数字刻蚀技术，实现对刻蚀深度的精准控制，并显著降低刻蚀损伤的负面作用"
+        }
+      },
+      {
+        "point": "利用H等离子体钝化实现免刻蚀增强型p沟道GaN MOSFET，提升工艺均匀性",
+        "category": "新工艺流程",
+        "evidence": {
+          "section": "第四章",
+          "quote": "单独应用H等离子钝化实现的增强型器件具有免刻蚀的特点，相比传统凹槽栅刻蚀具有高工艺均匀性"
+        }
+      },
+      {
+        "point": "采用Ti/Al/Ti/TiN体系n型欧姆接触实现低温、低扩散的2DEG埋栅连接",
+        "category": "新材料体系",
+        "evidence": {
+          "section": "5.2.1",
+          "quote": "使用Ti/Al/Ti/TiN体系n型欧姆接触，其具有退火温度低（<600℃）与金属扩散度低的特点"
+        }
+      }
+    ],
+    "assumptions_or_dependencies": [
+      {
+        "item": "双异质结外延结构中p-GaN帽层部分刻蚀后可恢复2DEG埋层沟道",
+        "evidence": {
+          "section": "第五章",
+          "quote": "凹槽栅结构中，栅极区域下方存在2DEG埋层沟道"
+        }
+      },
+      {
+        "item": "AlN/AlGaN/AlN复合势垒层可有效抑制2DEG与2DHG沟道间纵向漏电",
+        "evidence": {
+          "section": "5.1.2",
+          "quote": "AlN/AlGaN/AlN复合势垒层将2DEG埋层沟道界面的导带带阶从0.4 eV提升至1.95 eV"
+        }
+      }
+    ]
+  },
+  "results": {
+    "items": [
+      {
+        "metric_name": "接触电阻",
+        "value": "36.4",
+        "unit": "Ω·mm",
+        "delta": "",
+        "baseline_or_comparator": "",
+        "condition": "Ni/Au(15/30nm)退火550℃5min，p++-GaN接触层",
+        "significance": "",
+        "evidence": {
+          "section": "3.2.2",
+          "quote": "实现了低接触电阻（36.4Ω·mm）"
+        }
+      },
+      {
+        "metric_name": "刻蚀速率",
+        "value": "5.8",
+        "unit": "nm/min",
+        "delta": "",
+        "baseline_or_comparator": "",
+        "condition": "纯BCl3 ICP刻蚀，低功率",
+        "significance": "",
+        "evidence": {
+          "section": "摘要",
+          "quote": "实现了适用于p沟道GaN MOSFET凹槽栅结构的慢速（~5.8 nm/min）低功率的Cl基ICP刻蚀"
+        }
+      },
+      {
+        "metric_name": "阈值电压",
+        "value": "-5.8",
+        "unit": "V",
+        "delta": "",
+        "baseline_or_comparator": "传统凹槽栅",
+        "condition": "H等离子体钝化+凹槽栅",
+        "significance": "",
+        "evidence": {
+          "section": "摘要",
+          "quote": "实现了高达-5.8 V的阈值电压"
+        }
+      },
+      {
+        "metric_name": "阈值电压",
+        "value": "-3.5",
+        "unit": "V",
+        "delta": "",
+        "baseline_or_comparator": "传统凹槽栅",
+        "condition": "氧化数字刻蚀+干法刻蚀",
+        "significance": "",
+        "evidence": {
+          "section": "摘要",
+          "quote": "实现了-3.5 V的阈值电压"
+        }
+      },
+      {
+        "metric_name": "导通电流密度",
+        "value": "-2.54",
+        "unit": "mA/mm",
+        "delta": "",
+        "baseline_or_comparator": "传统凹槽栅",
+        "condition": "氧化数字刻蚀+干法刻蚀",
+        "significance": "",
+        "evidence": {
+          "section": "摘要",
+          "quote": "实现了-2.54 mA/mm的导通电流密度"
+        }
+      },
+      {
+        "metric_name": "亚阈值斜率",
+        "value": "106",
+        "unit": "mV/dec",
+        "delta": "",
+        "baseline_or_comparator": "传统凹槽栅",
+        "condition": "氧化数字刻蚀+干法刻蚀",
+        "significance": "",
+        "evidence": {
+          "section": "摘要",
+          "quote": "实现了106 mV/dec的亚阈值斜率"
+        }
+      },
+      {
+        "metric_name": "亚阈值斜率",
+        "value": "85.6",
+        "unit": "mV/dec",
+        "delta": "",
+        "baseline_or_comparator": "传统凹槽栅",
+        "condition": "BBG p-MOSFET",
+        "significance": "",
+        "evidence": {
+          "section": "摘要",
+          "quote": "进一步实现了低至85.6 mV/dec的亚阈值斜率"
+        }
+      },
+      {
+        "metric_name": "阈值电压回滞",
+        "value": "0.1",
+        "unit": "V",
+        "delta": "",
+        "baseline_or_comparator": "传统凹槽栅",
+        "condition": "BBG p-MOSFET，双向扫描",
+        "significance": "",
+        "evidence": {
+          "section": "摘要",
+          "quote": "具有良好的阈值电压稳定性，在双向扫描与变温测试中均表现出极低的阈值回滞或漂移特点（~0.1 V）"
+        }
+      },
+      {
+        "metric_name": "阈值电压",
+        "value": "-2",
+        "unit": "V",
+        "delta": "",
+        "baseline_or_comparator": "",
+        "condition": "BBG p-MOSFET",
+        "significance": "",
+        "evidence": {
+          "section": "摘要",
+          "quote": "器件阈值电压达到-2 V的同时实现了~10^8的高开关电流比"
+        }
+      },
+      {
+        "metric_name": "开关电流比",
+        "value": "1e8",
+        "unit": "",
+        "delta": "",
+        "baseline_or_comparator": "",
+        "condition": "BBG p-MOSFET",
+        "significance": "",
+        "evidence": {
+          "section": "摘要",
+          "quote": "实现了~10^8的高开关电流比"
+        }
+      },
+      {
+        "metric_name": "界面态密度",
+        "value": "3.6e12",
+        "unit": "cm^{-2} eV^{-1}",
+        "delta": "",
+        "baseline_or_comparator": "Al2O3栅介质",
+        "condition": "SiO2/p-GaN MOS电容",
+        "significance": "",
+        "evidence": {
+          "section": "3.4",
+          "quote": "SiO2/p-GaN界面态密度为3.6×10^12 cm^{-2} eV^{-1}"
+        }
+      }
+    ],
+    "results_kv": {
+      "接触电阻@Ni/Au(15/30nm), p++-GaN": "36.4 Ω·mm",
+      "刻蚀速率@纯BCl3 ICP": "~5.8 nm/min",
+      "阈值电压@H等离子体钝化+凹槽栅": "-5.8 V",
+      "阈值电压@氧化数字刻蚀": "-3.5 V",
+      "导通电流密度@氧化数字刻蚀": "-2.54 mA/mm",
+      "亚阈值斜率@氧化数字刻蚀": "106 mV/dec",
+      "亚阈值斜率@BBG p-MOSFET": "85.6 mV/dec",
+      "阈值回滞@BBG p-MOSFET": "~0.1 V",
+      "阈值电压@BBG p-MOSFET": "-2 V",
+      "开关电流比@BBG p-MOSFET": "~1e8",
+      "界面态密度@SiO2/p-GaN": "3.6e12 cm^{-2} eV^{-1}"
+    }
+  },
+  "application": {
+    "near_term": [
+      {
+        "direction": "用于GaN单片集成中的低压逻辑驱动单元",
+        "evidence": {
+          "section": "1.2",
+          "quote": "全GaN单片集成技术旨在将高压功率器件与低压控制、驱动、监测与保护等模块进行集成"
+        }
+      }
+    ],
+    "mid_term": [
+      {
+        "direction": "构建GaN基CMOS反相器与环路振荡器",
+        "evidence": {
+          "section": "第五章",
+          "quote": "CMOS反相器混合仿真表明BBG p-MOSFET能将上升时间从7.1 μs缩短至1.1 μs"
+        }
+      }
+    ],
+    "long_term": [
+      {
+        "direction": "实现全GaN单片集成电源管理芯片",
+        "evidence": {
+          "section": "结论",
+          "quote": "为GaN基互补逻辑集成电路的发展提供技术支撑"
+        }
+      }
+    ]
+  },
+  "trl": {
+    "level_range": "L4-L6",
+    "rationale": "器件已在实验室实现并完成电学特性测试，验证了双栅协同控制机制，但尚未集成至完整系统或量产",
+    "evidence": [
+      {
+        "section": "第五章",
+        "quote": "实验制备的BBG p-MOSFET实现了-2 V阈值电压与~10^8开关比"
+      },
+      {
+        "section": "第五章",
+        "quote": "CMOS反相器混合仿真验证了其在逻辑电路中的性能优势"
+      }
+    ],
+    "uncertain": false
+  }
+}
