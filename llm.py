@@ -13,30 +13,120 @@ def load_paper(path):
         return json.load(f)
     
 def safe_json_loads(llm_text: str):
+    """安全解析 LLM 返回的 JSON，处理常见的格式问题"""
     llm_text = llm_text.strip()
-    if llm_text.startswith("```"):
-        llm_text = re.sub(r"^```(?:json)?", "", llm_text)
-        llm_text = re.sub(r"```$", "", llm_text)
-        llm_text = llm_text.strip()
-    return json.loads(llm_text)
+
+    # 提取 ```json``` 代码块
+    if "```" in llm_text:
+        # 找到第一个 ``` 和最后一个 ```
+        start = llm_text.find("```")
+        end = llm_text.rfind("```")
+        if start != -1 and end != -1:
+            # 获取代码块内容
+            code_block = llm_text[start:end]
+            # 移除 ```json 或 ``` 标记
+            code_block = re.sub(r"^```(?:json)?\s*", "", code_block)
+            llm_text = code_block.strip()
+
+    # 尝试直接解析
+    try:
+        return json.loads(llm_text)
+    except json.JSONDecodeError:
+        # 如果失败，尝试提取第一个完整的 JSON 对象
+        # 从第一个 { 开始匹配
+        start = llm_text.find("{")
+        if start == -1:
+            raise
+
+        # 计算括号匹配，找到完整的 JSON 对象
+        brace_count = 0
+        in_string = False
+        escape_next = False
+        end = -1
+
+        for i in range(start, len(llm_text)):
+            char = llm_text[i]
+
+            if escape_next:
+                escape_next = False
+                continue
+
+            if char == "\\" and in_string:
+                escape_next = True
+                continue
+
+            if char == '"':
+                in_string = not in_string
+                continue
+
+            if not in_string:
+                if char == "{":
+                    brace_count += 1
+                elif char == "}":
+                    brace_count -= 1
+                    if brace_count == 0:
+                        end = i + 1
+                        break
+
+        if end == -1:
+            raise
+
+        return json.loads(llm_text[start:end])
 
 
 def _matching_sync(paper, industry_problems):
     industry_problems_dict = {i: prob for i, prob in enumerate(industry_problems)}
     prompt = f"""
-你是一位专业的工业界专家以及学者。
-给定以下论文内容，请判断该论文是否能够解决下列产业难题中的某些难题:
-论文内容:
+你是一位专业的工业界专家以及学者，擅长评估学术研究对产业难题的实际价值。
+
+【任务】
+给定一篇论文，判断该论文是否对下列产业难题具有实际贡献（即：论文的研究内容、方法或结果能够为解决该产业难题提供有意义的技术路径、方案或突破）。
+
+【判断维度】
+请从以下 5 个维度综合评估论文与产业难题的相关性：
+
+1. 研究对象相关性：论文的研究对象是否与产业难题的核心技术领域匹配
+2. 应用场景一致性：论文的应用场景是否与产业难题的工业应用场景一致或相近
+3. 技术路径适配度：论文提出的技术路径是否针对产业难题的核心瓶颈
+4. 创新点聚焦性：论文的创新点是否涉及产业难题的关键技术问题
+5. 工艺/性能相关性：论文的工艺节点或性能指标是否与产业难题的需求方向一致（不要求达到难题指标，但需在同一技术路线或竞品范畴内）
+
+【匹配标准】
+✅ 匹配（true）：论文在至少 2 个维度上与产业难题相关，且研究对象或应用场景维度必须匹配
+❌ 不匹配（false）：论文的研究对象、应用场景、技术路径与产业难题完全无关，或仅存在极其间接的关联
+
+【注意事项】
+- 严格匹配：不要因为"都是芯片领域"就认为所有芯片论文都匹配所有芯片难题
+- 工艺节点不达标不一定不匹配：例如论文研究 14nm 工艺，难题需要 7nm，但如果是同一技术路线、解决同类问题，仍可匹配
+- 仅判断关联性：当前任务只判断论文与难题是否有匹配，至于解决深度由后续评分步骤评估
+- 避免过度泛化：光通信芯片论文不匹配光刻胶难题，存储芯片论文不匹配 EDA 工具难题
+
+【论文内容】
 {paper}
-产业难题:
+
+【产业难题】
 {industry_problems_dict}
-请返回一个 JSON 对象，键为产业难题的编号，值为布尔值，表示该论文是否能够解决对应的产业难题。例如:
+
+【输出要求】
+返回一个 JSON 对象，键为产业难题的编号，值为一个对象，包含 matched（是否匹配）和 reason（匹配理由）。
+
+例如:
 {{
-  "0": true,
-  "1": false,
-  "2": true
+  "0": {{
+    "matched": true,
+    "reason": "论文研究对象是CMOS毫米波频率综合器，应用场景是6G无线收发机，与难题2的晶圆制造场景一致..."
+  }},
+  "1": {{
+    "matched": false,
+    "reason": "论文研究的是频率综合器芯片，与HBM存储芯片的制造工艺和堆叠技术完全无关..."
+  }},
+  "2": {{
+    "matched": true,
+    "reason": "论文采用40nm CMOS工艺，属于集成电路制造领域，工艺路径与难题3的半导体材料制造相关..."
+  }}
 }}
-请确保准确无遗漏地找到该论文能够解决的所有产业难题。
+
+重要：reason 字段必须详细说明匹配或不匹配的具体依据，不要只说"相关"或"不相关"。
 """
     resp = client.chat.completions.create(
         model="deepseek-chat",
@@ -44,6 +134,7 @@ def _matching_sync(paper, industry_problems):
         temperature=0
     )
     return safe_json_loads(resp.choices[0].message.content)
+
 
 def _extract_scores_sync(paper, industry_problem):
     prompt = f"""
