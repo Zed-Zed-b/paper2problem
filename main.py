@@ -3,12 +3,15 @@ import json
 from llm import extract_scores, matching
 from config import INDUSTRY_PROBLEMS
 import numpy as np
+import matplotlib
+matplotlib.use('Agg')  # 使用非交互式后端
 import matplotlib.pyplot as plt
 import asyncio
 from asyncio import Lock
 
-plt.rcParams['font.sans-serif'] = ['SimHei']
-plt.rcParams['axes.unicode_minus'] = False    
+# 设置中文字体，添加多个后备选项
+plt.rcParams['font.sans-serif'] = ['WenQuanYi Micro Hei']
+plt.rcParams['axes.unicode_minus'] = False
 
 
 def load_paper(path):
@@ -16,27 +19,40 @@ def load_paper(path):
         return json.load(f)
     
 
-def plot_heatmap(all_results, paper_names=None, problem_names=None):
-    plt.close("all")  
+def plot_heatmap(all_results, paper_names=None, problem_names=None, save_path="heatmap.png"):
+    """绘制并保存论文-产业难题匹配热力图"""
+    plt.close("all")
     data = np.array(all_results)
 
-    plt.figure(figsize=(8, 6))
-    plt.imshow(data)
-    plt.colorbar()
+    fig, ax = plt.subplots(figsize=(12, 8))
+    im = ax.imshow(data, aspect='auto', cmap='YlOrRd')
+    cbar = plt.colorbar(im, ax=ax)
+    cbar.set_label('得分 (p_score × TRL)')
 
+    # 设置横轴标签（产业难题）
     if problem_names:
-        plt.xticks(range(len(problem_names)), problem_names, rotation=45, ha="right")
+        ax.set_xticks(range(len(problem_names)))
+        ax.set_xticklabels(problem_names, rotation=45, ha='right', fontsize=9)
     else:
-        plt.xlabel("Industry Problem Index")
+        ax.set_xlabel("产业难题编号", fontsize=10)
 
+    # 设置纵轴标签（论文名称）
     if paper_names:
-        plt.yticks(range(len(paper_names)), paper_names)
+        ax.set_yticks(range(len(paper_names)))
+        ax.set_yticklabels(paper_names, fontsize=9)
     else:
-        plt.ylabel("Paper Index")
+        ax.set_ylabel("论文编号", fontsize=10)
 
-    plt.title("Paper–Industry Problem Matching Heatmap")
+    # 在每个格子中显示数值
+    for i in range(len(all_results)):
+        for j in range(len(all_results[i])):
+            text = ax.text(j, i, f'{all_results[i][j]:.1f}',
+                        ha="center", va="center", color="black", fontsize=8)
+
+    ax.set_title("论文-产业难题匹配热力图", fontsize=12, pad=15)
     plt.tight_layout()
-    plt.show()
+    plt.savefig(save_path, dpi=300, bbox_inches='tight')
+    print(f"热力图已保存至: {save_path}")
     
 
 print_lock = Lock()
@@ -77,8 +93,8 @@ async def process_single_paper(paper_path):
     for i, r in zip(matched_ids, results):
         scores[i] = r["p_score"] * r["TRL"]
         outputs.append(f"\n  问题[{i}] - 得分: {scores[i]:.2f}")
-        outputs.append(f"    P评分: {r['p_score']} - {r['p_score_reason']}...")
-        outputs.append(f"    TRL: {r['TRL']} - {r['TRL_reason']}...")
+        outputs.append(f"    P评分: {r['p_score']} - {r['p_score_reason']}")
+        outputs.append(f"    TRL: {r['TRL']} - {r['TRL_reason']}")
     
     # 一次性输出
     async with print_lock:
@@ -93,11 +109,14 @@ async def main():
     all_results = await asyncio.gather(
         *[process_single_paper(p) for p in papers]
     )
-    # plot_heatmap(
-    #     all_results,
-    #     paper_names=[p.split("/")[-1] for p in papers],
-    #     problem_names=[f"Problem {i}" for i in range(len(INDUSTRY_PROBLEMS))]
-    # )
+
+    # 生成热力图
+    plot_heatmap(
+        all_results,
+        paper_names=[p.split("/")[-1].replace(".json", "") for p in papers],
+        problem_names=[prob["name"] for prob in INDUSTRY_PROBLEMS],
+        save_path="heatmap.png"
+    )
 
 
 if __name__ == "__main__":

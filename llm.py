@@ -31,7 +31,7 @@ def safe_json_loads(llm_text: str):
     # 尝试直接解析
     try:
         return json.loads(llm_text)
-    except json.JSONDecodeError:
+    except json.decoder.JSONDecodeError:
         # 如果失败，尝试提取第一个完整的 JSON 对象
         # 从第一个 { 开始匹配
         start = llm_text.find("{")
@@ -85,14 +85,12 @@ def _matching_sync(paper, industry_problems):
 【判断维度】
 请从以下 3 个维度综合评估论文与产业难题的相关性：
 
-1. 研究领域相关性：论文的研究对象是否与产业难题的核心技术领域匹配
+1. 研究领域相关性：论文的研究对象是否与产业难题的核心技术领域高度匹配
 2. 应用场景一致性：论文的应用场景是否与产业难题的工业应用场景一致或相近
-3. 问题层面适配度：论文提出的核心方法所解决的问题是否和产业难题的具体描述有关
-
+3. 问题层面适配度：论文提出的核心方法所解决的问题是否和产业难题的具体描述匹配或能够推动产业难题的解决
 
 【注意事项】
 - 严格匹配：不要因为"都是芯片领域"就认为所有芯片论文都匹配所有芯片难题
-- 工艺节点不达标不一定不匹配：例如论文研究 14nm 工艺，难题需要 7nm，但如果是同一技术路线、解决同类问题，仍可匹配
 - 仅判断关联性：当前任务只判断论文与难题是否有匹配，至于解决深度由后续评分步骤评估
 - 避免过度泛化：光通信芯片论文不匹配光刻胶难题，存储芯片论文不匹配 EDA 工具难题
 
@@ -103,25 +101,22 @@ def _matching_sync(paper, industry_problems):
 {industry_problems_dict}
 
 【输出要求】
-返回一个 JSON 对象，键为产业难题的编号，值为一个对象，包含 matched（是否匹配）和 reason（匹配理由）。
+返回一个 **JSON 对象**，键为产业难题的编号，值为一个对象，包含 matched（是否匹配）和 reason（相关理由）， 请确保你的输出严格遵守 json 格式，可以被正确解析。
 
 例如:
-{{
-  "0": {{
+{{"0": {{
     "matched": true,
-    "reason": "论文研究对象是CMOS毫米波频率综合器，应用场景是6G无线收发机，与难题2的晶圆制造场景一致..."
+    "reason": ""
   }},
   "1": {{
     "matched": false,
-    "reason": "论文研究的是频率综合器芯片，与HBM存储芯片的制造工艺和堆叠技术完全无关..."
+    "reason": ""
   }},
   "2": {{
     "matched": true,
-    "reason": "论文采用40nm CMOS工艺，属于集成电路制造领域，工艺路径与难题3的半导体材料制造相关..."
+    "reason": ""
   }}
 }}
-
-重要：reason 字段必须详细说明匹配或不匹配的具体依据，不要只说"相关"或"不相关"。
 """
     resp = client.chat.completions.create(
         model="deepseek-chat",
