@@ -1,7 +1,7 @@
 import glob
 import json
 from llm import extract_scores, matching
-from config import INDUSTRY_PROBLEMS
+# from config import INDUSTRY_PROBLEMS
 import numpy as np
 import matplotlib
 matplotlib.use('Agg')  # 使用非交互式后端
@@ -13,6 +13,22 @@ from asyncio import Lock
 plt.rcParams['font.sans-serif'] = ['WenQuanYi Micro Hei']
 plt.rcParams['axes.unicode_minus'] = False
 
+def load_industry_problems():
+    json_data = None
+    with open(r"集成电路_0125.json", "r", encoding="utf-8") as f:
+        json_data = json.load(f)
+    
+    sub_fields = json_data["sub_fields"]
+    problems = []
+    for item in sub_fields:
+        problems.extend(item["problems"])
+
+    for problem in problems:
+        problem.pop("id", None)
+
+    return problems
+
+INDUSTRY_PROBLEMS = load_industry_problems()
 
 def load_paper(path):
     with open(path, "r", encoding="utf-8") as f:
@@ -34,6 +50,7 @@ def plot_heatmap(all_results, paper_names=None, problem_names=None, save_path="h
         ax.set_xticks(range(len(problem_names)))
         ax.set_xticklabels(problem_names, rotation=45, ha='right', fontsize=9)
     else:
+        ax.set_xticks(range(data.shape[1]))
         ax.set_xlabel("产业难题编号", fontsize=10)
 
     # 设置纵轴标签（论文名称）
@@ -44,10 +61,10 @@ def plot_heatmap(all_results, paper_names=None, problem_names=None, save_path="h
         ax.set_ylabel("论文编号", fontsize=10)
 
     # 在每个格子中显示数值
-    for i in range(len(all_results)):
-        for j in range(len(all_results[i])):
-            text = ax.text(j, i, f'{all_results[i][j]:.1f}',
-                        ha="center", va="center", color="black", fontsize=8)
+    # for i in range(len(all_results)):
+    #     for j in range(len(all_results[i])):
+    #         text = ax.text(j, i, f'{all_results[i][j]:.1f}',
+    #                     ha="center", va="center", color="black", fontsize=8)
 
     ax.set_title("论文-产业难题匹配热力图", fontsize=12, pad=15)
     plt.tight_layout()
@@ -72,11 +89,12 @@ async def process_single_paper(paper_path):
     matched_ids = [int(i) for i, v in match_result.items() if v['matched']]
 
     # 输出所有匹配结果及理由
-    outputs.append(f"📊 匹配分析:")
+    # outputs.append(f"📊 匹配分析:")
     for i, result in match_result.items():
-        status = "✅ 匹配" if result['matched'] else "❌ 不匹配"
-        outputs.append(f"  问题[{i}] {status}")
-        outputs.append(f"    理由: {result['reason']}")
+        if result['matched']:
+            status = "✅ 匹配"
+            outputs.append(f"  问题[{i}] {status}")
+            outputs.append(f"    理由: {result['reason']}")
     
     if not matched_ids:
         outputs.append("无匹配问题，跳过")
@@ -86,8 +104,16 @@ async def process_single_paper(paper_path):
         return scores
     
     # 并发评分
-    tasks = [extract_scores(paper, INDUSTRY_PROBLEMS[i]) for i in matched_ids]
-    results = await asyncio.gather(*tasks)
+    try:
+        tasks = [extract_scores(paper, INDUSTRY_PROBLEMS[i]) for i in matched_ids]
+        results = await asyncio.gather(*tasks)
+    except Exception as e:
+        outputs.append(f"评分过程中出现错误: {e}")
+        outputs.append(f"模型输出: {match_result}")
+        async with print_lock:
+            print("\n".join(outputs))
+        raise e
+        # return scores
     
     # 处理结果
     for i, r in zip(matched_ids, results):
@@ -114,7 +140,7 @@ async def main():
     plot_heatmap(
         all_results,
         paper_names=[p.split("/")[-1].replace(".json", "") for p in papers],
-        problem_names=[prob["name"] for prob in INDUSTRY_PROBLEMS],
+        problem_names=None,
         save_path="heatmap.png"
     )
 
