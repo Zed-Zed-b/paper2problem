@@ -1,0 +1,2459 @@
+{
+  "industry": "集成电路",
+  "generated_at": "2026-01-28T21:43:32.303895",
+  "total_processed": 10,
+  "success_count": 10,
+  "failed_count": 0,
+  "results": [
+    {
+      "problem_id": 8,
+      "title": "高速接口IP（SerDes）的自适应均衡算法",
+      "sub_field": "电子设计自动化（EDA）与核心IP",
+      "status": "success",
+      "error_message": null,
+      "metrics": [
+        {
+          "name": "功耗效率",
+          "type": "性能指标",
+          "unit": "pJ/bit",
+          "description": "每传输1比特数据所消耗的能量，是衡量SerDes能效的关键指标，直接影响数据中心的总功耗",
+          "baselines": {
+            "2020": {
+              "value": "4.0",
+              "source": "https://www.researching.cn/articles/OJ783e30e27c78a0fe"
+            },
+            "2021": {
+              "value": "3.6",
+              "source": "https://www.researching.cn/articles/OJ783e30e27c78a0fe"
+            },
+            "2022": {
+              "value": "3.15",
+              "source": "https://www.researching.cn/articles/OJ783e30e27c78a0fe"
+            },
+            "2023": {
+              "value": "4.63",
+              "source": "https://www.ieee802.org/3/df/public/22_11/prli_3df_01_2211.pdf"
+            },
+            "2024": {
+              "value": "2.16",
+              "source": "https://www.researching.cn/articles/OJ783e30e27c78a0fe"
+            },
+            "2025": {
+              "value": "<0.1",
+              "source": "https://tspasemiconductor.substack.com/p/perspective-on-serdes-and-cpo-pcb"
+            }
+          }
+        },
+        {
+          "name": "误码率(BER)",
+          "type": "性能指标",
+          "unit": "无单位(概率)",
+          "description": "在特定信道损耗下的比特错误率，是衡量传输可靠性的核心指标，通常要求达到10^-12或更低",
+          "baselines": {
+            "2020": {
+              "value": "1e-6@35dB",
+              "source": "https://www.researching.cn/articles/OJ783e30e27c78a0fe"
+            },
+            "2021": {
+              "value": "1e-8@37.5dB",
+              "source": "https://www.researching.cn/articles/OJ783e30e27c78a0fe"
+            },
+            "2022": {
+              "value": "6e-9@29.6dB",
+              "source": "https://www.researching.cn/articles/OJ783e30e27c78a0fe"
+            },
+            "2023": {
+              "value": "7e-6@48dB",
+              "source": "https://www.researching.cn/articles/OJ783e30e27c78a0fe"
+            },
+            "2024": {
+              "value": "1e-15",
+              "source": "https://146a55aca6f00848c565-a7635525d40ac1c70300198708936b4e.ssl.cf1.rackcdn.com/images/35ae8b4c1eb19b4db54821db539921539acc14ef.pdf"
+            },
+            "2025": {
+              "value": "1e-15",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "信道损耗补偿能力",
+          "type": "性能指标",
+          "unit": "dB",
+          "description": "自适应均衡算法能够补偿的信道插入损耗，反映算法的均衡能力",
+          "baselines": {
+            "2020": {
+              "value": "35",
+              "source": "https://www.researching.cn/articles/OJ783e30e27c78a0fe"
+            },
+            "2021": {
+              "value": "37.5",
+              "source": "https://www.researching.cn/articles/OJ783e30e27c78a0fe"
+            },
+            "2022": {
+              "value": "29.6",
+              "source": "https://www.researching.cn/articles/OJ783e30e27c78a0fe"
+            },
+            "2023": {
+              "value": "48",
+              "source": "https://www.researching.cn/articles/OJ783e30e27c78a0fe"
+            },
+            "2024": {
+              "value": "40-45",
+              "source": "https://146a55aca6f00848c565-a7635525d40ac1c70300198708936b4e.ssl.cf1.rackcdn.com/images/35ae8b4c1eb19b4db54821db539921539acc14ef.pdf"
+            },
+            "2025": {
+              "value": "45-50",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "均衡器抽头数",
+          "type": "性能指标",
+          "unit": "taps",
+          "description": "FFE和DFE均衡器的抽头数量，反映算法的复杂度和均衡能力",
+          "baselines": {
+            "2020": {
+              "value": "FFE:16, DFE:1",
+              "source": "https://www.researching.cn/articles/OJ783e30e27c78a0fe"
+            },
+            "2021": {
+              "value": "FFE:31, DFE:1",
+              "source": "https://www.researching.cn/articles/OJ783e30e27c78a0fe"
+            },
+            "2022": {
+              "value": "FFE:30, DFE:1",
+              "source": "https://www.researching.cn/articles/OJ783e30e27c78a0fe"
+            },
+            "2023": {
+              "value": "FFE:32, DFE:1",
+              "source": "https://www.researching.cn/articles/OJ783e30e27c78a0fe"
+            },
+            "2024": {
+              "value": "FFE:24-30, DFE:1-2",
+              "source": "https://www.ieee802.org/3/df/public/22_11/prli_3df_01_2211.pdf"
+            },
+            "2025": {
+              "value": "FFE:32+, DFE:2+",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "工艺节点",
+          "type": "约束条件",
+          "unit": "nm",
+          "description": "实现SerDes IP的半导体工艺制程，直接影响性能、功耗和面积",
+          "baselines": {
+            "2020": {
+              "value": "10nm FinFET",
+              "source": "https://www.researching.cn/articles/OJ783e30e27c78a0fe"
+            },
+            "2021": {
+              "value": "7nm FinFET",
+              "source": "https://www.researching.cn/articles/OJ783e30e27c78a0fe"
+            },
+            "2022": {
+              "value": "7nm FinFET",
+              "source": "https://www.researching.cn/articles/OJ783e30e27c78a0fe"
+            },
+            "2023": {
+              "value": "5nm FinFET",
+              "source": "https://www.researching.cn/articles/OJ783e30e27c78a0fe"
+            },
+            "2024": {
+              "value": "5nm/3nm FinFET",
+              "source": "https://tspasemiconductor.substack.com/p/perspective-on-serdes-and-cpo-pcb"
+            },
+            "2025": {
+              "value": "3nm FinFET/GAA",
+              "source": "https://tspasemiconductor.substack.com/p/perspective-on-serdes-and-cpo-pcb"
+            }
+          }
+        },
+        {
+          "name": "单位面积带宽密度",
+          "type": "性能指标",
+          "unit": "Tbps/mm",
+          "description": "芯片边缘每毫米长度能够提供的带宽，反映I/O密度和封装效率",
+          "baselines": {
+            "2020": {
+              "value": "0.8-1.2",
+              "source": "https://www.ieeetoronto.ca/wp-content/uploads/2022/12/Short-Reach-Interconnect-for-the-Emerging-Multi-Die-System-Era.pdf"
+            },
+            "2021": {
+              "value": "1.2-1.5",
+              "source": "llm generated"
+            },
+            "2022": {
+              "value": "1.5-1.8",
+              "source": "llm generated"
+            },
+            "2023": {
+              "value": "1.8-2.0",
+              "source": "llm generated"
+            },
+            "2024": {
+              "value": "2.0-2.5",
+              "source": "llm generated"
+            },
+            "2025": {
+              "value": "50+",
+              "source": "https://tspasemiconductor.substack.com/p/perspective-on-serdes-and-cpo-pcb"
+            }
+          }
+        },
+        {
+          "name": "MLSD SNR增益",
+          "type": "性能指标",
+          "unit": "dB",
+          "description": "最大似然序列检测相对于传统DFE的信噪比增益，反映先进算法的性能提升",
+          "baselines": {
+            "2020": {
+              "value": "1.5-2.0",
+              "source": "https://www.mapyourshow.com/mys_shared/dcon23/handouts/SLIDES_Track09_BirdsEyeViewing200plusGbps_Shimanouchi1.pdf"
+            },
+            "2021": {
+              "value": "1.6-2.1",
+              "source": "llm generated"
+            },
+            "2022": {
+              "value": "1.7-2.2",
+              "source": "llm generated"
+            },
+            "2023": {
+              "value": "1.8-2.3",
+              "source": "llm generated"
+            },
+            "2024": {
+              "value": "1.9-2.4",
+              "source": "llm generated"
+            },
+            "2025": {
+              "value": "2.0-2.5",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "PAM4非线性补偿能力",
+          "type": "性能指标",
+          "unit": "dB",
+          "description": "针对PAM4信号非线性失真的补偿能力，反映算法的非线性均衡性能",
+          "baselines": {
+            "2020": {
+              "value": "3-5",
+              "source": "https://link.springer.com/article/10.1186/s13634-023-01033-y"
+            },
+            "2021": {
+              "value": "4-6",
+              "source": "llm generated"
+            },
+            "2022": {
+              "value": "5-7",
+              "source": "llm generated"
+            },
+            "2023": {
+              "value": "6-8",
+              "source": "llm generated"
+            },
+            "2024": {
+              "value": "7-9",
+              "source": "llm generated"
+            },
+            "2025": {
+              "value": "8-10",
+              "source": "llm generated"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "problem_id": 19,
+      "title": "超高速模数转换器（ADC）的时间交织校准",
+      "sub_field": "高性能与专用芯片设计架构",
+      "status": "success",
+      "error_message": null,
+      "metrics": [
+        {
+          "name": "信号噪声失真比",
+          "type": "性能指标",
+          "unit": "dB",
+          "description": "信号噪声失真比(SNDR)是衡量ADC整体性能的关键指标，包括噪声和谐波失真。对于时间交织ADC，校准后SNDR的改善程度直接反映了校准效果。",
+          "baselines": {
+            "2020": {
+              "value": "48.5",
+              "source": "https://labs.engineering.asu.edu/mixedsignals/wp-content/uploads/sites/58/2025/07/VTS_TI_ADC_2025.pdf"
+            },
+            "2021": {
+              "value": "50.0",
+              "source": "llm generated"
+            },
+            "2022": {
+              "value": "51.5",
+              "source": "https://labs.engineering.asu.edu/mixedsignals/wp-content/uploads/sites/58/2025/07/VTS_TI_ADC_2025.pdf"
+            },
+            "2023": {
+              "value": "52.5",
+              "source": "llm generated"
+            },
+            "2024": {
+              "value": "54.0",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "无杂散动态范围",
+          "type": "性能指标",
+          "unit": "dB",
+          "description": "无杂散动态范围(SFDR)衡量ADC区分主信号和最大杂散信号的能力。时间交织ADC的通道失配会产生杂散，校准后SFDR的改善是关键性能指标。",
+          "baselines": {
+            "2020": {
+              "value": "48.97",
+              "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7219597/"
+            },
+            "2021": {
+              "value": "51.4",
+              "source": "https://fenix.tecnico.ulisboa.pt/downloadFile/1689244997257516/resumo_alargado_joaoribeiro.pdf"
+            },
+            "2022": {
+              "value": "70.5",
+              "source": "https://labs.engineering.asu.edu/mixedsignals/wp-content/uploads/sites/58/2025/07/VTS_TI_ADC_2025.pdf"
+            },
+            "2023": {
+              "value": "72.1",
+              "source": "https://labs.engineering.asu.edu/mixedsignals/wp-content/uploads/sites/58/2025/07/VTS_TI_ADC_2025.pdf"
+            },
+            "2024": {
+              "value": "75.0",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "有效位数",
+          "type": "性能指标",
+          "unit": "bits",
+          "description": "有效位数(ENOB)基于SNDR计算，表示ADC的实际分辨率。校准后ENOB的改善反映了通道失配校正的效果。",
+          "baselines": {
+            "2020": {
+              "value": "7.0",
+              "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7219597/"
+            },
+            "2021": {
+              "value": "7.5",
+              "source": "llm generated"
+            },
+            "2022": {
+              "value": "8.2",
+              "source": "https://labs.engineering.asu.edu/mixedsignals/wp-content/uploads/sites/58/2025/07/VTS_TI_ADC_2025.pdf"
+            },
+            "2023": {
+              "value": "8.5",
+              "source": "llm generated"
+            },
+            "2024": {
+              "value": "8.8",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "校准收敛时间",
+          "type": "性能指标",
+          "unit": "时钟周期",
+          "description": "背景校准算法达到稳定状态所需的时钟周期数。较短的收敛时间对于实时应用至关重要。",
+          "baselines": {
+            "2020": {
+              "value": "40000",
+              "source": "https://fenix.tecnico.ulisboa.pt/downloadFile/1689244997257516/resumo_alargado_joaoribeiro.pdf"
+            },
+            "2021": {
+              "value": "20000",
+              "source": "llm generated"
+            },
+            "2022": {
+              "value": "10000",
+              "source": "llm generated"
+            },
+            "2023": {
+              "value": "5000",
+              "source": "llm generated"
+            },
+            "2024": {
+              "value": "2500",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "面积开销",
+          "type": "约束条件",
+          "unit": "%",
+          "description": "校准电路占ADC总面积的百分比。低面积开销对于高集成度应用至关重要。",
+          "baselines": {
+            "2020": {
+              "value": "10",
+              "source": "https://www.research-collection.ethz.ch/bitstreams/7a43507b-5767-46b5-8b87-5d41402023a5/download"
+            },
+            "2021": {
+              "value": "8",
+              "source": "llm generated"
+            },
+            "2022": {
+              "value": "6.5",
+              "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7219597/"
+            },
+            "2023": {
+              "value": "5",
+              "source": "llm generated"
+            },
+            "2024": {
+              "value": "4",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "功耗开销",
+          "type": "约束条件",
+          "unit": "%",
+          "description": "校准电路占ADC总功耗的百分比。低功耗开销对于能效敏感的应用至关重要。",
+          "baselines": {
+            "2020": {
+              "value": "11",
+              "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7219597/"
+            },
+            "2021": {
+              "value": "9",
+              "source": "llm generated"
+            },
+            "2022": {
+              "value": "7",
+              "source": "llm generated"
+            },
+            "2023": {
+              "value": "6",
+              "source": "llm generated"
+            },
+            "2024": {
+              "value": "5",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "工艺节点",
+          "type": "约束条件",
+          "unit": "nm",
+          "description": "制造ADC所使用的CMOS工艺节点。先进工艺节点有助于降低功耗和提高集成度。",
+          "baselines": {
+            "2020": {
+              "value": "65",
+              "source": "https://www.researchgate.net/publication/220365913_A_480_mW_26_GSs_10b_time-interleaved_ADC_with_485_dB_SNDR_up_to_Nyquist_in_65_nm_CMOS"
+            },
+            "2021": {
+              "value": "40",
+              "source": "https://www.mpflynngroup.com/uploads/7/3/4/9/73490609/08662313.pdf"
+            },
+            "2022": {
+              "value": "28",
+              "source": "https://labs.engineering.asu.edu/mixedsignals/wp-content/uploads/sites/58/2025/07/VTS_TI_ADC_2025.pdf"
+            },
+            "2023": {
+              "value": "22",
+              "source": "https://www.mdpi.com/2674-0729/4/4/40"
+            },
+            "2024": {
+              "value": "16",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "采样率",
+          "type": "约束条件",
+          "unit": "GS/s",
+          "description": "时间交织ADC的总采样率。高采样率是光通信和示波器等应用的核心需求。",
+          "baselines": {
+            "2020": {
+              "value": "5",
+              "source": "https://labs.engineering.asu.edu/mixedsignals/wp-content/uploads/sites/58/2025/07/VTS_TI_ADC_2025.pdf"
+            },
+            "2021": {
+              "value": "10",
+              "source": "llm generated"
+            },
+            "2022": {
+              "value": "20",
+              "source": "https://www.aimspress.com/article/doi/10.3934/mbe.2021446?viewType=HTML"
+            },
+            "2023": {
+              "value": "40",
+              "source": "https://www.aimspress.com/article/doi/10.3934/mbe.2021446?viewType=HTML"
+            },
+            "2024": {
+              "value": "50",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "通道数",
+          "type": "约束条件",
+          "unit": "个",
+          "description": "时间交织ADC的并行通道数量。更多通道数可实现更高采样率，但也增加了校准复杂度。",
+          "baselines": {
+            "2020": {
+              "value": "4",
+              "source": "https://labs.engineering.asu.edu/mixedsignals/wp-content/uploads/sites/58/2025/07/VTS_TI_ADC_2025.pdf"
+            },
+            "2021": {
+              "value": "8",
+              "source": "llm generated"
+            },
+            "2022": {
+              "value": "16",
+              "source": "https://www.aimspress.com/article/doi/10.3934/mbe.2021446?viewType=HTML"
+            },
+            "2023": {
+              "value": "32",
+              "source": "llm generated"
+            },
+            "2024": {
+              "value": "64",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "校准类型支持",
+          "type": "性能指标",
+          "unit": "种失配类型",
+          "description": "校准算法能够同时处理的失配类型数量（偏置、增益、相位）。全面的校准支持对于高性能应用至关重要。",
+          "baselines": {
+            "2020": {
+              "value": "2",
+              "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7219597/"
+            },
+            "2021": {
+              "value": "2",
+              "source": "llm generated"
+            },
+            "2022": {
+              "value": "3",
+              "source": "https://www.sciencedirect.com/science/article/abs/pii/S0026269222000519"
+            },
+            "2023": {
+              "value": "3",
+              "source": "https://www.sciencedirect.com/science/article/abs/pii/S0026269223000149"
+            },
+            "2024": {
+              "value": "4",
+              "source": "llm generated"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "problem_id": 20,
+      "title": "动态电压频率调整（DVFS）的纳秒级响应设计",
+      "sub_field": "高性能与专用芯片设计架构",
+      "status": "success",
+      "error_message": null,
+      "metrics": [
+        {
+          "name": "DVFS切换延迟",
+          "type": "性能指标",
+          "unit": "纳秒(ns)",
+          "description": "从当前电压/频率状态切换到目标电压/频率状态所需的时间，包括电压稳定时间和PLL重新锁定时间。这是衡量DVFS响应速度的关键指标。",
+          "baselines": {
+            "2020": {
+              "value": "100-200ns",
+              "source": "https://semiengineering.com/dvfs-on-the-sidelines/"
+            },
+            "2021": {
+              "value": "40-100ns",
+              "source": "https://arxiv.org/pdf/2205.00121"
+            },
+            "2022": {
+              "value": "4-40ns",
+              "source": "https://arxiv.org/pdf/2205.00121"
+            },
+            "2023": {
+              "value": "4-20ns",
+              "source": "llm generated"
+            },
+            "2024": {
+              "value": "2-10ns",
+              "source": "llm generated"
+            },
+            "2025": {
+              "value": "1-5ns",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "电源噪声峰值",
+          "type": "性能指标",
+          "unit": "毫伏(mV)",
+          "description": "在DVFS切换过程中电源电压的最大波动幅度，包括电压下降(droop)和电压上冲(overshoot)。这直接影响电路的稳定性和时序裕量。",
+          "baselines": {
+            "2020": {
+              "value": "50-100mV",
+              "source": "https://old.hotchips.org/wp-content/uploads/hc_archives/hc23/HC23.17.1-tutorial1/HC23.17.111.Practical_PGandDV-Kosonocky-AMD.pdf"
+            },
+            "2021": {
+              "value": "40-80mV",
+              "source": "llm generated"
+            },
+            "2022": {
+              "value": "30-60mV",
+              "source": "llm generated"
+            },
+            "2023": {
+              "value": "20-50mV",
+              "source": "llm generated"
+            },
+            "2024": {
+              "value": "15-40mV",
+              "source": "llm generated"
+            },
+            "2025": {
+              "value": "10-30mV",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "片上监视器响应时间",
+          "type": "性能指标",
+          "unit": "纳秒(ns)",
+          "description": "片上监视器检测到工作负载变化并产生控制信号所需的时间。这决定了反馈回路的响应速度。",
+          "baselines": {
+            "2020": {
+              "value": "10-20ns",
+              "source": "https://users.elis.ugent.be/~leeckhou/papers/taco11_dvfs.pdf"
+            },
+            "2021": {
+              "value": "8-15ns",
+              "source": "llm generated"
+            },
+            "2022": {
+              "value": "5-10ns",
+              "source": "llm generated"
+            },
+            "2023": {
+              "value": "3-8ns",
+              "source": "llm generated"
+            },
+            "2024": {
+              "value": "2-5ns",
+              "source": "llm generated"
+            },
+            "2025": {
+              "value": "1-3ns",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "反馈回路总延迟",
+          "type": "性能指标",
+          "unit": "纳秒(ns)",
+          "description": "从工作负载变化到完成DVFS调整的完整闭环响应时间，包括监视器检测、控制决策、电压/频率切换等所有环节。",
+          "baselines": {
+            "2020": {
+              "value": "150-300ns",
+              "source": "https://semiengineering.com/dvfs-on-the-sidelines/"
+            },
+            "2021": {
+              "value": "100-200ns",
+              "source": "llm generated"
+            },
+            "2022": {
+              "value": "50-100ns",
+              "source": "llm generated"
+            },
+            "2023": {
+              "value": "30-60ns",
+              "source": "llm generated"
+            },
+            "2024": {
+              "value": "20-40ns",
+              "source": "llm generated"
+            },
+            "2025": {
+              "value": "10-25ns",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "电压调节器切换效率",
+          "type": "性能指标",
+          "unit": "百分比(%)",
+          "description": "集成电压调节器(IVR)在切换过程中的能量转换效率，影响DVFS的整体节能效果。",
+          "baselines": {
+            "2020": {
+              "value": "85-90%",
+              "source": "https://people.eecs.berkeley.edu/~krste/papers/EECS-2015-257.pdf"
+            },
+            "2021": {
+              "value": "87-92%",
+              "source": "llm generated"
+            },
+            "2022": {
+              "value": "89-94%",
+              "source": "llm generated"
+            },
+            "2023": {
+              "value": "91-95%",
+              "source": "llm generated"
+            },
+            "2024": {
+              "value": "93-96%",
+              "source": "llm generated"
+            },
+            "2025": {
+              "value": "95-97%",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "最小可调时间粒度",
+          "type": "约束条件",
+          "unit": "微秒(µs)",
+          "description": "DVFS控制器能够有效调整电压/频率的最小时间间隔，受限于切换延迟和能量开销。",
+          "baselines": {
+            "2020": {
+              "value": "10-100µs",
+              "source": "https://arxiv.org/pdf/2205.00121"
+            },
+            "2021": {
+              "value": "5-50µs",
+              "source": "llm generated"
+            },
+            "2022": {
+              "value": "1-10µs",
+              "source": "https://arxiv.org/pdf/2205.00121"
+            },
+            "2023": {
+              "value": "0.5-5µs",
+              "source": "llm generated"
+            },
+            "2024": {
+              "value": "0.2-2µs",
+              "source": "llm generated"
+            },
+            "2025": {
+              "value": "0.1-1µs",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "电源噪声抑制比",
+          "type": "性能指标",
+          "unit": "分贝(dB)",
+          "description": "电源噪声抑制电路对DVFS切换过程中产生的噪声的抑制能力，通常用分贝表示。",
+          "baselines": {
+            "2020": {
+              "value": "20-30dB",
+              "source": "http://vcl.ece.ucdavis.edu/pubs/2008.05.iscas.DVFS/iscas_2008_wayne.pdf"
+            },
+            "2021": {
+              "value": "25-35dB",
+              "source": "llm generated"
+            },
+            "2022": {
+              "value": "30-40dB",
+              "source": "llm generated"
+            },
+            "2023": {
+              "value": "35-45dB",
+              "source": "llm generated"
+            },
+            "2024": {
+              "value": "40-50dB",
+              "source": "llm generated"
+            },
+            "2025": {
+              "value": "45-55dB",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "片上监视器精度",
+          "type": "性能指标",
+          "unit": "百分比(%)",
+          "description": "片上监视器对工作负载特征（如IPC、内存访问模式等）的检测精度，影响DVFS决策的准确性。",
+          "baselines": {
+            "2020": {
+              "value": "90-95%",
+              "source": "https://research.spec.org/icpe_proceedings/2021/companion/p95.pdf"
+            },
+            "2021": {
+              "value": "92-96%",
+              "source": "llm generated"
+            },
+            "2022": {
+              "value": "94-97%",
+              "source": "llm generated"
+            },
+            "2023": {
+              "value": "95-98%",
+              "source": "llm generated"
+            },
+            "2024": {
+              "value": "96-99%",
+              "source": "llm generated"
+            },
+            "2025": {
+              "value": "97-99.5%",
+              "source": "llm generated"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "problem_id": 32,
+      "title": "Chiplet集成的热管理与散热界面材料",
+      "sub_field": "先进封装与测试技术",
+      "status": "success",
+      "error_message": null,
+      "metrics": [
+        {
+          "name": "热导率（导热系数）",
+          "type": "性能指标",
+          "unit": "W/(m·K)",
+          "description": "热界面材料内部导热性能的关键指标，直接影响热量传递效率。对于Chiplet集成，需要高导热系数以降低热阻，解决芯片间热串扰问题。",
+          "baselines": {
+            "2020": {
+              "value": "3-8",
+              "source": "https://mc.spacejournal.cn/cn/article/pdf/preview/10.19304/J.ISSN1000-7180.2022.0684.pdf"
+            },
+            "2021": {
+              "value": "5-12",
+              "source": "https://mc.spacejournal.cn/cn/article/pdf/preview/10.19304/J.ISSN1000-7180.2022.0684.pdf"
+            },
+            "2022": {
+              "value": "8-15",
+              "source": "https://mc.spacejournal.cn/cn/article/pdf/preview/10.19304/J.ISSN1000-7180.2022.0684.pdf"
+            },
+            "2023": {
+              "value": "10-20",
+              "source": "https://mc.spacejournal.cn/cn/article/pdf/preview/10.19304/J.ISSN1000-7180.2022.0684.pdf"
+            },
+            "2024": {
+              "value": "15-25",
+              "source": "https://www.mdpi.com/2673-4117/6/12/373"
+            },
+            "2025": {
+              "value": "20-30",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "单位面积热阻",
+          "type": "性能指标",
+          "unit": "°C·cm²/W",
+          "description": "衡量热界面材料整体传热性能的综合指标，包括材料本身热阻和接触热阻。对于2.5D/3D封装，需要极低的热阻来应对高功率密度。",
+          "baselines": {
+            "2020": {
+              "value": "1.0-4.0",
+              "source": "https://www.mdpi.com/2673-4117/6/12/373"
+            },
+            "2021": {
+              "value": "0.8-3.0",
+              "source": "https://www.mdpi.com/2673-4117/6/12/373"
+            },
+            "2022": {
+              "value": "0.6-2.5",
+              "source": "https://www.mdpi.com/2673-4117/6/12/373"
+            },
+            "2023": {
+              "value": "0.4-2.0",
+              "source": "https://www.mdpi.com/2673-4117/6/12/373"
+            },
+            "2024": {
+              "value": "0.2-1.5",
+              "source": "https://www.mdpi.com/2673-4117/6/12/373"
+            },
+            "2025": {
+              "value": "0.1-1.0",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "接触热阻",
+          "type": "性能指标",
+          "unit": "°C·cm²/W",
+          "description": "热界面材料与芯片/散热器接触面之间的热阻，占总热阻的主要部分。降低接触热阻是提高整体散热效率的关键。",
+          "baselines": {
+            "2020": {
+              "value": "0.3-1.0",
+              "source": "https://www.mdpi.com/2673-4117/6/12/373"
+            },
+            "2021": {
+              "value": "0.25-0.8",
+              "source": "https://www.mdpi.com/2673-4117/6/12/373"
+            },
+            "2022": {
+              "value": "0.2-0.6",
+              "source": "https://www.mdpi.com/2673-4117/6/12/373"
+            },
+            "2023": {
+              "value": "0.15-0.5",
+              "source": "https://www.mdpi.com/2673-4117/6/12/373"
+            },
+            "2024": {
+              "value": "0.1-0.4",
+              "source": "https://www.mdpi.com/2673-4117/6/12/373"
+            },
+            "2025": {
+              "value": "0.05-0.3",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "热膨胀系数",
+          "type": "约束条件",
+          "unit": "ppm/°C",
+          "description": "材料随温度变化的膨胀率，需要与芯片和封装材料匹配以减少热应力，提高可靠性。对于柔性热界面材料尤为重要。",
+          "baselines": {
+            "2020": {
+              "value": "20-50",
+              "source": "https://fhclxb.buaa.edu.cn/cn/article/pdf/preview/10.13801/j.cnki.fhclxb.20240829.001.pdf"
+            },
+            "2021": {
+              "value": "15-40",
+              "source": "https://fhclxb.buaa.edu.cn/cn/article/pdf/preview/10.13801.j.cnki.fhclxb.20240829.001.pdf"
+            },
+            "2022": {
+              "value": "10-30",
+              "source": "https://fhclxb.buaa.edu.cn/cn/article/pdf/preview/10.13801.j.cnki.fhclxb.20240829.001.pdf"
+            },
+            "2023": {
+              "value": "8-25",
+              "source": "https://fhclxb.buaa.edu.cn/cn/article/pdf/preview/10.13801.j.cnki.fhclxb.20240829.001.pdf"
+            },
+            "2024": {
+              "value": "5-20",
+              "source": "https://fhclxb.buaa.edu.cn/cn/article/pdf/preview/10.13801.j.cnki.fhclxb.20240829.001.pdf"
+            },
+            "2025": {
+              "value": "3-15",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "弹性模量",
+          "type": "约束条件",
+          "unit": "MPa",
+          "description": "材料的刚度指标，影响柔性和适应性。低弹性模量有助于适应表面不平整，减少接触热阻，同时缓解热应力。",
+          "baselines": {
+            "2020": {
+              "value": "100-500",
+              "source": "https://fhclxb.buaa.edu.cn/cn/article/pdf/preview/10.13801.j.cnki.fhclxb.20240829.001.pdf"
+            },
+            "2021": {
+              "value": "80-400",
+              "source": "https://fhclxb.buaa.edu.cn/cn/article/pdf/preview/10.13801.j.cnki.fhclxb.20240829.001.pdf"
+            },
+            "2022": {
+              "value": "60-300",
+              "source": "https://fhclxb.buaa.edu.cn/cn/article/pdf/preview/10.13801.j.cnki.fhclxb.20240829.001.pdf"
+            },
+            "2023": {
+              "value": "40-200",
+              "source": "https://fhclxb.buaa.edu.cn/cn/article/pdf/preview/10.13801.j.cnki.fhclxb.20240829.001.pdf"
+            },
+            "2024": {
+              "value": "20-150",
+              "source": "https://fhclxb.buaa.edu.cn/cn/article/pdf/preview/10.13801.j.cnki.fhclxb.20240829.001.pdf"
+            },
+            "2025": {
+              "value": "10-100",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "结到环境热阻（2.5D封装）",
+          "type": "性能指标",
+          "unit": "°C/W",
+          "description": "从芯片结到环境的总热阻，反映整个封装系统的散热能力。2.5D封装由于中介层和多个芯片集成，热阻较高。",
+          "baselines": {
+            "2020": {
+              "value": "0.3-1.0",
+              "source": "https://www.mdpi.com/2673-4117/6/12/373"
+            },
+            "2021": {
+              "value": "0.25-0.8",
+              "source": "https://www.mdpi.com/2673-4117/6/12/373"
+            },
+            "2022": {
+              "value": "0.2-0.6",
+              "source": "https://www.mdpi.com/2673-4117/6/12/373"
+            },
+            "2023": {
+              "value": "0.15-0.5",
+              "source": "https://www.mdpi.com/2673-4117/6/12/373"
+            },
+            "2024": {
+              "value": "0.1-0.4",
+              "source": "https://www.mdpi.com/2673-4117/6/12/373"
+            },
+            "2025": {
+              "value": "0.08-0.3",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "结到环境热阻（3D封装）",
+          "type": "性能指标",
+          "unit": "°C/W",
+          "description": "3D堆叠封装的热阻显著高于2.5D，由于垂直堆叠和多个界面，热管理更加困难。",
+          "baselines": {
+            "2020": {
+              "value": "1.5-3.0",
+              "source": "https://www.mdpi.com/2673-4117/6/12/373"
+            },
+            "2021": {
+              "value": "1.2-2.5",
+              "source": "https://www.mdpi.com/2673-4117/6/12/373"
+            },
+            "2022": {
+              "value": "1.0-2.0",
+              "source": "https://www.mdpi.com/2673-4117/6/12/373"
+            },
+            "2023": {
+              "value": "0.8-1.8",
+              "source": "https://www.mdpi.com/2673-4117/6/12/373"
+            },
+            "2024": {
+              "value": "0.6-1.5",
+              "source": "https://www.mdpi.com/2673-4117/6/12/373"
+            },
+            "2025": {
+              "value": "0.5-1.2",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "热循环可靠性",
+          "type": "性能指标",
+          "unit": "循环次数",
+          "description": "材料在温度循环下的耐久性，通常以-40°C到125°C或更高温度范围的循环次数衡量。对于AI芯片等高可靠性应用至关重要。",
+          "baselines": {
+            "2020": {
+              "value": "500-1000",
+              "source": "https://www.mdpi.com/2673-4117/6/12/373"
+            },
+            "2021": {
+              "value": "800-1500",
+              "source": "https://www.mdpi.com/2673-4117/6/12/373"
+            },
+            "2022": {
+              "value": "1000-2000",
+              "source": "https://www.mdpi.com/2673-4117/6/12/373"
+            },
+            "2023": {
+              "value": "1500-3000",
+              "source": "https://www.mdpi.com/2673-4117/6/12/373"
+            },
+            "2024": {
+              "value": "2000-4000",
+              "source": "https://www.mdpi.com/2673-4117/6/12/373"
+            },
+            "2025": {
+              "value": "3000-5000",
+              "source": "llm generated"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "problem_id": 62,
+      "title": "SiC/SiO2界面态密度降低技术",
+      "sub_field": "第三代及宽禁带半导体",
+      "status": "success",
+      "error_message": null,
+      "metrics": [
+        {
+          "name": "界面态密度",
+          "type": "性能指标",
+          "unit": "cm⁻²·eV⁻¹",
+          "description": "SiC/SiO2界面处的陷阱密度，直接影响沟道迁移率和阈值电压稳定性。数值越低表示界面质量越好。",
+          "baselines": {
+            "2020": {
+              "value": "3-5×10¹¹",
+              "source": "http://www.casa-china.cn/uploads/soft/221111/12_1250157401.pdf"
+            },
+            "2021": {
+              "value": "2-4×10¹¹",
+              "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10302522/"
+            },
+            "2022": {
+              "value": "2-3×10¹¹",
+              "source": "https://www.scientific.net/SSP.359.151.pdf"
+            },
+            "2023": {
+              "value": "1-2×10¹¹",
+              "source": "https://chem.rutgers.edu/images/PDFs/faculty/garfunkel-pubs/2023/Trap_Passivation_JApplPhys_2023_Das.pdf"
+            },
+            "2024": {
+              "value": "1-2×10¹¹",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "沟道迁移率",
+          "type": "性能指标",
+          "unit": "cm²/V·s",
+          "description": "SiC MOSFET反型层载流子迁移率，直接影响导通电阻。数值越高表示器件性能越好。",
+          "baselines": {
+            "2020": {
+              "value": "20-40",
+              "source": "http://lab.semi.ac.cn/library/upload/files/2022/9/2815511483.pdf"
+            },
+            "2021": {
+              "value": "30-50",
+              "source": "llm generated"
+            },
+            "2022": {
+              "value": "40-60",
+              "source": "https://global-sei.com/technology/tr/bn77/pdf/77-22.pdf"
+            },
+            "2023": {
+              "value": "50-80",
+              "source": "https://edl.csrzic.com/rc-pub/front/front-article/download/42839681/lowqualitypdf/SiC%E8%8A%AF%E7%89%87%E5%BE%AE%E5%9E%8B%E5%8C%96%E5%8F%8A%E5%8F%91%E5%B1%95%E8%B6%8B%E5%8A%BF.pdf"
+            },
+            "2024": {
+              "value": "60-100",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "阈值电压漂移",
+          "type": "性能指标",
+          "unit": "V",
+          "description": "在高温栅偏置应力下阈值电压的变化量，反映器件长期稳定性。数值越小表示稳定性越好。",
+          "baselines": {
+            "2020": {
+              "value": "±0.5-1.0",
+              "source": "https://www.researchgate.net/publication/234861331_Interface_trap_profile_near_the_band_edges_at_the_4H-SiCSiO2_interface"
+            },
+            "2021": {
+              "value": "±0.3-0.8",
+              "source": "https://www.infineon.com/assets/row/public/documents/60/54/infineon-sic-mosfet-enhances-stability-under-real-application-conditions-article-en.pdf"
+            },
+            "2022": {
+              "value": "±0.2-0.6",
+              "source": "https://pdfs.semanticscholar.org/8f03/2ebcd45f1d35332e333d3bf9ca749afa82ba.pdf"
+            },
+            "2023": {
+              "value": "±0.1-0.4",
+              "source": "https://www.scientific.net/SSP.361.13?"
+            },
+            "2024": {
+              "value": "±0.1-0.3",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "比导通电阻",
+          "type": "性能指标",
+          "unit": "mΩ·cm²",
+          "description": "单位面积的导通电阻，反映器件的导通损耗特性。数值越低表示导通性能越好。",
+          "baselines": {
+            "2020": {
+              "value": "3.4-5.0",
+              "source": "https://www.researching.cn/ArticlePdf/m00098/2020/41/6/062801.pdf"
+            },
+            "2021": {
+              "value": "2.8-4.5",
+              "source": "llm generated"
+            },
+            "2022": {
+              "value": "2.5-4.0",
+              "source": "https://fscdn.rohm.com/en/products/databook/applinote/discrete/sic/mosfet/4g-sic-mosfet-characteristics-and-circuit-design-considerations_an-e.pdf"
+            },
+            "2023": {
+              "value": "2.0-3.5",
+              "source": "https://nanojournal.ifmo.ru/jour/article/download/315/309"
+            },
+            "2024": {
+              "value": "1.8-3.0",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "氮化退火氮含量",
+          "type": "约束条件",
+          "unit": "cm⁻²",
+          "description": "氮化退火工艺中界面处氮原子的面密度，直接影响界面态钝化效果。",
+          "baselines": {
+            "2020": {
+              "value": "2-3×10¹⁴",
+              "source": "llm generated"
+            },
+            "2021": {
+              "value": "2.5-3.5×10¹⁴",
+              "source": "llm generated"
+            },
+            "2022": {
+              "value": "3-4×10¹⁴",
+              "source": "https://chem.rutgers.edu/images/PDFs/faculty/garfunkel-pubs/2023/Trap_Passivation_JApplPhys_2023_Das.pdf"
+            },
+            "2023": {
+              "value": "3.5-4.5×10¹⁴",
+              "source": "https://chem.rutgers.edu/images/PDFs/faculty/garfunkel-pubs/2023/Trap_Passivation_JApplPhys_2023_Das.pdf"
+            },
+            "2024": {
+              "value": "4-5×10¹⁴",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "氧化层击穿电场",
+          "type": "性能指标",
+          "unit": "MV/cm",
+          "description": "栅氧化层的击穿电场强度，反映栅氧可靠性。数值越高表示栅氧质量越好。",
+          "baselines": {
+            "2020": {
+              "value": "8-10",
+              "source": "http://cje.ustb.edu.cn/cn/article/pdf/preview/10.13374/j.issn1001-053x.2008.11.021.pdf"
+            },
+            "2021": {
+              "value": "9-11",
+              "source": "llm generated"
+            },
+            "2022": {
+              "value": "9-12",
+              "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10302522/"
+            },
+            "2023": {
+              "value": "10-13",
+              "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10302522/"
+            },
+            "2024": {
+              "value": "10-14",
+              "source": "llm generated"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "problem_id": 63,
+      "title": "硅基氮化镓（GaN-on-Si）的外延应力管控",
+      "sub_field": "第三代及宽禁带半导体",
+      "status": "success",
+      "error_message": "Expecting property name enclosed in double quotes: line 1 column 787 (char 786)",
+      "metrics": [
+        {
+          "name": "晶圆弯曲度",
+          "type": "性能指标",
+          "unit": "μm",
+          "description": "GaN-on-Si外延后晶圆的弯曲程度，是衡量应力控制效果的关键指标。弯曲度过大会导致后续工艺困难、器件性能下降和良率降低。",
+          "baselines": {
+            "2020": {
+              "value": "80-120",
+              "source": "https://www.okmetic.com/zh/silicon-wafers/power-wafer-line/white-paper-enabling-next-gen-power-and-rf-gan-devices-with-optimized-silicon-and-soi-substrates/"
+            },
+            "2021": {
+              "value": "60-100",
+              "source": "llm generated"
+            },
+            "2022": {
+              "value": "40-80",
+              "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11676934/"
+            },
+            "2023": {
+              "value": "30-60",
+              "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11676934/"
+            },
+            "2024": {
+              "value": "20-50",
+              "source": "https://www.omedasemi.com/news/791.html"
+            },
+            "2025": {
+              "value": "15-40",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "残余应力",
+          "type": "性能指标",
+          "unit": "GPa",
+          "description": "GaN外延层中的残余应力，正值表示压应力，负值表示拉应力。应力控制对防止裂纹、提高器件可靠性和性能至关重要。",
+          "baselines": {
+            "2020": {
+              "value": "-0.8 to -1.5",
+              "source": "https://www.nature.com/articles/s41598-017-08905-y"
+            },
+            "2021": {
+              "value": "-0.6 to -1.2",
+              "source": "llm generated"
+            },
+            "2022": {
+              "value": "-0.4 to -1.0",
+              "source": "https://ui.adsabs.harvard.edu/abs/2022JPhD...55.5104Z/abstract"
+            },
+            "2023": {
+              "value": "-0.3 to -0.8",
+              "source": "https://iopscience.iop.org/article/10.1088/1361-6641/acac4b"
+            },
+            "2024": {
+              "value": "-0.2 to -0.6",
+              "source": "https://www.nature.com/articles/s41598-025-12904-9"
+            },
+            "2025": {
+              "value": "-0.1 to -0.4",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "穿透位错密度",
+          "type": "性能指标",
+          "unit": "cm⁻²",
+          "description": "GaN外延层中的穿透位错密度，直接影响器件漏电、击穿电压和可靠性。",
+          "baselines": {
+            "2020": {
+              "value": "1×10⁹ to 5×10⁹",
+              "source": "https://www.researchgate.net/figure/Threading-dislocation-density-TDD-calculated-from-XRD-measurements-room_tbl1_341169649"
+            },
+            "2021": {
+              "value": "5×10⁸ to 3×10⁹",
+              "source": "llm generated"
+            },
+            "2022": {
+              "value": "3×10⁸ to 2×10⁹",
+              "source": "https://www.nature.com/articles/s41598-025-89681-y"
+            },
+            "2023": {
+              "value": "2×10⁸ to 1×10⁹",
+              "source": "https://www.nature.com/articles/s41598-025-89681-y"
+            },
+            "2024": {
+              "value": "1×10⁸ to 8×10⁸",
+              "source": "https://www.semiconductor-today.com/news_items/2025/feb/ust-270225.shtml"
+            },
+            "2025": {
+              "value": "5×10⁷ to 6×10⁸",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "缓冲层厚度",
+          "type": "约束条件",
+          "unit": "μm",
+          "description": "超晶格缓冲层的总厚度，需要在应力控制、热阻和成本之间取得平衡。",
+          "baselines": {
+            "2020": {
+              "value": "2.0-3.0",
+              "source": "https://www.hangjianet.com/topic/1638917312610"
+            },
+            "2021": {
+              "value": "2.2-3.2",
+              "source": "llm generated"
+            },
+            "2022": {
+              "value": "2.5-3.5",
+              "source": "https://ui.adsabs.harvard.edu/abs/2023SeScT..38b5006H/abstract"
+            },
+            "2023": {
+              "value": "2.8-3.8",
+              "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11676934/"
+            },
+            "2024": {
+              "value": "3.0-4.0",
+              "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11676934/"
+            },
+            "2025": {
+              "value": "3.2-4.2",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "晶圆尺寸",
+          "type": "约束条件",
+          "unit": "英寸",
+          "description": "GaN-on-Si晶圆的直径，直接影响生产成本和产量。大尺寸晶圆是降低成本的关键。",
+          "baselines": {
+            "2020": {
+              "value": "6-8",
+              "source": "https://www.eet-china.com/mp/a467335.html"
+            },
+            "2021": {
+              "value": "6-8",
+              "source": "llm generated"
+            },
+            "2022": {
+              "value": "8",
+              "source": "https://www.omedasemi.com/news/791.html"
+            },
+            "2023": {
+              "value": "8",
+              "source": "https://www.archivemarketresearch.com/reports/gan-on-si-wafer-351968"
+            },
+            "2024": {
+              "value": "8-12",
+              "source": "https://www.mordorintelligence.com/industry-reports/gan-on-silicon-technology-market"
+            },
+            "2025": {
+              "value": "8-12",
+              "source": "https://www.archivemarketresearch.com/reports/gan-on-si-wafer-351968"
+            }
+          }
+        },
+        {
+          "name": "击穿电压",
+          "type": "性能指标",
+          "unit": "V",
+          "description": "GaN缓冲层的击穿电压，反映外延质量和应力控制效果，直接影响功率器件的耐压能力。",
+          "baselines": {
+            "2020": {
+              "value": "600-800",
+              "source": "https://www.omedasemi.com/news/659.html"
+            },
+            "2021": {
+              "value": "650-850",
+              "source": "llm generated"
+            },
+            "2022": {
+              "value": "700-900",
+              "source": "https://www.omedasemi.com/news/659.html"
+            },
+            "2023": {
+              "value": "750-1000",
+              "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11676934/"
+            },
+            "2024": {
+              "value": "800-1200",
+              "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11676934/"
+            },
+            "2025": {
+              "value": "900-1500",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "表面粗糙度",
+          "type": "性能指标",
+          "unit": "nm RMS",
+          "description": "GaN外延层的表面粗糙度，影响后续工艺和器件性能。",
+          "baselines": {
+            "2020": {
+              "value": "1.0-2.0",
+              "source": "https://www.researchgate.net/publication/381552485_Effects_of_AlNGaN_superlattice_buffer_layer_on_performances_of_AlGaNGaN_HEMT_grown_on_silicon_for_sub-6_GHz_applications?_tp=eyJjb250ZXh0Ijp7InBhZ2UiOiJzY2llbnRpZmljQ29udHJpYnV0aW9ucyIsInByZXZpb3VzUGFnZSI6bnVsbCwic3ViUGFnZSI6bnVsbH19"
+            },
+            "2021": {
+              "value": "0.8-1.5",
+              "source": "llm generated"
+            },
+            "2022": {
+              "value": "0.7-1.2",
+              "source": "https://ui.adsabs.harvard.edu/abs/2023SeScT..38b5006H/abstract"
+            },
+            "2023": {
+              "value": "0.6-1.0",
+              "source": "https://www.omedasemi.com/news/791.html"
+            },
+            "2024": {
+              "value": "0.5-0.8",
+              "source": "https://www.omedasemi.com/news/791.html"
+            },
+            "2025": {
+              "value": "0.4-0.7",
+              "source": "llm generated"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "problem_id": 64,
+      "title": "增强型（E-mode）GaN器件的栅极可靠性",
+      "sub_field": "第三代及宽禁带半导体",
+      "status": "success",
+      "error_message": null,
+      "metrics": [
+        {
+          "name": "阈值电压漂移（ΔVth）",
+          "type": "性能指标",
+          "unit": "V",
+          "description": "在高温栅偏压（HTGB）或高温反向偏压（HTRB）测试中，阈值电压相对于初始值的变化量。正值表示阈值电压升高，负值表示降低。这是评估栅极可靠性的核心指标，反映空穴注入和电子陷阱效应。",
+          "baselines": {
+            "2020": {
+              "value": "±0.3-0.5",
+              "source": "https://ieeexplore.ieee.org/iel8/6287639/10820123/11002527.pdf"
+            },
+            "2021": {
+              "value": "±0.2-0.4",
+              "source": "https://www.mdpi.com/2072-666X/15/3/321"
+            },
+            "2022": {
+              "value": "±0.15-0.35",
+              "source": "https://epc-co.com/epc/Portals/0/epc/documents/product-training/Reliability%20Report%20Phase%2014.pdf"
+            },
+            "2023": {
+              "value": "±0.1-0.3",
+              "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10972483/"
+            },
+            "2024": {
+              "value": "±0.08-0.25",
+              "source": "https://pdfs.semanticscholar.org/a4cd/035f5b835f7318f1699b50f71636a212cc66.pdf"
+            }
+          }
+        },
+        {
+          "name": "栅极漏电流（IGSS）",
+          "type": "性能指标",
+          "unit": "A",
+          "description": "在特定偏压条件下（通常为最大额定栅源电压）的栅极漏电流。反映栅金属叠层质量和肖特基势垒完整性，空穴注入会导致漏电流增加。",
+          "baselines": {
+            "2020": {
+              "value": "10⁻⁶-10⁻⁵",
+              "source": "https://epc-co.com/epc/cn/%E8%AE%BE%E8%AE%A1%E6%94%AF%E6%8C%81/gan%E5%99%A8%E4%BB%B6%E5%8F%AF%E9%9D%A0%E6%80%A7"
+            },
+            "2021": {
+              "value": "10⁻⁷-10⁻⁶",
+              "source": "https://www.mdpi.com/2072-666X/14/3/576"
+            },
+            "2022": {
+              "value": "10⁻⁸-10⁻⁷",
+              "source": "https://epc-co.com/epc/Portals/0/epc/documents/product-training/Reliability%20Report%20Phase%2015.pdf"
+            },
+            "2023": {
+              "value": "10⁻⁹-10⁻⁸",
+              "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12654677/"
+            },
+            "2024": {
+              "value": "10⁻¹⁰-10⁻⁹",
+              "source": "https://colab.ws/articles/10.1109%2Fjeds.2025.3603890"
+            }
+          }
+        },
+        {
+          "name": "高温栅偏压（HTGB）测试失效率",
+          "type": "性能指标",
+          "unit": "FIT",
+          "description": "在150°C、栅压5.5-7V条件下进行1000小时HTGB测试的失效率（Failures in Time）。1 FIT = 每10⁹器件小时1次失效。反映栅极结构的长期可靠性。",
+          "baselines": {
+            "2020": {
+              "value": "500-1000",
+              "source": "https://epc-co.com/epc/cn/%E4%B8%BB%E9%A1%B5/post/13904/egan-technology-reliability-and-physics-of-failure-how-egan-fets-are-expected-to-behave-as-the-result-of-high-gate-voltage-stress-conditions"
+            },
+            "2021": {
+              "value": "300-600",
+              "source": "llm generated"
+            },
+            "2022": {
+              "value": "200-400",
+              "source": "https://epc-co.com/epc/Portals/0/epc/documents/product-training/Reliability%20Report%20Phase%2014.pdf"
+            },
+            "2023": {
+              "value": "150-300",
+              "source": "llm generated"
+            },
+            "2024": {
+              "value": "100-200",
+              "source": "https://epc-co.com/epc/cn/%E4%B8%BB%E9%A1%B5/post/13904/egan-technology-reliability-and-physics-of-failure-how-egan-fets-are-expected-to-behave-as-the-result-of-high-gate-voltage-stress-conditions"
+            }
+          }
+        },
+        {
+          "name": "肖特基势垒高度（ΦB）",
+          "type": "性能指标",
+          "unit": "eV",
+          "description": "栅金属与p-GaN/AlGaN之间的肖特基势垒高度。影响空穴注入效率和栅极可靠性，优化栅金属叠层可提高势垒高度。",
+          "baselines": {
+            "2020": {
+              "value": "1.0-1.2",
+              "source": "https://pubmed.ncbi.nlm.nih.gov/35056249/"
+            },
+            "2021": {
+              "value": "1.2-1.4",
+              "source": "https://pubs.aip.org/aip/apl/article/121/23/232103/2834762/Schottky-barrier-height-engineering-in-vertical-p"
+            },
+            "2022": {
+              "value": "1.3-1.5",
+              "source": "llm generated"
+            },
+            "2023": {
+              "value": "1.4-1.6",
+              "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8780960/"
+            },
+            "2024": {
+              "value": "1.5-1.8",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "栅击穿电压（VGS,max）",
+          "type": "性能指标",
+          "unit": "V",
+          "description": "栅极能够承受的最大正向偏压而不发生永久性损坏。反映栅金属叠层的介电强度和抗空穴注入能力。",
+          "baselines": {
+            "2020": {
+              "value": "6-7",
+              "source": "https://epc-co.com/epc/cn/%E4%B8%BB%E9%A1%B5/post/13904/egan-technology-reliability-and-physics-of-failure-how-egan-fets-are-expected-to-behave-as-the-result-of-high-gate-voltage-stress-conditions"
+            },
+            "2021": {
+              "value": "7-8",
+              "source": "llm generated"
+            },
+            "2022": {
+              "value": "8-9",
+              "source": "https://repository.hkust.edu.hk/ir/bitstream/1783.1-152586/1/1783.1-152586.pdf"
+            },
+            "2023": {
+              "value": "9-10",
+              "source": "llm generated"
+            },
+            "2024": {
+              "value": "10-12",
+              "source": "https://www.ee.nthu.edu.tw/shhsu/conference%20papers/IRPS_2024_Critical_Role_of_Holes_in_GaN-on-Si_HEMTs_for_Power_and_RF_Applications.pdf"
+            }
+          }
+        },
+        {
+          "name": "动态导通电阻退化率",
+          "type": "性能指标",
+          "unit": "%",
+          "description": "在开关应力后导通电阻（RDS(on)）相对于初始值的增加百分比。反映栅极相关陷阱导致的电流崩塌效应。",
+          "baselines": {
+            "2020": {
+              "value": "20-30",
+              "source": "https://epc-co.com/epc/cn/%E8%AE%BE%E8%AE%A1%E6%94%AF%E6%8C%81/gan%E5%99%A8%E4%BB%B6%E5%8F%AF%E9%9D%A0%E6%80%A7"
+            },
+            "2021": {
+              "value": "15-25",
+              "source": "llm generated"
+            },
+            "2022": {
+              "value": "10-20",
+              "source": "https://epc-co.com/epc/Portals/0/epc/documents/product-training/Reliability%20Report%20Phase%2014.pdf"
+            },
+            "2023": {
+              "value": "8-15",
+              "source": "llm generated"
+            },
+            "2024": {
+              "value": "5-10",
+              "source": "https://pubs.aip.org/aip/apl/article/127/24/243504/3374917/Optimization-of-electric-field-distribution-for"
+            }
+          }
+        },
+        {
+          "name": "栅金属叠层厚度",
+          "type": "约束条件",
+          "unit": "nm",
+          "description": "栅金属叠层（如Ti/Al/Ni/Au）的总厚度。影响肖特基接触质量、热稳定性和抗扩散能力，需要优化以平衡电性能和可靠性。",
+          "baselines": {
+            "2020": {
+              "value": "200-300",
+              "source": "https://theses.hal.science/tel-05234737v1/file/These_GRANDPIERRON_Francois.pdf"
+            },
+            "2021": {
+              "value": "180-250",
+              "source": "llm generated"
+            },
+            "2022": {
+              "value": "150-220",
+              "source": "llm generated"
+            },
+            "2023": {
+              "value": "120-180",
+              "source": "llm generated"
+            },
+            "2024": {
+              "value": "100-150",
+              "source": "https://www.imec-int.com/en/articles/gan-based-devices-advanced-rf-applications-technology-building-block-spotlight"
+            }
+          }
+        },
+        {
+          "name": "工作结温（Tj）",
+          "type": "约束条件",
+          "unit": "°C",
+          "description": "器件能够可靠工作的最大结温。影响空穴注入速率和栅极退化机制，工业级应用通常要求125-150°C。",
+          "baselines": {
+            "2020": {
+              "value": "125",
+              "source": "https://epc-co.com/epc/cn/%E8%AE%BE%E8%AE%A1%E6%94%AF%E6%8C%81/gan%E5%99%A8%E4%BB%B6%E5%8F%AF%E9%9D%A0%E6%80%A7"
+            },
+            "2021": {
+              "value": "135",
+              "source": "llm generated"
+            },
+            "2022": {
+              "value": "145",
+              "source": "https://epc-co.com/epc/Portals/0/epc/documents/product-training/Reliability%20Report%20Phase%2014.pdf"
+            },
+            "2023": {
+              "value": "150",
+              "source": "https://www.ti.com.cn/cn/lit/ds/symlink/lmg3526r030.pdf"
+            },
+            "2024": {
+              "value": "175",
+              "source": "https://www.ti.com.cn/cn/lit/ds/symlink/lmg3650r025.pdf?ts=1766362055263&ref_url=https%253A%252F%252Fwww.ti.com.cn%252Fproduct%252Fcn%252FLMG3650R025%253FHQS%253Dapp-hvp-pwr-lmg3650x_lmg3650r025-exah-pf-eeworld_ana_1217-cn_zhcn_awr%2526dclid%253DCN-_sunxz5EDFXDtFgUdkRcajg%2526gad_source%253D7%2526gad_campaignid%253D23350215577"
+            }
+          }
+        },
+        {
+          "name": "静电放电（ESD）耐受电压",
+          "type": "性能指标",
+          "unit": "V",
+          "description": "人体模型（HBM）ESD测试中栅极能够承受的最大电压。反映栅金属叠层和边缘设计的鲁棒性。",
+          "baselines": {
+            "2020": {
+              "value": "300-500",
+              "source": "https://www.ee.nthu.edu.tw/shhsu/conference%20papers/IRPS_2024_Critical_Role_of_Holes_in_GaN-on-Si_HEMTs_for_Power_and_RF_Applications.pdf"
+            },
+            "2021": {
+              "value": "500-1000",
+              "source": "llm generated"
+            },
+            "2022": {
+              "value": "1000-2000",
+              "source": "llm generated"
+            },
+            "2023": {
+              "value": "2000-3000",
+              "source": "llm generated"
+            },
+            "2024": {
+              "value": "3000-3500",
+              "source": "https://www.ee.nthu.edu.tw/shhsu/conference%20papers/IRPS_2024_Critical_Role_of_Holes_in_GaN-on-Si_HEMTs_for_Power_and_RF_Applications.pdf"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "problem_id": 72,
+      "title": "二维材料的金属接触电阻",
+      "sub_field": "前沿新机理与后摩尔器件",
+      "status": "success",
+      "error_message": null,
+      "metrics": [
+        {
+          "name": "接触电阻 (Contact Resistance)",
+          "type": "性能指标",
+          "unit": "Ω·μm",
+          "description": "衡量二维材料与金属电极之间接触性能的关键指标，直接影响器件驱动电流和功耗。通常使用传输线法(TLM)提取。IRDS标准要求1nm节点以下接触电阻低于50-100Ω·μm。",
+          "baselines": {
+            "2020": {
+              "value": "800-1000",
+              "source": "https://m.elecfans.com/article/7057136.html"
+            },
+            "2021": {
+              "value": "123-235",
+              "source": "https://ic.nju.edu.cn/c2/06/c56618a639494/page.htm"
+            },
+            "2022": {
+              "value": "78-123",
+              "source": "https://www.osti.gov/servlets/purl/1999037"
+            },
+            "2023": {
+              "value": "42-78",
+              "source": "https://news.sciencenet.cn/htmlnews/2023/1/492506.shtm"
+            },
+            "2024": {
+              "value": "32-117",
+              "source": "https://link.springer.com/article/10.1007/s40843-024-3000-8"
+            },
+            "2025": {
+              "value": "42-100",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "肖特基势垒高度 (Schottky Barrier Height)",
+          "type": "性能指标",
+          "unit": "meV",
+          "description": "金属-半导体界面处的能带势垒高度，直接影响载流子注入效率。理想欧姆接触要求SBH接近0meV。通过变温I-V曲线和阿伦尼乌斯方程计算。",
+          "baselines": {
+            "2020": {
+              "value": "150-200",
+              "source": "https://m.elecfans.com/article/7057136.html"
+            },
+            "2021": {
+              "value": "31-158",
+              "source": "https://m.elecfans.com/article/7057136.html"
+            },
+            "2022": {
+              "value": "20-50",
+              "source": "https://www.matek.com/zh-TW/Tech_Article/detail/specialist-column/all/20231027-IAR"
+            },
+            "2023": {
+              "value": "10-32",
+              "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11739435/"
+            },
+            "2024": {
+              "value": "10-30",
+              "source": "llm generated"
+            },
+            "2025": {
+              "value": "<20",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "开态电流密度 (On-state Current Density)",
+          "type": "性能指标",
+          "unit": "μA/μm",
+          "description": "晶体管在开态时的电流驱动能力，是衡量器件性能的关键指标。IRDS要求1nm节点开态电流>1.2mA/μm。",
+          "baselines": {
+            "2020": {
+              "value": "200-400",
+              "source": "https://www.nature.com/articles/s41467-020-20732-w"
+            },
+            "2021": {
+              "value": "436-1135",
+              "source": "https://www.matek.com/zh-TW/Tech_Article/detail/specialist-column/all/20231027-IAR"
+            },
+            "2022": {
+              "value": "800-1200",
+              "source": "https://ic.nju.edu.cn/c2/06/c56618a639494/page.htm"
+            },
+            "2023": {
+              "value": "1220-1230",
+              "source": "https://ic.nju.edu.cn/c2/06/c56618a639494/page.htm"
+            },
+            "2024": {
+              "value": "1220-1300",
+              "source": "https://link.springer.com/article/10.1007/s40843-024-3000-8"
+            },
+            "2025": {
+              "value": "1300-1500",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "接触长度微缩极限 (Contact Length Scaling Limit)",
+          "type": "约束条件",
+          "unit": "nm",
+          "description": "接触电极的最小可制造长度，决定集成密度。传统顶接触在<100nm时接触电阻呈指数增长，边缘接触可突破此限制。",
+          "baselines": {
+            "2020": {
+              "value": "30-50",
+              "source": "https://m.elecfans.com/article/7057136.html"
+            },
+            "2021": {
+              "value": "20-30",
+              "source": "https://m.elecfans.com/article/7057136.html"
+            },
+            "2022": {
+              "value": "12-20",
+              "source": "https://m.elecfans.com/article/7057136.html"
+            },
+            "2023": {
+              "value": "5-12",
+              "source": "https://m.elecfans.com/article/7057136.html"
+            },
+            "2024": {
+              "value": "5-10",
+              "source": "llm generated"
+            },
+            "2025": {
+              "value": "<5",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "工艺兼容温度 (Process Compatibility Temperature)",
+          "type": "约束条件",
+          "unit": "°C",
+          "description": "接触工艺与后端工艺(BEOL)兼容的最高温度。传统金属接触需耐受450°C退火，半金属接触可降低热预算要求。",
+          "baselines": {
+            "2020": {
+              "value": "300-350",
+              "source": "https://m.elecfans.com/article/7057136.html"
+            },
+            "2021": {
+              "value": "350-400",
+              "source": "https://m.elecfans.com/article/7057136.html"
+            },
+            "2022": {
+              "value": "400-450",
+              "source": "https://m.elecfans.com/article/7057136.html"
+            },
+            "2023": {
+              "value": "400-500",
+              "source": "https://m.elecfans.com/article/7057136.html"
+            },
+            "2024": {
+              "value": "450-500",
+              "source": "llm generated"
+            },
+            "2025": {
+              "value": "500-550",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "IRDS接触电阻目标 (IRDS Contact Resistance Target)",
+          "type": "约束条件",
+          "unit": "Ω·μm",
+          "description": "国际器件与系统路线图对不同技术节点的接触电阻要求，是技术发展的基准目标。",
+          "baselines": {
+            "2024": {
+              "value": "<150",
+              "source": "https://github.com/Parcha-ai/grep-v2-deepresearch-bench/blob/main/reports/report_034.md"
+            },
+            "2028": {
+              "value": "<100",
+              "source": "https://github.com/Parcha-ai/grep-v2-deepresearch-bench/blob/main/reports/report_034.md"
+            },
+            "2031": {
+              "value": "<50",
+              "source": "https://github.com/Parcha-ai/grep-v2-deepresearch-bench/blob/main/reports/report_034.md"
+            },
+            "2034": {
+              "value": "<30",
+              "source": "https://github.com/Parcha-ai/grep-v2-deepresearch-bench/blob/main/reports/report_034.md"
+            }
+          }
+        },
+        {
+          "name": "接触稳定性 (Contact Stability)",
+          "type": "性能指标",
+          "unit": "%性能衰减",
+          "description": "接触电阻在高温退火或环境暴露后的稳定性，通常以退火后性能衰减百分比衡量。",
+          "baselines": {
+            "2020": {
+              "value": ">20%",
+              "source": "https://m.elecfans.com/article/7057136.html"
+            },
+            "2021": {
+              "value": "10-20%",
+              "source": "https://m.elecfans.com/article/7057136.html"
+            },
+            "2022": {
+              "value": "5-10%",
+              "source": "https://m.elecfans.com/article/7057136.html"
+            },
+            "2023": {
+              "value": "<5%",
+              "source": "https://m.elecfans.com/article/7057136.html"
+            },
+            "2024": {
+              "value": "<3%",
+              "source": "llm generated"
+            },
+            "2025": {
+              "value": "<2%",
+              "source": "llm generated"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "problem_id": 74,
+      "title": "硅光子（Silicon Photonics）的片上激光器集成",
+      "sub_field": "前沿新机理与后摩尔器件",
+      "status": "success",
+      "error_message": null,
+      "metrics": [
+        {
+          "name": "阈值电流密度",
+          "type": "性能指标",
+          "unit": "A/cm²",
+          "description": "激光器开始激射时的电流密度，反映激光器的效率和材料质量。对于硅基激光器，阈值电流密度是衡量异质外延质量的关键指标，与位错密度直接相关。",
+          "baselines": {
+            "2020": {
+              "value": "440 A/cm²",
+              "source": "https://cjl.lightpublishing.cn/rc-pub/front/front-article/download/42822450/lowqualitypdf/%E7%A1%85%E5%9F%BA%E9%87%8F%E5%AD%90%E7%82%B9%E6%BF%80%E5%85%89%E5%99%A8%E7%A0%94%E7%A9%B6%E8%BF%9B%E5%B1%95.pdf"
+            },
+            "2021": {
+              "value": "397 A/cm²",
+              "source": "https://cjl.lightpublishing.cn/rc-pub/front/front-article/download/42822450/lowqualitypdf/%E7%A1%85%E5%9F%BA%E9%87%8F%E5%AD%90%E7%82%B9%E6%BF%80%E5%85%89%E5%99%A8%E7%A0%94%E7%A9%B6%E8%BF%9B%E5%B1%95.pdf"
+            },
+            "2022": {
+              "value": "370 A/cm²",
+              "source": "https://cjl.lightpublishing.cn/rc-pub/front/front-article/download/42822450/lowqualitypdf/%E7%A1%85%E5%9F%BA%E9%87%8F%E5%AD%90%E7%82%B9%E6%BF%80%E5%85%89%E5%99%A8%E7%A0%94%E7%A9%B6%E8%BF%9B%E5%B1%95.pdf"
+            },
+            "2023": {
+              "value": "0.65 kA/cm² (650 A/cm²)",
+              "source": "http://shb.cas.cn/kydt2024/kjjz2024/202403/t20240315_7036036.html"
+            },
+            "2024": {
+              "value": "320 A/cm²",
+              "source": "llm generated"
+            },
+            "2025": {
+              "value": "300 A/cm²",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "输出功率",
+          "type": "性能指标",
+          "unit": "mW",
+          "description": "激光器在连续波模式下的最大输出功率，反映激光器的功率能力和热管理性能。对于数据中心应用，需要高功率激光器以支持长距离传输。",
+          "baselines": {
+            "2020": {
+              "value": "105 mW",
+              "source": "https://cjl.lightpublishing.cn/rc-pub/front/front-article/download/42822450/lowqualitypdf/%E7%A1%85%E5%9F%BA%E9%87%8F%E5%AD%90%E7%82%B9%E6%BF%80%E5%85%89%E5%99%A8%E7%A0%94%E7%A9%B6%E8%BF%9B%E5%B1%95.pdf"
+            },
+            "2021": {
+              "value": "138 mW",
+              "source": "https://cjl.lightpublishing.cn/rc-pub/front/front-article/download/42822450/lowqualitypdf/%E7%A1%85%E5%9F%BA%E9%87%8F%E5%AD%90%E7%82%B9%E6%BF%80%E5%85%89%E5%99%A8%E7%A0%94%E7%A9%B6%E8%BF%9B%E5%B1%95.pdf"
+            },
+            "2022": {
+              "value": "155 mW",
+              "source": "http://shb.cas.cn/kydt2024/kjjz2024/202403/t20240315_7036036.html"
+            },
+            "2023": {
+              "value": "200 mW",
+              "source": "https://aigc.idigital.com.cn/djyanbao/%E3%80%90%E5%9B%BD%E8%81%94%E8%AF%81%E5%88%B8%E3%80%91%E4%BB%95%E4%BD%B3%E5%85%89%E5%AD%90%EF%BC%88688313%EF%BC%89%EF%BC%9A%E7%A1%85%E5%85%89%E6%97%B6%E4%BB%A3%E7%9A%84%E8%8A%AF%E7%89%87%E7%BA%A7%E5%85%89%E9%80%9A%E4%BF%A1%E5%99%A8%E4%BB%B6%E5%B9%B3%E5%8F%B0-2025-01-13.pdf"
+            },
+            "2024": {
+              "value": "900 mW",
+              "source": "https://aigc.idigital.com.cn/djyanbao/%E3%80%90%E5%9B%BD%E8%81%94%E8%AF%81%E5%88%B8%E3%80%91%E4%BB%95%E4%BD%B3%E5%85%89%E5%AD%90%EF%BC%88688313%EF%BC%89%EF%BC%9A%E7%A1%85%E5%85%89%E6%97%B6%E4%BB%A3%E7%9A%84%E8%8A%AF%E7%89%87%E7%BA%A7%E5%85%89%E9%80%9A%E4%BF%A1%E5%99%A8%E4%BB%B6%E5%B9%B3%E5%8F%B0-2025-01-13.pdf"
+            },
+            "2025": {
+              "value": "1000 mW",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "边模抑制比",
+          "type": "性能指标",
+          "unit": "dB",
+          "description": "主模与最强边模的功率比，反映激光器的单模特性。对于光通信应用，需要高边模抑制比以确保信号质量。",
+          "baselines": {
+            "2020": {
+              "value": "50 dB",
+              "source": "https://cjl.lightpublishing.cn/rc-pub/front/front-article/download/42822450/lowqualitypdf/%E7%A1%85%E5%9F%BA%E9%87%8F%E5%AD%90%E7%82%B9%E6%BF%80%E5%85%89%E5%99%A8%E7%A0%94%E7%A9%B6%E8%BF%9B%E5%B1%95.pdf"
+            },
+            "2021": {
+              "value": "40 dB",
+              "source": "https://www.researching.cn/ArticlePdf/m00006/2022/42/16/1614001.pdf"
+            },
+            "2022": {
+              "value": "40 dB",
+              "source": "https://www.researching.cn/ArticlePdf/m00006/2022/42/16/1614001.pdf"
+            },
+            "2023": {
+              "value": "40 dB",
+              "source": "https://www.dogain.com/news_detail/146.html"
+            },
+            "2024": {
+              "value": "45 dB",
+              "source": "llm generated"
+            },
+            "2025": {
+              "value": "50 dB",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "最高工作温度",
+          "type": "性能指标",
+          "unit": "°C",
+          "description": "激光器能够正常工作的最高环境温度，反映激光器的热稳定性和可靠性。对于数据中心应用，需要高温工作能力以降低冷却成本。",
+          "baselines": {
+            "2020": {
+              "value": "120 °C",
+              "source": "https://cjl.lightpublishing.cn/rc-pub/front/front-article/download/42822450/lowqualitypdf/%E7%A1%85%E5%9F%BA%E9%87%8F%E5%AD%90%E7%82%B9%E6%BF%80%E5%85%89%E5%99%A8%E7%A0%94%E7%A9%B6%E8%BF%9B%E5%B1%95.pdf"
+            },
+            "2021": {
+              "value": "120 °C",
+              "source": "https://cjl.lightpublishing.cn/rc-pub/front/front-article/download/42822450/lowqualitypdf/%E7%A1%85%E5%9F%BA%E9%87%8F%E5%AD%90%E7%82%B9%E6%BF%80%E5%85%89%E5%99%A8%E7%A0%94%E7%A9%B6%E8%BF%9B%E5%B1%95.pdf"
+            },
+            "2022": {
+              "value": "120 °C",
+              "source": "http://shb.cas.cn/kydt2024/kjjz2024/202403/t20240315_7036036.html"
+            },
+            "2023": {
+              "value": "105 °C",
+              "source": "https://www-file.huawei.com/-/media/corp2020/pdf/publications/huawei-research/2023/huawei-research-issue4-cn2.pdf"
+            },
+            "2024": {
+              "value": "125 °C",
+              "source": "llm generated"
+            },
+            "2025": {
+              "value": "130 °C",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "位错密度",
+          "type": "约束条件",
+          "unit": "cm⁻²",
+          "description": "异质外延界面处的位错缺陷密度，直接影响激光器的效率和可靠性。硅与III-V族材料的晶格失配导致高密度位错，是技术难题的核心。",
+          "baselines": {
+            "2020": {
+              "value": "10⁷ cm⁻²",
+              "source": "https://www-file.huawei.com/-/media/corp2020/pdf/publications/huawei-research/2023/huawei-research-issue4-cn2.pdf"
+            },
+            "2021": {
+              "value": "7×10⁶ cm⁻²",
+              "source": "https://www-file.huawei.com/-/media/corp2020/pdf/publications/huawei-research/2023/huawei-research-issue4-cn2.pdf"
+            },
+            "2022": {
+              "value": "2×10⁶ cm⁻²",
+              "source": "https://core.ac.uk/download/pdf/41457173.pdf"
+            },
+            "2023": {
+              "value": "10⁶ cm⁻²",
+              "source": "llm generated"
+            },
+            "2024": {
+              "value": "5×10⁵ cm⁻²",
+              "source": "llm generated"
+            },
+            "2025": {
+              "value": "10⁵ cm⁻²",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "CMOS工艺兼容性",
+          "type": "约束条件",
+          "unit": "工艺节点",
+          "description": "硅光子工艺与标准CMOS工艺的兼容程度，决定制造成本和可扩展性。需要无偏角硅衬底、低温工艺等约束条件。",
+          "baselines": {
+            "2020": {
+              "value": "0.13 μm",
+              "source": "https://www.zte.com.cn/content/dam/zte-site/res-www-zte-com-cn/mediares/magazine/publication/com_cn/pdf/201705.pdf"
+            },
+            "2021": {
+              "value": "0.13 μm",
+              "source": "https://www.zte.com.cn/content/dam/zte-site/res-www-zte-com-cn/mediares/magazine/publication/com_cn/pdf/201705.pdf"
+            },
+            "2022": {
+              "value": "0.13 μm",
+              "source": "https://pdf.dfcfw.com/pdf/H3_AP202406031635253373_1.pdf"
+            },
+            "2023": {
+              "value": "90 nm",
+              "source": "llm generated"
+            },
+            "2024": {
+              "value": "65 nm",
+              "source": "llm generated"
+            },
+            "2025": {
+              "value": "45 nm",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "晶圆尺寸",
+          "type": "约束条件",
+          "unit": "英寸",
+          "description": "硅基激光器制造所用的晶圆尺寸，影响生产效率和成本。大尺寸晶圆有利于规模化生产。",
+          "baselines": {
+            "2020": {
+              "value": "4英寸",
+              "source": "http://shb.cas.cn/kydt2024/kjjz2024/202403/t20240315_7036036.html"
+            },
+            "2021": {
+              "value": "4英寸",
+              "source": "http://www.ime.cas.cn/icac/newsroom/newsroom_1/202006/t20200620_5609600.html"
+            },
+            "2022": {
+              "value": "8英寸",
+              "source": "http://www.ime.cas.cn/icac/newsroom/newsroom_1/202006/t20200620_5609600.html"
+            },
+            "2023": {
+              "value": "8英寸",
+              "source": "llm generated"
+            },
+            "2024": {
+              "value": "12英寸",
+              "source": "llm generated"
+            },
+            "2025": {
+              "value": "12英寸",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "斜率效率",
+          "type": "性能指标",
+          "unit": "mW/mA",
+          "description": "激光器输出功率随注入电流变化的斜率，反映激光器的电光转换效率。高斜率效率意味着更好的能量利用。",
+          "baselines": {
+            "2020": {
+              "value": "0.35 mW/mA",
+              "source": "https://www.researching.cn/ArticlePdf/m00006/2022/42/16/1614001.pdf"
+            },
+            "2021": {
+              "value": "0.48 mW/mA",
+              "source": "https://www.dogain.com/news_detail/146.html"
+            },
+            "2022": {
+              "value": "0.35 mW/mA",
+              "source": "https://www.researching.cn/ArticlePdf/m00006/2022/42/16/1614001.pdf"
+            },
+            "2023": {
+              "value": "0.48 mW/mA",
+              "source": "https://www.dogain.com/news_detail/146.html"
+            },
+            "2024": {
+              "value": "0.50 mW/mA",
+              "source": "llm generated"
+            },
+            "2025": {
+              "value": "0.55 mW/mA",
+              "source": "llm generated"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "problem_id": 80,
+      "title": "片上太赫兹（THz）源的高效产生",
+      "sub_field": "前沿新机理与后摩尔器件",
+      "status": "success",
+      "error_message": null,
+      "metrics": [
+        {
+          "name": "输出功率",
+          "type": "性能指标",
+          "unit": "dBm或mW",
+          "description": "片上太赫兹源在特定频率下的辐射输出功率，是衡量源性能的核心指标，直接影响通信距离和成像分辨率",
+          "baselines": {
+            "2020": {
+              "value": "2.03 W（单模脉冲功率，锁相阵列）",
+              "source": "https://www.researching.cn/ArticlePdf/m00001/2024/51/1/0114001.pdf"
+            },
+            "2021": {
+              "value": "220 mW（磷化铟DHBT工艺，220 GHz）",
+              "source": "https://www-file.huawei.com/admin/asset/v1/pro/view/1ed71ef6c4e84e01a979f9887d7f2d30.pdf"
+            },
+            "2022": {
+              "value": "4 dBm（270 GHz，GaAs工艺）",
+              "source": "https://ycyk.spacejournal.cn/cn/article/pdf/preview/10.12347/j.ycyk.20210914001.pdf"
+            },
+            "2023": {
+              "value": "820 mW（210 GHz，3D增材制造工艺）",
+              "source": "https://www-file.huawei.com/admin/asset/v1/pro/view/1ed71ef6c4e84e01a979f9887d7f2d30.pdf"
+            },
+            "2024": {
+              "value": "7.38 mW（4.02 THz，脉冲峰值功率）",
+              "source": "http://www.wuli.ac.cn/cn/article/pdf/preview/10.7693/wl20220505.pdf"
+            }
+          }
+        },
+        {
+          "name": "辐射效率",
+          "type": "性能指标",
+          "unit": "%",
+          "description": "输入电功率转换为太赫兹辐射功率的效率，反映能量转换的有效性",
+          "baselines": {
+            "2020": {
+              "value": "2%（钌薄膜热辐射）",
+              "source": "https://wulixb.iphy.ac.cn/pdf-content/10.7498/aps.65.010704.pdf"
+            },
+            "2021": {
+              "value": "11.2%（GaAs pHEMT工艺，100 GHz）",
+              "source": "https://ycyk.spacejournal.cn/cn/article/pdf/preview/10.12347/j.ycyk.20210914001.pdf"
+            },
+            "2022": {
+              "value": "1.7%（65nm CMOS工艺，129-171 GHz）",
+              "source": "https://ycyk.spacejournal.cn/cn/article/pdf/preview/10.12347/j.ycyk.20210914001.pdf"
+            },
+            "2023": {
+              "value": "0.4%（SiGe BiCMOS工艺，519-536 GHz）",
+              "source": "https://ycyk.spacejournal.cn/cn/article/pdf/preview/10.12347/j.ycyk.20210914001.pdf"
+            },
+            "2024": {
+              "value": "3.6×10⁻⁷ W⁻¹（铌酸锂混合波导理论效率）",
+              "source": "https://einstein.nju.edu.cn/upload/uploadify/20250827/%E9%93%8C%E9%85%B8%E9%94%82%E6%B7%B7%E5%90%88%E9%9B%86%E6%88%90%E6%B3%A2%E5%AF%BC%E9%9D%9E%E7%BA%BF%E6%80%A7%E5%A4%AA%E8%B5%AB%E5%85%B9%E6%BA%90_202508271915447815.pdf"
+            }
+          }
+        },
+        {
+          "name": "工作频率",
+          "type": "性能指标",
+          "unit": "GHz或THz",
+          "description": "太赫兹源的中心工作频率，决定应用场景和系统性能",
+          "baselines": {
+            "2020": {
+              "value": "1.2-5.2 THz（QCL覆盖范围）",
+              "source": "http://www.wuli.ac.cn/cn/article/pdf/preview/10.7693/wl20220505.pdf"
+            },
+            "2021": {
+              "value": "220 GHz（磷化铟DHBT工艺）",
+              "source": "https://www-file.huawei.com/admin/asset/v1/pro/view/1ed71ef6c4e84e01a979f9887d7f2d30.pdf"
+            },
+            "2022": {
+              "value": "270 GHz（GaAs工艺）",
+              "source": "https://ycyk.spacejournal.cn/cn/article/pdf/preview/10.12347/j.ycyk.20210914001.pdf"
+            },
+            "2023": {
+              "value": "300-450 GHz（6G通信频段）",
+              "source": "https://www-file.huawei.com/admin/asset/v1/pro/view/1ed71ef6c4e84e01a979f9887d7f2d30.pdf"
+            },
+            "2024": {
+              "value": "0.379 THz（铌酸锂混合波导）",
+              "source": "https://einstein.nju.edu.cn/upload/uploadify/20250827/%E9%93%8C%E9%85%B8%E9%94%82%E6%B7%B7%E5%90%88%E9%9B%86%E6%88%90%E6%B3%A2%E5%AF%BC%E9%9D%9E%E7%BA%BF%E6%80%A7%E5%A4%AA%E8%B5%AB%E5%85%B9%E6%BA%90_202508271915447815.pdf"
+            }
+          }
+        },
+        {
+          "name": "等效全向辐射功率（EIRP）",
+          "type": "性能指标",
+          "unit": "dBm",
+          "description": "考虑天线增益后的有效辐射功率，反映系统整体辐射能力",
+          "baselines": {
+            "2020": {
+              "value": "21.86 dBm（236 GHz系统）",
+              "source": "https://www.researching.cn/ArticlePdf/m00078/2021/19/5/2021-05-0753.pdf"
+            },
+            "2021": {
+              "value": "14 dBm（420 GHz硅基天线阵列）",
+              "source": "http://www.cjors.cn/cn/article/pdf/preview/10.12265/j.cjors.2023130.pdf"
+            },
+            "2022": {
+              "value": "-17 dBm（823 GHz，SiGe CMOS工艺）",
+              "source": "https://ycyk.spacejournal.cn/cn/article/pdf/preview/10.12347/j.ycyk.20210914001.pdf"
+            },
+            "2023": {
+              "value": "-11.3 dBm（519-536 GHz，可重构阵列）",
+              "source": "https://ycyk.spacejournal.cn/cn/article/pdf/preview/10.12347/j.ycyk.20210914001.pdf"
+            },
+            "2024": {
+              "value": "llm generated（基于趋势推测为-5至0 dBm范围）",
+              "source": "llm generated"
+            }
+          }
+        },
+        {
+          "name": "工作温度",
+          "type": "约束条件",
+          "unit": "K或°C",
+          "description": "太赫兹源能够正常工作的环境温度，影响系统复杂性和成本",
+          "baselines": {
+            "2020": {
+              "value": "250 K（-23°C，QCL最高工作温度）",
+              "source": "https://www.researching.cn/ArticlePdf/m00001/2024/51/1/0114001.pdf"
+            },
+            "2021": {
+              "value": "129 K（-144°C，连续波QCL最高温度）",
+              "source": "http://www.wuli.ac.cn/cn/article/pdf/preview/10.7693/wl20220505.pdf"
+            },
+            "2022": {
+              "value": "300 K（27°C，室温工作目标）",
+              "source": "https://wulixb.iphy.ac.cn/pdf-content/10.7498/aps.65.010704.pdf"
+            },
+            "2023": {
+              "value": "210 K（-63°C，热电制冷条件）",
+              "source": "https://www.researching.cn/ArticlePdf/m00001/2024/51/1/0114001.pdf"
+            },
+            "2024": {
+              "value": "300 K（27°C，铌酸锂室温工作）",
+              "source": "https://einstein.nju.edu.cn/upload/uploadify/20250827/%E9%93%8C%E9%85%B8%E9%94%82%E6%B7%B7%E5%90%88%E9%9B%86%E6%88%90%E6%B3%A2%E5%AF%BC%E9%9D%9E%E7%BA%BF%E6%80%A7%E5%A4%AA%E8%B5%AB%E5%85%B9%E6%BA%90_202508271915447815.pdf"
+            }
+          }
+        },
+        {
+          "name": "工艺节点",
+          "type": "约束条件",
+          "unit": "nm",
+          "description": "制造太赫兹源采用的半导体工艺技术节点，影响器件性能和集成度",
+          "baselines": {
+            "2020": {
+              "value": "65nm CMOS（主流工艺）",
+              "source": "https://ycyk.spacejournal.cn/cn/article/pdf/preview/10.12347/j.ycyk.20210914001.pdf"
+            },
+            "2021": {
+              "value": "0.13μm SiGe HBT（高频应用）",
+              "source": "https://ycyk.spacejournal.cn/cn/article/pdf/preview/10.12347/j.ycyk.20210914001.pdf"
+            },
+            "2022": {
+              "value": "0.1μm GaAs pHEMT（高性能工艺）",
+              "source": "https://ycyk.spacejournal.cn/cn/article/pdf/preview/10.12347/j.ycyk.20210914001.pdf"
+            },
+            "2023": {
+              "value": "35nm InP HEMT（先进工艺）",
+              "source": "https://www-file.huawei.com/admin/asset/v1/pro/view/1ed71ef6c4e84e01a979f9887d7f2d30.pdf"
+            },
+            "2024": {
+              "value": "混合集成工艺（铌酸锂+金属超晶格）",
+              "source": "https://einstein.nju.edu.cn/upload/uploadify/20250827/%E9%93%8C%E9%85%B8%E9%94%82%E6%B7%B7%E5%90%88%E9%9B%86%E6%88%90%E6%B3%A2%E5%AF%BC%E9%9D%9E%E7%BA%BF%E6%80%A7%E5%A4%AA%E8%B5%AB%E5%85%B9%E6%BA%90_202508271915447815.pdf"
+            }
+          }
+        },
+        {
+          "name": "调制带宽",
+          "type": "性能指标",
+          "unit": "GHz",
+          "description": "太赫兹源能够支持的最大信号调制带宽，决定通信速率",
+          "baselines": {
+            "2020": {
+              "value": "35 GHz（240 GHz SiGe工艺）",
+              "source": "https://www.researching.cn/ArticlePdf/m00078/2021/19/5/2021-05-0753.pdf"
+            },
+            "2021": {
+              "value": "42 GHz（129-171 GHz，65nm CMOS）",
+              "source": "https://ycyk.spacejournal.cn/cn/article/pdf/preview/10.12347/j.ycyk.20210914001.pdf"
+            },
+            "2022": {
+              "value": "30 GHz（穿行式扫描系统）",
+              "source": "https://www.itu.int/dms_pub/itu-r/opb/rep/R-REP-SM.2352-1-2022-PDF-C.pdf"
+            },
+            "2023": {
+              "value": "44 GHz（300 GHz成像雷达）",
+              "source": "https://www.itu.int/dms_pub/itu-r/opb/rep/R-REP-SM.2352-1-2022-PDF-C.pdf"
+            },
+            "2024": {
+              "value": "8 GHz（140 GHz原型样机）",
+              "source": "https://www-file.huawei.com/admin/asset/v1/pro/view/1ed71ef6c4e84e01a979f9887d7f2d30.pdf"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

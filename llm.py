@@ -182,6 +182,36 @@ f"""
     )
     return safe_json_loads(resp.choices[0].message.content)
 
+def _decide_metric_sync(paper, metric_list, paper_type="论文"):
+    prompt = f"""
+你是一位专业的工业界专家以及学者。
+给定以下{paper_type}内容和与此{paper_type}有直接关联 metric 列表，请判断该{paper_type}中是否提供了其提出的方法在某个 metric 上的性能结果。
+请返回一个 JSON 对象，格式如下:
+{{
+    "metric_name_1": {{
+        "provided": true/false,
+        "value": "浮点数，论文中该 metric 的性能结果, 如果没提供则置为 0",
+        "unit": "该 metric 的单位，例如 ms, %, frames per second 等"
+        }},
+    "metric_name_2": {{
+        "provided": true/false,
+        "value": "浮点数，论文中该 metric 的性能结果, 如果没提供则置为 0",
+        "unit": "该 metric 的单位，例如 ms, %, frames per second 等"
+        }}
+}}
+返回 JSON 对象中的 metric_name 应与输入的 metric_list 中提供的 name 保持一致。
+
+{paper_type}内容:
+{paper}
+metric 列表:
+{metric_list}
+"""
+    resp = client.chat.completions.create(
+        model=MODEL,
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0
+    )
+    return safe_json_loads(resp.choices[0].message.content)
 
 
 # ---------- async 并发封装 ----------
@@ -192,3 +222,6 @@ async def matching(paper, industry_problems, paper_type="论文"):
 
 async def extract_scores(paper, industry_problem, paper_type="论文"):
     return await asyncio.to_thread(_extract_scores_sync, paper, industry_problem, paper_type)
+
+async def decide_metric(paper, metric_list, paper_type="论文"):
+    return await asyncio.to_thread(_decide_metric_sync, paper, metric_list, paper_type)
