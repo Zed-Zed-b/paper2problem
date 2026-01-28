@@ -75,27 +75,27 @@ def safe_json_loads(llm_text: str):
         return json.loads(llm_text[start:end])
 
 
-def _matching_sync(paper, industry_problems):
+def _matching_sync(paper, industry_problems, paper_type="论文"):
     industry_problems_dict = {i: prob for i, prob in enumerate(industry_problems)}
     prompt = f"""
 你是一位专业的工业界专家以及学者，擅长评估学术研究对产业难题的实际价值。
 
 【任务】
-给定一篇论文，判断该论文是否对下列产业难题具有实际贡献（即：论文的研究内容、方法或结果能够为解决该产业难题提供有意义的技术路径、方案或突破）。
+给定一篇{paper_type}，判断该{paper_type}是否对下列产业难题具有实际贡献（即：{paper_type}的研究内容、方法或结果能够为解决该产业难题提供有意义的技术路径、方案或突破）。
 
 【判断维度】
-请从以下 3 个维度综合评估论文是否对产业难题有实际贡献：
+请从以下 3 个维度综合评估{paper_type}是否对产业难题有实际贡献：
 
-1. 研究领域相关性：论文的研究对象是否与产业难题的核心技术领域高度匹配
-2. 应用场景一致性：论文的应用场景是否与产业难题的工业应用场景一致或相近
-3. 问题层面适配度：论文提出的核心方法所解决的问题是否和产业难题的具体描述匹配或能够推动产业难题的解决
+1. 研究领域相关性：{paper_type}的研究对象是否与产业难题的核心技术领域高度匹配
+2. 应用场景一致性：{paper_type}的应用场景是否与产业难题的工业应用场景一致或相近
+3. 问题层面适配度：{paper_type}提出的核心方法所解决的问题是否和产业难题的具体描述匹配或能够推动产业难题的解决
 
 【注意事项】
-- 严格匹配：不要因为"都是芯片领域"就认为所有芯片论文都匹配所有芯片难题
-- 仅判断关联性：当前任务只判断论文与难题是否有匹配，至于解决深度由后续评分步骤评估
-- 避免过度泛化：光通信芯片论文不匹配光刻胶难题，存储芯片论文不匹配 EDA 工具难题
+- 严格匹配：不要因为"都是芯片领域"就认为所有芯片{paper_type}都匹配所有芯片难题
+- 仅判断关联性：当前任务只判断{paper_type}与难题是否有匹配，至于解决深度由后续评分步骤评估
+- 避免过度泛化：光通信芯片{paper_type}不匹配光刻胶难题，存储芯片{paper_type}不匹配 EDA 工具难题
 
-【论文内容】
+【{paper_type}内容】
 {paper}
 
 【产业难题】
@@ -128,12 +128,12 @@ def _matching_sync(paper, industry_problems):
     return safe_json_loads(resp.choices[0].message.content)
 
 
-def _extract_scores_sync(paper, industry_problem):
+def _extract_scores_sync(paper, industry_problem, paper_type="论文"):
     prompt = f"""
 你是一位专业的工业界专家以及学者。
-给定以下论文内容和产业难题，请提取该论文在解决该产业难题方面的能力提升。
-这种提升分为两方面：一是性能阈值跨越(p_score)，二是技术成熟度等级（TRL）。
-p_score 是一个数值，表示该论文在解决该产业难题方面的性能提升，数值越大表示提升越大。
+给定以下{paper_type}内容和产业难题，请提取该{paper_type}在解决该产业难题方面的能力提升。
+这种提升分为三方面：一是性能阈值跨越(p_score)，二是技术成熟度等级（TRL），三是自身表現(s_score)。
+p_score 是一个数值，表示该{paper_type}在解决该产业难题方面的性能提升，数值越大表示提升越大。
 | 等级 | 名称 | 定义描述 | 关键特征识别（AI / 专家判据） |
 |----|----|----|----|
 | P1 | 边缘性改进 | 针对难题的周边环节或非核心参数进行了微调，未涉及核心技术逻辑。 | 权利要求多为外围优化；解决的是局部偶发问题；技术可替代性极强。 |
@@ -153,8 +153,14 @@ TRL 是技术成熟度等级（Technology Readiness Level）的缩写，是衡�
 | 三、系统验证阶段（产业落地） | TRL 7 | 真实操作环境下的系统演示 | 在实际运行环境（如工厂生产线、真实电网）中进行验证，是解决“最后一公里”的关键。 |
 |  | TRL 8 | 最终系统完成并经过测试定型 | 技术完全成熟，通过工业级可靠性与安全性测试。例如：完成芯片流片并进行批量测试。 |
 |  | TRL 9 | 实际系统在真实任务中被证明 | 技术已实现商业化大规模应用，或在重大国家工程中稳定运行。例如：列入国家 / 行业采购目录。 |
-请基于上述定义，提取该论文在解决以下产业难题方面的 p_score 和 TRL：
-论文内容:
+s_score 是{paper_type}自身取得的在对应产业难题上的性能数值提升。"""+\
+r"""它的计算公式为: s_{score} = \left|\frac{Result_{paper} - Result_{baseline}}{Result_{baseline}}\right"""+\
+f"""
+如果{paper_type}的性能不及基线，请将 result_paper 和 result_baseline 均置为 0。
+如果 s_score 无法从{paper_type}中直接提取，即 result_paper 和 result_baseline 有一者缺失，也请将 result_paper 和 result_baseline 均置为 0。
+请基于上述定义，提取该{paper_type}在解决以下产业难题方面的 p_score, TRL, 和 s_score（你只需提供 result_paper 和 result_baseline，我来计算s_score）：
+{paper_type}内容:
+"""+f"""
 {paper}
 产业难题:
 {industry_problem}
@@ -163,7 +169,10 @@ TRL 是技术成熟度等级（Technology Readiness Level）的缩写，是衡�
   "p_score": 1~5 的整数,
   "p_score_reason": "详细说明评分依据",
   "TRL": 1~9 的整数,
-  "TRL_reason": "详细说明评分依据"
+  "TRL_reason": "详细说明评分依据",
+  "result_paper": "浮点数，论文中取得的性能结果",
+  "result_baseline": "浮点数，论文中提及的基线性能结果",
+  "s_score_reason": "详细说明 result_paper 和 result_baseline 提取结果"
 }}
 """
     resp = client.chat.completions.create(
@@ -174,11 +183,12 @@ TRL 是技术成熟度等级（Technology Readiness Level）的缩写，是衡�
     return safe_json_loads(resp.choices[0].message.content)
 
 
+
 # ---------- async 并发封装 ----------
 
-async def matching(paper, industry_problems):
-    return await asyncio.to_thread(_matching_sync, paper, industry_problems)
+async def matching(paper, industry_problems, paper_type="论文"):
+    return await asyncio.to_thread(_matching_sync, paper, industry_problems, paper_type)
 
 
-async def extract_scores(paper, industry_problem):
-    return await asyncio.to_thread(_extract_scores_sync, paper, industry_problem)
+async def extract_scores(paper, industry_problem, paper_type="论文"):
+    return await asyncio.to_thread(_extract_scores_sync, paper, industry_problem, paper_type)
