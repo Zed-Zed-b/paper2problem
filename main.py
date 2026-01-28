@@ -2,6 +2,7 @@ import glob
 import json
 from llm import extract_scores, matching
 # from config import INDUSTRY_PROBLEMS
+import math
 import numpy as np
 import matplotlib
 matplotlib.use('Agg')  # 使用非交互式后端
@@ -74,7 +75,7 @@ def plot_heatmap(all_results, paper_names=None, problem_names=None, save_path="h
 
 print_lock = Lock()
 
-async def process_single_paper(paper_path):
+async def process_single_paper(paper_path, paper_type="论文"):
     paper = load_paper(paper_path)
     scores = [0.0] * len(INDUSTRY_PROBLEMS)
     
@@ -82,10 +83,10 @@ async def process_single_paper(paper_path):
     
     # 收集所有输出
     outputs = [f"\n{'='*60}"]
-    outputs.append(f"📄 论文: {paper_name}")
+    outputs.append(f"📄 {paper_type}: {paper_name}")
     
     # 匹配
-    match_result = await matching(paper, INDUSTRY_PROBLEMS)
+    match_result = await matching(paper, INDUSTRY_PROBLEMS, paper_type=paper_type)
     matched_ids = [int(i) for i, v in match_result.items() if v['matched']]
 
     # 输出所有匹配结果及理由
@@ -105,7 +106,7 @@ async def process_single_paper(paper_path):
     
     # 并发评分
     try:
-        tasks = [extract_scores(paper, INDUSTRY_PROBLEMS[i]) for i in matched_ids]
+        tasks = [extract_scores(paper, INDUSTRY_PROBLEMS[i], paper_type=paper_type) for i in matched_ids]
         results = await asyncio.gather(*tasks)
     except Exception as e:
         outputs.append(f"评分过程中出现错误: {e}")
@@ -117,23 +118,27 @@ async def process_single_paper(paper_path):
     
     # 处理结果
     for i, r in zip(matched_ids, results):
-        scores[i] = r["p_score"] * r["TRL"]
+        rp = eval(r["result_paper"]) if isinstance(r["result_paper"], str) else r["result_paper"]
+        rb = eval(r["result_baseline"]) if isinstance(r["result_baseline"], str) else r["result_baseline"]
+        s_score = math.tanh(math.fabs((rp - rb) / rb)) if rb != 0 else 0.0
+        scores[i] = r["p_score"] * r["TRL"] * (1 + s_score)
         outputs.append(f"\n  问题[{i}] - 得分: {scores[i]:.2f}")
         outputs.append(f"    P评分: {r['p_score']} - {r['p_score_reason']}")
         outputs.append(f"    TRL: {r['TRL']} - {r['TRL_reason']}")
+        outputs.append(f"    result_paper: {rp}, result_baseline: {rb} - s_score: {s_score:.4f} - {r['s_score_reason']}")
     
     # 一次性输出
     async with print_lock:
         print("\n".join(outputs))
-    
     return scores
 
 
 async def main():
+    paper_type = "论文"
     papers = glob.glob("example/*.json")
 
     all_results = await asyncio.gather(
-        *[process_single_paper(p) for p in papers]
+        *[process_single_paper(p, paper_type=paper_type) for p in papers]
     )
 
     # 生成热力图
