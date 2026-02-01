@@ -173,14 +173,26 @@ async def process_single_paper(paper_path, paper_type="论文"):
 
     try:
         metric_tasks = []
+        metric_task_problem_ids = []  # 记录每个任务对应的 problem_id
         for i in matched_ids:
             if i in INDUSTRY_PROBLEMS_METRIC:
                 metric_tasks.append(decide_metric(paper, INDUSTRY_PROBLEMS_METRIC[i], paper_type=paper_type))
+                metric_task_problem_ids.append(i)
         if metric_tasks:
             metric_results = await asyncio.gather(*metric_tasks)
+
+            # 重新组织数据结构：将 metric 结果与 problem_id 关联
+            reorganized_results = []
+            for problem_id, metric_result in zip(metric_task_problem_ids, metric_results):
+                # 包含所有 metrics，不进行过滤
+                reorganized_results.append({
+                    "problem_id": problem_id + 1,
+                    "metrics": metric_result
+                })
+
             os.makedirs("metric_match", exist_ok=True)
             with open(f"metric_match/{paper_name}.json", "w", encoding="utf-8") as f:
-                json.dump(metric_results, f, ensure_ascii=False, indent=4)
+                json.dump(reorganized_results, f, ensure_ascii=False, indent=4)
     except Exception as e:
         outputs.append(f"评分过程中出现错误: {e}")
         outputs.append(f"模型输出: {match_result}")
@@ -208,7 +220,7 @@ async def process_single_paper(paper_path, paper_type="论文"):
 
 async def main():
     paper_type = "论文"
-    paper_dir = "中文文献"
+    paper_dir = "英文文献"
     papers = glob.glob(f"example/{paper_dir}/*.json")
 
     all_results = await asyncio.gather(
