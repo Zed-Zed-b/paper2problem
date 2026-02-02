@@ -517,3 +517,123 @@ class Scorer:
             name = problem.get('title', f'问题{i}')
             names.append(name)
         return names
+
+    def rank_papers_for_problem(self, problem_id: int, top_n: Optional[int] = None) -> List[Dict[str, Any]]:
+        """
+        对特定产业难题的论文进行排名（从高到低）
+
+        Args:
+            problem_id: 产业难题ID
+            top_n: 返回前N名，如果为None则返回所有
+
+        Returns:
+            排序后的论文列表，每个元素包含paper_id、title、score等信息
+        """
+        if problem_id >= len(self.industry_problems):
+            raise ValueError(f"无效的problem_id: {problem_id}")
+
+        ranked_papers = []
+
+        # 遍历所有论文
+        for paper_id, paper in self.papers.items():
+            score = 0.0
+            score_data = None
+
+            # 检查是否有评分记录
+            if paper_id in self.scores and problem_id in self.scores[paper_id]:
+                score_data = self.scores[paper_id][problem_id]
+                score = score_data.get("total_score", 0.0)
+            else:
+                # 检查是否有匹配记录但未评分的情况
+                if paper_id in self.match_results and self.match_results[paper_id].get(problem_id, False):
+                    # 匹配但未评分，得分为0
+                    score = 0.0
+                else:
+                    # 未匹配也未评分，跳过
+                    continue
+
+            # 构建论文信息
+            paper_info = {
+                "paper_id": paper_id,
+                "title": paper.title,
+                "domain": paper.domain,
+                "score": score,
+                "score_data": score_data,
+                "matched": score_data is not None or (paper_id in self.match_results and self.match_results[paper_id].get(problem_id, False))
+            }
+
+            ranked_papers.append(paper_info)
+
+        # 按分数从高到低排序
+        ranked_papers.sort(key=lambda x: x["score"], reverse=True)
+
+        # 限制返回数量
+        if top_n is not None and top_n > 0:
+            ranked_papers = ranked_papers[:top_n]
+
+        return ranked_papers
+
+    def get_problem_rankings(self, problem_id: int, include_zero_scores: bool = False) -> List[Dict[str, Any]]:
+        """
+        获取特定产业难题的完整排名（包括详细评分信息）
+
+        Args:
+            problem_id: 产业难题ID
+            include_zero_scores: 是否包含得分为0的论文
+
+        Returns:
+            排序后的论文列表，包含详细评分信息
+        """
+        if problem_id >= len(self.industry_problems):
+            raise ValueError(f"无效的problem_id: {problem_id}")
+
+        rankings = []
+
+        # 遍历所有论文
+        for paper_id, paper in self.papers.items():
+            # 检查是否有评分记录
+            if paper_id in self.scores and problem_id in self.scores[paper_id]:
+                score_data = self.scores[paper_id][problem_id]
+                score = score_data.get("total_score", 0.0)
+
+                # 构建详细排名信息
+                ranking_info = {
+                    "paper_id": paper_id,
+                    "title": paper.title,
+                    "domain": paper.domain,
+                    "score": score,
+                    "p_score": score_data.get("p_score", 0),
+                    "TRL": score_data.get("TRL", 0),
+                    "s_score": score_data.get("s_score", 0.0),
+                    "result_paper_value": score_data.get("result_paper_value", 0),
+                    "result_baseline_value": score_data.get("result_baseline_value", 0),
+                    "reasoning": score_data.get("reasoning", ""),
+                    "matched": True
+                }
+                rankings.append(ranking_info)
+            elif include_zero_scores:
+                # 包含得分为0的论文（匹配但未评分，或未匹配）
+                matched = paper_id in self.match_results and self.match_results[paper_id].get(problem_id, False)
+                ranking_info = {
+                    "paper_id": paper_id,
+                    "title": paper.title,
+                    "domain": paper.domain,
+                    "score": 0.0,
+                    "p_score": 0,
+                    "TRL": 0,
+                    "s_score": 0.0,
+                    "result_paper_value": 0,
+                    "result_baseline_value": 0,
+                    "reasoning": "",
+                    "matched": matched
+                }
+                rankings.append(ranking_info)
+
+        # 按分数从高到低排序
+        rankings.sort(key=lambda x: x["score"], reverse=True)
+
+        # 添加排名序号
+        for i, ranking in enumerate(rankings):
+            ranking["rank"] = i + 1
+
+        return rankings
