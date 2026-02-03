@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple, Optional, Dict, Any
 
 
 class Paper:
@@ -49,7 +49,7 @@ class IndustryProblem:
         """
         self.id = id
         self.metadata = metadata
-        self.belonged_papers = []  # 匹配的Paper对象列表
+        self.belonged_papers: List[Tuple['Paper', Optional[Dict[str, Any]]]] = []  # 匹配的论文及评分数据列表，评分数据可能为None
         self.title = metadata.get('title', f'问题{id}')
 
     def __repr__(self):
@@ -58,20 +58,84 @@ class IndustryProblem:
     def __str__(self):
         return self.title
 
-    def add_paper(self, paper: Paper):
-        """添加匹配的论文"""
-        if paper not in self.belonged_papers:
-            self.belonged_papers.append(paper)
-            paper.add_problem(self.id)
+    def add_paper(self, paper: Paper, score_data: Optional[Dict[str, Any]] = None):
+        """添加匹配的论文及评分数据
+
+        Args:
+            paper: Paper对象
+            score_data: 完整的评分数据字典，包含total_score等字段，如果为None表示未评分
+        """
+        # 检查是否已存在
+        for i, (existing_paper, existing_data) in enumerate(self.belonged_papers):
+            if existing_paper == paper:
+                # 更新评分数据
+                self.belonged_papers[i] = (paper, score_data)
+                return
+
+        # 不存在则添加
+        self.belonged_papers.append((paper, score_data))
+        paper.add_problem(self.id)
 
     def get_papers(self) -> List['Paper']:
-        """获取匹配的论文列表"""
+        """获取匹配的论文列表（不包含得分）"""
+        return [paper for paper, _ in self.belonged_papers]
+
+    def get_papers_with_scores(self) -> List[Tuple['Paper', Optional[Dict[str, Any]]]]:
+        """获取匹配的论文及评分数据列表"""
         return self.belonged_papers.copy()
 
     def has_paper(self, paper: Paper) -> bool:
         """检查是否匹配指定的论文"""
-        return paper in self.belonged_papers
+        return any(p == paper for p, _ in self.belonged_papers)
 
     def get_paper_count(self) -> int:
         """获取匹配的论文数量"""
         return len(self.belonged_papers)
+
+    def get_ranked_papers(self, include_none_scores: bool = False) -> List[Tuple['Paper', Optional[Dict[str, Any]]]]:
+        """获取按得分从高到低排序的论文列表
+
+        Args:
+            include_none_scores: 是否包含评分数据为None的论文，如果为False则只包含有评分数据的论文
+
+        Returns:
+            排序后的(论文, 评分数据)列表，按total_score从高到低排序，None评分数据排在最后（如果包含）
+        """
+        if include_none_scores:
+            papers = self.belonged_papers.copy()
+        else:
+            papers = [(paper, score_data) for paper, score_data in self.belonged_papers if score_data is not None]
+
+        # 排序：total_score高的在前，None评分数据排在最后
+        papers.sort(key=lambda x: (
+            x[1] is None,  # None数据排在最后
+            -x[1].get('total_score', 0.0) if x[1] is not None else 0  # 按total_score降序
+        ))
+        return papers
+
+    def get_paper_score(self, paper: Paper) -> Optional[float]:
+        """获取指定论文的得分（从评分数据中提取total_score）"""
+        for p, score_data in self.belonged_papers:
+            if p == paper:
+                if score_data is not None:
+                    return score_data.get('total_score', 0.0)
+                else:
+                    return None
+        return None
+
+    def update_paper_score_data(self, paper: Paper, score_data: Optional[Dict[str, Any]]) -> bool:
+        """更新指定论文的评分数据，如果论文不存在则添加"""
+        for i, (p, _) in enumerate(self.belonged_papers):
+            if p == paper:
+                self.belonged_papers[i] = (paper, score_data)
+                return True
+        # 论文不存在，添加它
+        self.add_paper(paper, score_data)
+        return True
+
+    def get_paper_score_data(self, paper: Paper) -> Optional[Dict[str, Any]]:
+        """获取指定论文的完整评分数据"""
+        for p, score_data in self.belonged_papers:
+            if p == paper:
+                return score_data
+        return None

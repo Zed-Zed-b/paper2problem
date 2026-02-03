@@ -221,15 +221,14 @@ class Scorer:
         匹配论文与产业难题
 
         Args:
-            paper: Paper对象
-            paper_type: 论文类型，可选"论文"或"专利"
+            paper: Paper对象（包含paper_type属性）
 
         Returns:
             匹配结果字典，problem_id -> matched (bool)
         """
-        # 选择正确的prompt
         paper_type = paper.paper_type
-        if paper.paper_type == "专利":
+        # 选择正确的prompt
+        if paper_type == "专利":
             prompt_template = self.prompts.get("match_patent", "")
         else:
             prompt_template = self.prompts.get("match_paper", "")
@@ -273,7 +272,7 @@ class Scorer:
                 if matched:
                     paper.add_problem(str(problem_id))
                     if problem_id in self.problems:
-                        self.problems[problem_id].add_paper(paper)
+                        self.problems[problem_id].add_paper(paper, score_data=None)
 
                 # 存储匹配结果
                 if paper.paper_id not in self.match_results:
@@ -290,9 +289,8 @@ class Scorer:
         对论文在特定产业难题上进行评分
 
         Args:
-            paper: Paper对象
+            paper: Paper对象（包含paper_type属性）
             problem_id: 产业难题ID
-            paper_type: 论文类型
 
         Returns:
             评分结果字典
@@ -358,20 +356,24 @@ class Scorer:
             self.scores[paper.paper_id] = {}
         self.scores[paper.paper_id][problem_id] = result
 
+        # 更新IndustryProblem中的得分
+        if problem_id in self.problems:
+            self.problems[problem_id].update_paper_score_data(paper, result)
+
         return result
 
-    async def evaluate_metrics_for_paper(self, paper: Paper, problem_id: int, paper_type: str = "论文") -> Dict[str, Any]:
+    async def evaluate_metrics_for_paper(self, paper: Paper, problem_id: int) -> Dict[str, Any]:
         """
         评估论文在特定产业难题上的指标
 
         Args:
-            paper: Paper对象
+            paper: Paper对象（包含paper_type属性）
             problem_id: 产业难题ID
-            paper_type: 论文类型
 
         Returns:
             指标评估结果
         """
+        paper_type = paper.paper_type
         if problem_id not in self.industry_problems_metric:
             return {"problem_id": problem_id, "metrics": {}, "has_metrics": False}
 
@@ -431,7 +433,7 @@ class Scorer:
         paper = self.load_paper(paper_path, paper_type=paper_type)
 
         # 匹配论文与产业难题
-        match_results = await self.match_paper_to_problems(paper, paper_type)
+        match_results = await self.match_paper_to_problems(paper)
         matched_ids = [pid for pid, matched in match_results.items() if matched]
 
         if not matched_ids:
@@ -443,14 +445,14 @@ class Scorer:
             }
 
         # 并发评分
-        score_tasks = [self.score_paper_for_problem(paper, pid, paper_type) for pid in matched_ids]
+        score_tasks = [self.score_paper_for_problem(paper, pid) for pid in matched_ids]
         score_results = await asyncio.gather(*score_tasks)
 
         # 并发评估指标
         metric_tasks = []
         for pid in matched_ids:
             if pid in self.industry_problems_metric:
-                metric_tasks.append(self.evaluate_metrics_for_paper(paper, pid, paper_type))
+                metric_tasks.append(self.evaluate_metrics_for_paper(paper, pid))
 
         metric_results = []
         if metric_tasks:
@@ -546,40 +548,33 @@ class Scorer:
         if problem_id >= len(self.industry_problems):
             raise ValueError(f"无效的problem_id: {problem_id}")
 
+        # 检查难题是否存在
+        if problem_id not in self.problems:
+            return []
+
+        problem = self.problems[problem_id]
+
+        # 获取排序后的论文（包含None得分的论文）
+        ranked_pairs = problem.get_ranked_papers(include_none_scores=True)
+
         ranked_papers = []
-
-        # 遍历所有论文
-        for paper_id, paper in self.papers.items():
-            score = 0.0
-            score_data = None
-
-            # 检查是否有评分记录
-            if paper_id in self.scores and problem_id in self.scores[paper_id]:
-                score_data = self.scores[paper_id][problem_id]
-                score = score_data.get("total_score", 0.0)
-            else:
-                # 检查是否有匹配记录但未评分的情况
-                if paper_id in self.match_results and self.match_results[paper_id].get(problem_id, False):
-                    # 匹配但未评分，得分为0
-                    score = 0.0
-                else:
-                    # 未匹配也未评分，跳过
-                    continue
+        for paper, score_data in ranked_pairs:
+            # 获取评分数据
+            # score_data = None
+            # if paper.paper_id in self.scores and problem_id in self.scores[paper.paper_id]:
+            #     score_data = self.scores[paper.paper_id][problem_id]
 
             # 构建论文信息
             paper_info = {
-                "paper_id": paper_id,
+                "paper_id": paper.paper_id,
                 "title": paper.title,
                 "domain": paper.domain,
-                "score": score,
+                # "score": score if score is not None else 0.0,  # None得分转换为0.0用于兼容
                 "score_data": score_data,
-                "matched": score_data is not None or (paper_id in self.match_results and self.match_results[paper_id].get(problem_id, False))
+                "matched": True  # 因为来自problem.belonged_papers，所以肯定是匹配的
             }
 
             ranked_papers.append(paper_info)
-
-        # 按分数从高到低排序
-        ranked_papers.sort(key=lambda x: x["score"], reverse=True)
 
         # 限制返回数量
         if top_n is not None and top_n > 0:
@@ -593,7 +588,7 @@ class Scorer:
 
         Args:
             problem_id: 产业难题ID
-            include_zero_scores: 是否包含得分为0的论文
+            include_zero_scores: 是否包含得分为0的论文（包括得分为None的论文）
 
         Returns:
             排序后的论文列表，包含详细评分信息
@@ -601,21 +596,29 @@ class Scorer:
         if problem_id >= len(self.industry_problems):
             raise ValueError(f"无效的problem_id: {problem_id}")
 
+        # 检查难题是否存在
+        if problem_id not in self.problems:
+            return []
+
+        problem = self.problems[problem_id]
+
+        # 获取排序后的论文
+        ranked_pairs = problem.get_ranked_papers(include_none_scores=include_zero_scores)
+
         rankings = []
+        for paper, score in ranked_pairs:
+            # 检查是否有详细评分数据
+            score_data = None
+            if paper.paper_id in self.scores and problem_id in self.scores[paper.paper_id]:
+                score_data = self.scores[paper.paper_id][problem_id]
 
-        # 遍历所有论文
-        for paper_id, paper in self.papers.items():
-            # 检查是否有评分记录
-            if paper_id in self.scores and problem_id in self.scores[paper_id]:
-                score_data = self.scores[paper_id][problem_id]
-                score = score_data.get("total_score", 0.0)
-
-                # 构建详细排名信息
+            if score_data:
+                # 有评分数据，构建详细排名信息
                 ranking_info = {
-                    "paper_id": paper_id,
+                    "paper_id": paper.paper_id,
                     "title": paper.title,
                     "domain": paper.domain,
-                    "score": score,
+                    "score": score if score is not None else 0.0,
                     "p_score": score_data.get("p_score", 0),
                     "TRL": score_data.get("TRL", 0),
                     "s_score": score_data.get("s_score", 0.0),
@@ -624,12 +627,10 @@ class Scorer:
                     "reasoning": score_data.get("reasoning", ""),
                     "matched": True
                 }
-                rankings.append(ranking_info)
-            elif include_zero_scores:
-                # 包含得分为0的论文（匹配但未评分，或未匹配）
-                matched = paper_id in self.match_results and self.match_results[paper_id].get(problem_id, False)
+            else:
+                # 无评分数据（匹配但未评分）
                 ranking_info = {
-                    "paper_id": paper_id,
+                    "paper_id": paper.paper_id,
                     "title": paper.title,
                     "domain": paper.domain,
                     "score": 0.0,
@@ -639,12 +640,10 @@ class Scorer:
                     "result_paper_value": 0,
                     "result_baseline_value": 0,
                     "reasoning": "",
-                    "matched": matched
+                    "matched": True
                 }
-                rankings.append(ranking_info)
 
-        # 按分数从高到低排序
-        rankings.sort(key=lambda x: x["score"], reverse=True)
+            rankings.append(ranking_info)
 
         # 添加排名序号
         for i, ranking in enumerate(rankings):

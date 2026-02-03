@@ -30,7 +30,7 @@ async def main():
     # 选择少量论文进行测试（避免过多API调用）
     import glob
     paper_dir = "example/英文文献"
-    paper_files = glob.glob(f"{paper_dir}/*.json")[:2]  # 只取前2篇
+    paper_files = glob.glob(f"{paper_dir}/*.json")
 
     if not paper_files:
         print(f"错误：在 {paper_dir} 中找不到论文文件")
@@ -94,64 +94,41 @@ async def main():
         for i, paper_info in enumerate(ranked_papers):
             print(f"  第{i+1}名: {paper_info['title'][:60]}...")
             print(f"      论文ID: {paper_info['paper_id']}")
-            print(f"      得分: {paper_info['score']:.4f}")
+            print(f"      得分信息: {paper_info['score']:.4f}")
             print(f"      领域: {paper_info['domain']}")
             print()
 
-        # 方法2: 使用get_problem_rankings获取详细排名
-        print("\n方法2: get_problem_rankings (详细排名)")
-        detailed_rankings = scorer.get_problem_rankings(problem_id, include_zero_scores=False)
+        # # 方法2: 使用get_problem_rankings获取详细排名
+        # print("\n方法2: get_problem_rankings (详细排名)")
+        # detailed_rankings = scorer.get_problem_rankings(problem_id, include_zero_scores=False)
 
-        for i, ranking in enumerate(detailed_rankings[:3]):  # 只显示前3名详细信息
-            print(f"  第{ranking['rank']}名: {ranking['title'][:60]}...")
-            print(f"      总分: {ranking['score']:.4f}")
-            print(f"      p_score: {ranking['p_score']}")
-            print(f"      TRL: {ranking['TRL']}")
-            print(f"      s_score: {ranking['s_score']:.4f}")
-            print(f"      论文结果: {ranking['result_paper_value']}")
-            print(f"      基线结果: {ranking['result_baseline_value']}")
-            print()
+        # for i, ranking in enumerate(detailed_rankings[:3]):  # 只显示前3名详细信息
+        #     print(f"  第{ranking['rank']}名: {ranking['title'][:60]}...")
+        #     print(f"      总分: {ranking['score']:.4f}")
+        #     print(f"      p_score: {ranking['p_score']}")
+        #     print(f"      TRL: {ranking['TRL']}")
+        #     print(f"      s_score: {ranking['s_score']:.4f}")
+        #     print(f"      论文结果: {ranking['result_paper_value']}")
+        #     print(f"      基线结果: {ranking['result_baseline_value']}")
+        #     print()
 
-            # 如果有推理信息，显示前100个字符
-            if ranking.get('reasoning'):
-                reasoning_preview = ranking['reasoning'][:100] + "..." if len(ranking['reasoning']) > 100 else ranking['reasoning']
-                print(f"      推理: {reasoning_preview}")
-                print()
+        #     # 如果有推理信息，显示前100个字符
+        #     if ranking.get('reasoning'):
+        #         reasoning_preview = ranking['reasoning'][:100] + "..." if len(ranking['reasoning']) > 100 else ranking['reasoning']
+        #         print(f"      推理: {reasoning_preview}")
+        #         print()
 
         # 保存排名结果到文件
-        output_file = f"ranking_problem_{problem_id}.json"
-        with open(output_file, 'w', encoding='utf-8') as f:
-            json.dump({
-                "problem_id": problem_id,
-                "problem_name": problem_name,
-                "ranked_papers": ranked_papers,
-                "detailed_rankings": detailed_rankings
-            }, f, ensure_ascii=False, indent=2)
-        print(f"  排名结果已保存到: {output_file}")
+        # output_file = f"ranking_problem_{problem_id}.json"
+        # with open(output_file, 'w', encoding='utf-8') as f:
+        #     json.dump({
+        #         "problem_id": problem_id,
+        #         "problem_name": problem_name,
+        #         "ranked_papers": ranked_papers,
+        #         "detailed_rankings": detailed_rankings
+        #     }, f, ensure_ascii=False, indent=2)
+        # print(f"  排名结果已保存到: {output_file}")
 
-    # 测试top_n参数
-    print("\n" + "="*60)
-    print("测试top_n参数（只显示前2名）:")
-    print("="*60)
-
-    if test_problems:
-        problem_id = test_problems[0]
-        problem_name = problem_names[problem_id] if problem_id < len(problem_names) else f"问题{problem_id}"
-        print(f"\n产业难题 {problem_id}: {problem_name}")
-
-        top_2 = scorer.rank_papers_for_problem(problem_id, top_n=2)
-        for i, paper_info in enumerate(top_2):
-            print(f"  第{i+1}名: {paper_info['title'][:60]}...")
-            print(f"      得分: {paper_info['score']:.4f}")
-
-        # 测试包含0分论文
-        print("\n测试包含0分论文:")
-        all_rankings = scorer.get_problem_rankings(problem_id, include_zero_scores=True)
-        print(f"  总论文数: {len(all_rankings)}")
-        scored_papers = [r for r in all_rankings if r['score'] > 0]
-        zero_score_papers = [r for r in all_rankings if r['score'] == 0]
-        print(f"  有得分论文: {len(scored_papers)}")
-        print(f"  0分论文: {len(zero_score_papers)}")
 
 if __name__ == "__main__":
     asyncio.run(main())
