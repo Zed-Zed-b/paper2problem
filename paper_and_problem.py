@@ -2,22 +2,24 @@ from typing import List
 
 
 class Paper:
-    def __init__(self, metadata):
+    def __init__(self, metadata, paper_type: str = "论文"):
         """
         论文/专利类
 
         Args:
             metadata: 包含论文元数据的字典，应包含'title'和'domain'字段
+            paper_type: 论文类型，可选"论文"或"专利"，默认为"论文"
         """
         self.title = metadata.get('title', '未知标题')
         self.domain = metadata.get('domain', '未知领域')
+        self.paper_type = paper_type
         self.metadata = metadata
         self.belonged_problems = []  # 匹配的产业难题ID列表
         self.paper_id = None  # 论文ID，通常为文件名
         self.file_path = None  # 文件路径
 
     def __repr__(self):
-        return f"Paper(title='{self.title}', domain='{self.domain}')"
+        return f"Paper(title='{self.title}', domain='{self.domain}', type='{self.paper_type}')"
 
     def __str__(self):
         return self.title

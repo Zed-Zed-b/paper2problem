@@ -168,13 +168,20 @@ class Scorer:
         self.industry_problems_metric = metrics
         return metrics
 
-    def load_paper(self, paper_path: str) -> Paper:
-        """加载单篇论文并创建Paper对象"""
+    def load_paper(self, paper_path: str, paper_type: str = "论文") -> Paper:
+        """加载单篇论文并创建Paper对象
+
+        Args:
+            paper_path: 论文文件路径
+            paper_type: 论文类型，可选"论文"或"专利"，默认为"论文"
+        """
         with open(paper_path, 'r', encoding='utf-8') as f:
             paper_data = json.load(f)
 
         # 从论文数据中提取标题和领域
-        title = paper_data.get('paper_title', paper_data.get('patent_title', '未知标题'))
+        title = paper_data.get('title',
+                               paper_data.get('paper_title',
+                                              paper_data.get('patent_title', '未知标题')))
         domain = paper_data.get('domain', '未知领域')
 
         # 创建Paper对象
@@ -184,7 +191,7 @@ class Scorer:
             'raw_data': paper_data
         }
 
-        paper = Paper(metadata)
+        paper = Paper(metadata, paper_type=paper_type)
         paper.file_path = paper_path
         paper.paper_id = os.path.basename(paper_path).replace('.json', '')
 
@@ -193,18 +200,23 @@ class Scorer:
 
         return paper
 
-    def load_papers_from_directory(self, directory: str) -> List[Paper]:
-        """从目录加载所有论文"""
+    def load_papers_from_directory(self, directory: str, paper_type: str = "论文") -> List[Paper]:
+        """从目录加载所有论文
+
+        Args:
+            directory: 目录路径
+            paper_type: 论文类型，可选"论文"或"专利"，默认为"论文"
+        """
         paper_files = glob.glob(os.path.join(directory, "*.json"))
         papers = []
 
         for paper_file in paper_files:
-            paper = self.load_paper(paper_file)
+            paper = self.load_paper(paper_file, paper_type=paper_type)
             papers.append(paper)
 
         return papers
 
-    async def match_paper_to_problems(self, paper: Paper, paper_type: str = "论文") -> Dict[int, bool]:
+    async def match_paper_to_problems(self, paper: Paper) -> Dict[int, bool]:
         """
         匹配论文与产业难题
 
@@ -216,7 +228,8 @@ class Scorer:
             匹配结果字典，problem_id -> matched (bool)
         """
         # 选择正确的prompt
-        if paper_type == "专利":
+        paper_type = paper.paper_type
+        if paper.paper_type == "专利":
             prompt_template = self.prompts.get("match_patent", "")
         else:
             prompt_template = self.prompts.get("match_paper", "")
@@ -272,7 +285,7 @@ class Scorer:
 
         return match_results
 
-    async def score_paper_for_problem(self, paper: Paper, problem_id: int, paper_type: str = "论文") -> Dict[str, Any]:
+    async def score_paper_for_problem(self, paper: Paper, problem_id: int) -> Dict[str, Any]:
         """
         对论文在特定产业难题上进行评分
 
@@ -284,6 +297,7 @@ class Scorer:
         Returns:
             评分结果字典
         """
+        paper_type = paper.paper_type
         if problem_id >= len(self.industry_problems):
             raise ValueError(f"无效的problem_id: {problem_id}")
 
@@ -414,7 +428,7 @@ class Scorer:
             处理结果
         """
         # 加载论文
-        paper = self.load_paper(paper_path)
+        paper = self.load_paper(paper_path, paper_type=paper_type)
 
         # 匹配论文与产业难题
         match_results = await self.match_paper_to_problems(paper, paper_type)
