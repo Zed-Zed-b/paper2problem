@@ -135,7 +135,7 @@ class Scorer:
 
             return json.loads(llm_text[start:end])
 
-    async def load_industry_problems(self, problems_file: str = "集成电路_0125_problems.json"):
+    async def load_industry_problems(self, problems_file: str = "new_data/problem/kpi_gen_集成电路_debate_vgemini.json"):
         """加载产业难题"""
         # 异步读取JSON文件
         def read_json_file():
@@ -144,23 +144,23 @@ class Scorer:
 
         json_data = await asyncio.to_thread(read_json_file)
 
-        sub_fields = json_data["sub_fields"]
-        problems = []
-        for item in sub_fields:
-            problems.extend(item["problems"])
+        problem_list = json_data["results"]
+        # processed_problems = []
 
         # 移除id字段，避免混淆
-        for problem in problems:
-            problem.pop("id", None)
+        for problem in problem_list:
+            problem.pop("problem_id", None)
+            problem.pop("status", None)
+            problem.pop("error_message", None)
 
-        self.industry_problems = problems
+        self.industry_problems = problem_list
 
         # 创建IndustryProblem对象
-        for i, problem_data in enumerate(problems):
+        for i, problem_data in enumerate(problem_list):
             problem = IndustryProblem(id=str(i), metadata=problem_data)
             self.problems[i] = problem
 
-        return problems
+        return problem_list
 
     async def load_industry_problems_metric(self, metric_file: str = "集成电路_0125_problems_metric.json"):
         """加载产业难题指标"""
@@ -301,7 +301,7 @@ class Scorer:
             problem_id: 产业难题ID
 
         Returns:
-            评分结果字典
+            评分结果字典，包含level和reason
         """
         paper_type = paper.paper_type
         if problem_id >= len(self.industry_problems):
@@ -316,13 +316,12 @@ class Scorer:
         if not prompt_template:
             raise ValueError(f"找不到{paper_type}评分的prompt模板")
 
-        # 获取产业难题
+        # 获取产业难题信息
         industry_problem = self.industry_problems[problem_id]
 
         # 构建完整prompt
         prompt = prompt_template
-        # 替换{paper_type}占位符
-        prompt = prompt.replace("{paper_type}", paper_type)
+        
         # 添加论文内容和产业难题
         paper_content = json.dumps(paper.metadata['raw_data'], ensure_ascii=False, indent=2)
         prompt += f"\n\n{paper_type}内容:\n{paper_content}"
@@ -339,22 +338,18 @@ class Scorer:
         # 解析结果
         score_result = self.safe_json_loads(resp.choices[0].message.content)
 
-        # 计算s_score
-        rp = eval(score_result["result_paper"]) if isinstance(score_result["result_paper"], str) else score_result["result_paper"]
-        rb = eval(score_result["result_baseline"]) if isinstance(score_result["result_baseline"], str) else score_result["result_baseline"]
-        s_score = math.tanh(math.fabs((rp - rb) / rb)) if rb != 0 else 0.0
+        # 提取level和reason（新prompt返回的格式）
+        level = score_result.get("level", 1) 
+        reason = score_result.get("reason", "")
 
-        # 计算总得分
-        p_score = score_result.get("p_score", 0)
-        trl = score_result.get("TRL", 0)
-        total_score = p_score * trl * (1 + s_score)
+        # 根据level计算total_score（L4最高=4分，L1最低=1分）
+        # level范围是1-4，直接作为得分
+        total_score = float(level)
 
         # 构建完整结果
         result = {
-            **score_result,
-            "result_paper_value": rp,
-            "result_baseline_value": rb,
-            "s_score": s_score,
+            "level": level,
+            "reason": reason,
             "total_score": total_score,
             "problem_id": problem_id
         }
@@ -456,31 +451,31 @@ class Scorer:
         score_tasks = [self.score_paper_for_problem(paper, pid) for pid in matched_ids]
         score_results = await asyncio.gather(*score_tasks)
 
-        # 并发评估指标
-        metric_tasks = []
-        for pid in matched_ids:
-            if pid in self.industry_problems_metric:
-                metric_tasks.append(self.evaluate_metrics_for_paper(paper, pid))
+        # # 并发评估指标
+        # metric_tasks = []
+        # for pid in matched_ids:
+        #     if pid in self.industry_problems_metric:
+        #         metric_tasks.append(self.evaluate_metrics_for_paper(paper, pid))
 
-        metric_results = []
-        if metric_tasks:
-            metric_results = await asyncio.gather(*metric_tasks)
+        # metric_results = []
+        # if metric_tasks:
+        #     metric_results = await asyncio.gather(*metric_tasks)
 
         # 保存指标结果到文件
-        if metric_results:
-            os.makedirs("metric_match", exist_ok=True)
-            output_file = f"metric_match/{paper.paper_id}.json"
+        # if metric_results:
+        #     os.makedirs("metric_match", exist_ok=True)
+        #     output_file = f"metric_match/{paper.paper_id}.json"
 
-            # 重新组织数据结构
-            reorganized_results = []
-            for result in metric_results:
-                reorganized_results.append({
-                    "problem_id": result["problem_id"] + 1,
-                    "metrics": result["metrics"]
-                })
+        #     # 重新组织数据结构
+        #     reorganized_results = []
+        #     for result in metric_results:
+        #         reorganized_results.append({
+        #             "problem_id": result["problem_id"] + 1,
+        #             "metrics": result["metrics"]
+        #         })
 
-            with open(output_file, 'w', encoding='utf-8') as f:
-                json.dump(reorganized_results, f, ensure_ascii=False, indent=4)
+        #     with open(output_file, 'w', encoding='utf-8') as f:
+        #         json.dump(reorganized_results, f, ensure_ascii=False, indent=4)
 
         # 构建最终结果
         result = {
@@ -489,7 +484,7 @@ class Scorer:
             "matched": True,
             "matched_problems": matched_ids,
             "scores": {r["problem_id"]: r for r in score_results},
-            "metric_results": {r["problem_id"]: r for r in metric_results} if metric_results else {}
+            # "metric_results": {r["problem_id"]: r for r in metric_results} if metric_results else {}
         }
 
         return result
@@ -543,7 +538,7 @@ class Scorer:
         return names
 
     def rank_papers_for_problem(self, problem_id: int, top_n: Optional[int] = None) -> List[Dict[str, Any]]:
-        """
+        """[DEPRECATED] 此方法已弃用，请使用 get_problem_rankings
         对特定产业难题的论文进行排名（从高到低）
 
         Args:
@@ -553,6 +548,12 @@ class Scorer:
         Returns:
             排序后的论文列表，每个元素包含paper_id、title、score等信息
         """
+        import warnings
+        warnings.warn(
+            "rank_papers_for_problem is deprecated, use get_problem_rankings instead",
+            DeprecationWarning,
+            stacklevel=2
+        )
         if problem_id >= len(self.industry_problems):
             raise ValueError(f"无效的problem_id: {problem_id}")
 
@@ -567,17 +568,12 @@ class Scorer:
 
         ranked_papers = []
         for paper, score_data in ranked_pairs:
-            # 获取评分数据
-            # score_data = None
-            # if paper.paper_id in self.scores and problem_id in self.scores[paper.paper_id]:
-            #     score_data = self.scores[paper.paper_id][problem_id]
 
             # 构建论文信息
             paper_info = {
                 "paper_id": paper.paper_id,
                 "title": paper.title,
                 "domain": paper.domain,
-                # "score": score if score is not None else 0.0,  # None得分转换为0.0用于兼容
                 "score_data": score_data,
                 "matched": True  # 因为来自problem.belonged_papers，所以肯定是匹配的
             }
@@ -589,72 +585,3 @@ class Scorer:
             ranked_papers = ranked_papers[:top_n]
 
         return ranked_papers
-
-    def get_problem_rankings(self, problem_id: int, include_zero_scores: bool = False) -> List[Dict[str, Any]]:
-        """
-        获取特定产业难题的完整排名（包括详细评分信息）
-
-        Args:
-            problem_id: 产业难题ID
-            include_zero_scores: 是否包含得分为0的论文（包括得分为None的论文）
-
-        Returns:
-            排序后的论文列表，包含详细评分信息
-        """
-        if problem_id >= len(self.industry_problems):
-            raise ValueError(f"无效的problem_id: {problem_id}")
-
-        # 检查难题是否存在
-        if problem_id not in self.problems:
-            return []
-
-        problem = self.problems[problem_id]
-
-        # 获取排序后的论文
-        ranked_pairs = problem.get_ranked_papers(include_none_scores=include_zero_scores)
-
-        rankings = []
-        for paper, score in ranked_pairs:
-            # 检查是否有详细评分数据
-            score_data = None
-            if paper.paper_id in self.scores and problem_id in self.scores[paper.paper_id]:
-                score_data = self.scores[paper.paper_id][problem_id]
-
-            if score_data:
-                # 有评分数据，构建详细排名信息
-                ranking_info = {
-                    "paper_id": paper.paper_id,
-                    "title": paper.title,
-                    "domain": paper.domain,
-                    "score": score if score is not None else 0.0,
-                    "p_score": score_data.get("p_score", 0),
-                    "TRL": score_data.get("TRL", 0),
-                    "s_score": score_data.get("s_score", 0.0),
-                    "result_paper_value": score_data.get("result_paper_value", 0),
-                    "result_baseline_value": score_data.get("result_baseline_value", 0),
-                    "reasoning": score_data.get("reasoning", ""),
-                    "matched": True
-                }
-            else:
-                # 无评分数据（匹配但未评分）
-                ranking_info = {
-                    "paper_id": paper.paper_id,
-                    "title": paper.title,
-                    "domain": paper.domain,
-                    "score": 0.0,
-                    "p_score": 0,
-                    "TRL": 0,
-                    "s_score": 0.0,
-                    "result_paper_value": 0,
-                    "result_baseline_value": 0,
-                    "reasoning": "",
-                    "matched": True
-                }
-
-            rankings.append(ranking_info)
-
-        # 添加排名序号
-        for i, ranking in enumerate(rankings):
-            ranking["rank"] = i + 1
-
-        return rankings

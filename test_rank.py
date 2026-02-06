@@ -32,23 +32,23 @@ async def main():
 
     print("加载产业难题...")
     try:
-        problems = await scorer.load_industry_problems("集成电路_0125_problems.json")
+        problems = await scorer.load_industry_problems("new_data/problem/kpi_gen_集成电路_debate_vgemini.json")
         print(f"  成功加载 {len(problems)} 个产业难题")
     except FileNotFoundError:
         print("  错误：找不到产业难题文件")
         return
 
-    print("加载产业难题指标...")
-    try:
-        metrics = await scorer.load_industry_problems_metric("集成电路_0125_problems_metric.json")
-        print(f"  成功加载 {len(metrics)} 个难题的指标")
-    except FileNotFoundError:
-        print("  警告：找不到产业难题指标文件")
+    # print("加载产业难题指标...")
+    # try:
+    #     metrics = await scorer.load_industry_problems_metric("集成电路_0125_problems_metric.json")
+    #     print(f"  成功加载 {len(metrics)} 个难题的指标")
+    # except FileNotFoundError:
+    #     print("  警告：找不到产业难题指标文件")
 
-    # 选择少量论文进行测试（避免过多API调用）
+    # 选择少量论文进行测试
     import glob
-    paper_dir = "example/中文文献"
-    paper_files = glob.glob(f"{paper_dir}/*.json")[0:16]
+    paper_dir = "new_data/中文文献"
+    paper_files = glob.glob(f"{paper_dir}/*.json")[0:5]
 
     if not paper_files:
         print(f"错误：在 {paper_dir} 中找不到论文文件")

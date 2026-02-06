@@ -93,7 +93,8 @@ class IndustryProblem:
         return len(self.belonged_papers)
 
     def get_ranked_papers(self, include_none_scores: bool = False) -> List[Tuple['Paper', Optional[Dict[str, Any]]]]:
-        """获取按得分从高到低排序的论文列表
+        """[DEPRECATED] 此方法已弃用，请使用基于level的排名逻辑
+        获取按得分从高到低排序的论文列表
 
         Args:
             include_none_scores: 是否包含评分数据为None的论文，如果为False则只包含有评分数据的论文
@@ -101,6 +102,12 @@ class IndustryProblem:
         Returns:
             排序后的(论文, 评分数据)列表，按total_score从高到低排序，None评分数据排在最后（如果包含）
         """
+        import warnings
+        warnings.warn(
+            "get_ranked_papers is deprecated, ranking is now based on level",
+            DeprecationWarning,
+            stacklevel=2
+        )
         if include_none_scores:
             papers = self.belonged_papers.copy()
         else:
@@ -113,12 +120,16 @@ class IndustryProblem:
         ))
         return papers
 
-    def get_paper_score(self, paper: Paper) -> Optional[float]:
-        """获取指定论文的得分（从评分数据中提取total_score）"""
+    def get_paper_level(self, paper: Paper) -> Optional[int]:
+        """获取指定论文的等级（从评分数据中提取level）
+
+        Returns:
+            level值 (1-4)，L4=4分最高，L1=1分最低，如果无评分数据则返回None
+        """
         for p, score_data in self.belonged_papers:
             if p == paper:
                 if score_data is not None:
-                    return score_data.get('total_score', 0.0)
+                    return score_data.get('level', 0)
                 else:
                     return None
         return None
