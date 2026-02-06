@@ -135,10 +135,14 @@ class Scorer:
 
             return json.loads(llm_text[start:end])
 
-    def load_industry_problems(self, problems_file: str = "集成电路_0125_problems.json"):
+    async def load_industry_problems(self, problems_file: str = "集成电路_0125_problems.json"):
         """加载产业难题"""
-        with open(problems_file, 'r', encoding='utf-8') as f:
-            json_data = json.load(f)
+        # 异步读取JSON文件
+        def read_json_file():
+            with open(problems_file, 'r', encoding='utf-8') as f:
+                return json.load(f)
+
+        json_data = await asyncio.to_thread(read_json_file)
 
         sub_fields = json_data["sub_fields"]
         problems = []
@@ -158,25 +162,33 @@ class Scorer:
 
         return problems
 
-    def load_industry_problems_metric(self, metric_file: str = "集成电路_0125_problems_metric.json"):
+    async def load_industry_problems_metric(self, metric_file: str = "集成电路_0125_problems_metric.json"):
         """加载产业难题指标"""
-        with open(metric_file, 'r', encoding='utf-8') as f:
-            json_data = json.load(f)
+        # 异步读取JSON文件
+        def read_json_file():
+            with open(metric_file, 'r', encoding='utf-8') as f:
+                return json.load(f)
+
+        json_data = await asyncio.to_thread(read_json_file)
 
         res = json_data["results"]
         metrics = {_item["problem_id"] - 1: _item["metrics"] for _item in res}
         self.industry_problems_metric = metrics
         return metrics
 
-    def load_paper(self, paper_path: str, paper_type: str = "论文") -> Paper:
+    async def load_paper(self, paper_path: str, paper_type: str = "论文") -> Paper:
         """加载单篇论文并创建Paper对象
 
         Args:
             paper_path: 论文文件路径
             paper_type: 论文类型，可选"论文"或"专利"，默认为"论文"
         """
-        with open(paper_path, 'r', encoding='utf-8') as f:
-            paper_data = json.load(f)
+        # 异步读取JSON文件
+        def read_json_file():
+            with open(paper_path, 'r', encoding='utf-8') as f:
+                return json.load(f)
+
+        paper_data = await asyncio.to_thread(read_json_file)
 
         # 从论文数据中提取标题和领域
         title = paper_data.get('title',
@@ -200,7 +212,7 @@ class Scorer:
 
         return paper
 
-    def load_papers_from_directory(self, directory: str, paper_type: str = "论文") -> List[Paper]:
+    async def load_papers_from_directory(self, directory: str, paper_type: str = "论文") -> List[Paper]:
         """从目录加载所有论文
 
         Args:
@@ -208,12 +220,8 @@ class Scorer:
             paper_type: 论文类型，可选"论文"或"专利"，默认为"论文"
         """
         paper_files = glob.glob(os.path.join(directory, "*.json"))
-        papers = []
-
-        for paper_file in paper_files:
-            paper = self.load_paper(paper_file, paper_type=paper_type)
-            papers.append(paper)
-
+        tasks = [self.load_paper(paper_file, paper_type=paper_type) for paper_file in paper_files]
+        papers = await asyncio.gather(*tasks)
         return papers
 
     async def match_paper_to_problems(self, paper: Paper) -> Dict[int, bool]:
@@ -430,7 +438,7 @@ class Scorer:
             处理结果
         """
         # 加载论文
-        paper = self.load_paper(paper_path, paper_type=paper_type)
+        paper = await self.load_paper(paper_path, paper_type=paper_type)
 
         # 匹配论文与产业难题
         match_results = await self.match_paper_to_problems(paper)
