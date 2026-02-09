@@ -5,18 +5,100 @@
 
 import asyncio
 import json
+
+from matplotlib import pyplot as plt
+import numpy as np
 from scorer import Scorer
 import time
 
-async def process_single_paper(scorer: Scorer, paper_file):
+# 设置中文字体，添加多个后备选项
+plt.rcParams['font.sans-serif'] = ['WenQuanYi Micro Hei']
+plt.rcParams['axes.unicode_minus'] = False
+
+
+def plot_heatmap(data:np.ndarray, 
+                 paper_names=None, 
+                 problem_names=None, 
+                 save_path="heatmap.png"):
+    """绘制并保存论文-产业难题匹配热力图"""
+    plt.close("all")
+
+    # 动态调整图形尺寸：根据数据量调整高度
+    n_papers = data.shape[0]
+    n_problems = data.shape[1]
+
+    # 基础高度，每行增加一定高度
+    base_height = 8
+    height_per_paper = 0.2  # 每篇论文增加的高度
+    fig_height = max(base_height, n_papers * height_per_paper)
+    fig_width = max(12, n_problems * 0.3)  # 根据问题数量调整宽度
+
+    fig, ax = plt.subplots(figsize=(fig_width, fig_height))
+    im = ax.imshow(data, aspect='auto', cmap='YlOrRd', vmin=0, vmax=4)
+    cbar = plt.colorbar(im, ax=ax, ticks=[0, 1, 2, 3, 4])
+    cbar.set_label('Level')
+    cbar.ax.set_yticklabels(['0', '1', '2', '3', '4'])
+
+    # 设置横轴标签（产业难题）
+    if problem_names:
+        # 如果问题数量过多，间隔显示标签
+        if len(problem_names) > 30:
+            step = max(1, len(problem_names) // 20)  # 最多显示20个标签
+            xticks = range(0, len(problem_names), step)
+            xticklabels = [problem_names[i] for i in xticks]
+            ax.set_xticks(xticks)
+            ax.set_xticklabels(xticklabels, rotation=45, ha='right', fontsize=8)
+        else:
+            ax.set_xticks(range(len(problem_names)))
+            ax.set_xticklabels(problem_names, rotation=45, ha='right', fontsize=9)
+    else:
+        ax.set_xticks(range(data.shape[1]))
+        ax.set_xlabel("产业难题编号", fontsize=10)
+
+    # 设置纵轴标签（论文名称）
+    if paper_names:
+        # 如果论文数量过多，调整显示策略
+        if len(paper_names) > 30:
+            # 间隔显示标签
+            step = max(1, len(paper_names) // 30)  # 最多显示30个标签
+            yticks = range(0, len(paper_names), step)
+            yticklabels = [paper_names[i] for i in yticks]
+            ax.set_yticks(yticks)
+            ax.set_yticklabels(yticklabels, fontsize=7, rotation=0)
+
+            # 添加网格线帮助定位
+            ax.grid(True, which='major', axis='y', linestyle='--', alpha=0.3, linewidth=0.5)
+        else:
+            ax.set_yticks(range(len(paper_names)))
+            # 如果论文名称过长，进行截断
+            truncated_names = []
+            max_len = 50  # 最大显示长度
+            for name in paper_names:
+                if len(name) > max_len:
+                    truncated_names.append(name[:max_len] + "...")
+                else:
+                    truncated_names.append(name)
+            ax.set_yticklabels(truncated_names, fontsize=8, rotation=0)
+    else:
+        ax.set_yticks(range(data.shape[0]))
+        ax.set_ylabel("论文编号", fontsize=10)
+
+    ax.set_title("论文-产业难题匹配热力图", fontsize=12, pad=15)
+    plt.tight_layout()
+    plt.savefig(save_path, dpi=300, bbox_inches='tight')
+    print(f"热力图已保存至: {save_path}")
+
+
+async def process_single_paper(scorer: Scorer, paper_file, paper_type: str = "论文"):
     """处理单篇论文"""
     try:
         # 处理单篇论文
-        result = await scorer.process_paper(paper_file, paper_type="论文")
-
+        result = await scorer.process_paper(paper_file, paper_type=paper_type)
+        print(f"\n处理{paper_type}文件: {result['paper_title']}")
         if result["matched"]:
-            print(f"  匹配到 {len(result['matched_problems'])} 个产业难题")
-            print(f"  评分结果: {list(result['scores'].keys())}")
+            print(f"  匹配到 {len(result['matched_problems'])} 个产业难题, ID 为 {result['matched_problems']}")
+            print(f"  Level 结果: {list(result['scores'])}")
+            # print("  详细评分结果:", result['detailed_scores'])
         else:
             print("  未匹配到任何产业难题")
 
@@ -24,6 +106,7 @@ async def process_single_paper(scorer: Scorer, paper_file):
     except Exception as e:
         print(f"  处理失败: {e}")
         return None
+
 
 async def main():
     """主测试函数"""
@@ -47,8 +130,9 @@ async def main():
 
     # 选择少量论文进行测试
     import glob
-    paper_dir = "new_data/中文文献"
-    paper_files = glob.glob(f"{paper_dir}/*.json")[0:5]
+    paper_dir = "专利"
+    paper_type = "专利"
+    paper_files = glob.glob(f"new_data/{paper_dir}/*.json")
 
     if not paper_files:
         print(f"错误：在 {paper_dir} 中找不到论文文件")
@@ -58,12 +142,19 @@ async def main():
 
     # 并发处理所有论文
     print(f"并发处理 {len(paper_files)} 篇论文...")
-    tasks = [process_single_paper(scorer, paper_file) for paper_file in paper_files]
+    tasks = [process_single_paper(scorer, paper_file, paper_type=paper_type) for paper_file in paper_files]
     results = await asyncio.gather(*tasks)
 
     # 过滤掉失败的结果（None）
     successful_results = [r for r in results if r is not None]
     print(f"\n成功处理 {len(successful_results)} 篇论文")
+
+    score_matrix, paper_titles = scorer.get_all_scores_matrix()
+    score_matrix = np.array(score_matrix, dtype = int)
+    # pass
+    plot_heatmap(score_matrix, 
+                 paper_names=paper_titles,
+                 save_path=f"{paper_dir}_heatmap.png")
 
     # 测试排名功能
     # print("\n" + "="*60)

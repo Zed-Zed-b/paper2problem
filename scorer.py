@@ -58,6 +58,7 @@ class Scorer:
         prompt_files = {
             "match_paper": "match_papers.txt",
             "match_patent": "match_patents.txt",
+            "match_screening": "match_screening.txt",
             "score_paper": "score_papers.txt",
             "score_patent": "score_patents.txt",
             "decide_metric": "decide_metric.txt"
@@ -191,9 +192,11 @@ class Scorer:
         paper_data = await asyncio.to_thread(read_json_file)
 
         # 从论文数据中提取标题和领域
-        title = paper_data.get('title',
-                               paper_data.get('paper_title',
-                                              paper_data.get('patent_title', '未知标题')))
+        if paper_type == "论文":
+            title = paper_data.get('title', paper_data.get('paper_title', '未知标题'))
+        else:
+            title = paper_data.get('title', paper_data["patent_basic_info"].get('patent_title', '未知标题'))
+            paper_data.pop("evaluation", None)
         domain = paper_data.get('domain', '未知领域')
 
         # 创建Paper对象
@@ -226,7 +229,10 @@ class Scorer:
 
     async def match_paper_to_problems(self, paper: Paper) -> Dict[int, bool]:
         """
-        匹配论文与产业难题
+        匹配论文与产业难题（两阶段方案）
+
+        阶段1：初筛 - 使用精简摘要快速筛选候选难题
+        阶段2：精筛 - 对候选难题进行详细匹配判断
 
         Args:
             paper: Paper对象（包含paper_type属性）
@@ -235,29 +241,66 @@ class Scorer:
             匹配结果字典，problem_id -> matched (bool)
         """
         paper_type = paper.paper_type
-        # 选择正确的prompt
-        if paper_type == "专利":
-            prompt_template = self.prompts.get("match_patent", "")
-        else:
-            prompt_template = self.prompts.get("match_paper", "")
 
-        if not prompt_template:
+        # 选择精筛阶段的prompt（原有的详细匹配prompt）
+        if paper_type == "专利":
+            detail_prompt_template = self.prompts.get("match_patent", "")
+        else:
+            detail_prompt_template = self.prompts.get("match_paper", "")
+
+        if not detail_prompt_template:
             raise ValueError(f"找不到{paper_type}匹配的prompt模板")
 
-        # 准备产业难题字典
-        industry_problems_dict = {i: prob for i, prob in enumerate(self.industry_problems)}
-
-        # 构建完整prompt
-        prompt = prompt_template
-        # 替换{paper_type}占位符
-        prompt = prompt.replace("{paper_type}", paper_type)
-        # 添加论文内容
+        # 获取论文内容
         paper_content = json.dumps(paper.metadata['raw_data'], ensure_ascii=False, indent=2)
-        prompt += f"\n\n【{paper_type}内容】\n{paper_content}"
-        # 添加产业难题
-        prompt += f"\n\n【产业难题】\n{industry_problems_dict}"
 
-        # 调用LLM
+        # ========== 阶段1：初筛 ==========
+        # 加载精简摘要
+        summary_file = "new_data/problem/summaries.json"
+        try:
+            with open(summary_file, 'r', encoding='utf-8') as f:
+                problems_summary = json.load(f)
+        except FileNotFoundError:
+            # 如果精简摘要不存在，回退到详细匹配
+            problems_summary = None
+
+        candidate_ids = list(range(len(self.industry_problems)))  # 默认全部
+
+        if problems_summary is not None:
+            # 加载初筛prompt
+            screening_prompt = self.prompts.get("match_screening", "")
+            if screening_prompt:
+                screening_prompt = screening_prompt.replace("{paper_type}", paper_type)
+                screening_prompt = screening_prompt.replace("{paper_content}", paper_content)
+                screening_prompt = screening_prompt.replace("{problems_summary}", json.dumps(problems_summary, ensure_ascii=False))
+
+                # 调用LLM进行初筛
+                resp = await asyncio.to_thread(
+                    self.client.chat.completions.create,
+                    model=self.model,
+                    messages=[{"role": "user", "content": screening_prompt}],
+                    temperature=0
+                )
+
+                # 解析初筛结果
+                screening_result = self.safe_json_loads(resp.choices[0].message.content)
+                candidate_ids = screening_result.get("matched_ids", list(range(len(self.industry_problems))))
+                # print(f"初筛完成，候选难题数量: {len(candidate_ids)}")
+            else:
+                print("未找到初筛prompt，回退到详细匹配全部难题")
+
+        # ========== 阶段2：精筛 ==========
+        # 只对候选难题进行详细匹配
+        # 构建候选难题字典
+        industry_problems_dict = {i: self.industry_problems[i] for i in candidate_ids if i < len(self.industry_problems)}
+
+        # 构建详细匹配prompt
+        prompt = detail_prompt_template
+        prompt = prompt.replace("{paper_type}", paper_type)
+        prompt += f"\n\n【{paper_type}内容】\n{paper_content}"
+        prompt += f"\n\n【产业难题】\n{json.dumps(industry_problems_dict, ensure_ascii=False, indent=2)}"
+
+        # 调用LLM进行精筛
         resp = await asyncio.to_thread(
             self.client.chat.completions.create,
             model=self.model,
@@ -265,7 +308,7 @@ class Scorer:
             temperature=0
         )
 
-        # 解析结果
+        # 解析精筛结果
         result = self.safe_json_loads(resp.choices[0].message.content)
 
         # 转换为problem_id -> bool的字典
@@ -273,7 +316,11 @@ class Scorer:
         for key, value in result.items():
             try:
                 problem_id = int(key)
+                # 只有在候选列表中的难题才会被标记为matched
                 matched = value.get('matched', False)
+                # 如果不在候选列表中，强制设为False
+                if problem_id not in candidate_ids:
+                    matched = False
                 match_results[problem_id] = matched
 
                 # 如果匹配，更新Paper和IndustryProblem对象
@@ -338,12 +385,11 @@ class Scorer:
         # 解析结果
         score_result = self.safe_json_loads(resp.choices[0].message.content)
 
-        # 提取level和reason（新prompt返回的格式）
-        level = score_result.get("level", 1) 
+        # 提取level和reason
+        level = score_result.get("level", 0) 
         reason = score_result.get("reason", "")
 
-        # 根据level计算total_score（L4最高=4分，L1最低=1分）
-        # level范围是1-4，直接作为得分
+        # 根据level计算total_score
         total_score = float(level)
 
         # 构建完整结果
@@ -442,6 +488,7 @@ class Scorer:
         if not matched_ids:
             return {
                 "paper_id": paper.paper_id,
+                "paper_title": paper.title,
                 "matched": False,
                 "scores": {},
                 "metric_results": {}
@@ -483,7 +530,8 @@ class Scorer:
             "paper_title": paper.title,
             "matched": True,
             "matched_problems": matched_ids,
-            "scores": {r["problem_id"]: r for r in score_results},
+            "scores": [r["level"] for r in score_results],
+            "detailed_scores": score_results,
             # "metric_results": {r["problem_id"]: r for r in metric_results} if metric_results else {}
         }
 
@@ -519,11 +567,13 @@ class Scorer:
             return []
 
         matrix = []
-        for paper_id in self.papers.keys():
+        paper_titles = []
+        for paper_id, paper in self.papers.items():
             scores = self.get_paper_scores(paper_id)
             matrix.append(scores)
+            paper_titles.append(paper.title)
 
-        return matrix
+        return matrix, paper_titles
 
     def get_paper_names(self) -> List[str]:
         """获取所有论文的名称"""
