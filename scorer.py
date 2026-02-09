@@ -50,6 +50,9 @@ class Scorer:
         self.metric_results: Dict[str, Dict[int, Dict[str, Any]]] = {}  # paper_id -> problem_id -> metric_results
         self.match_results: Dict[str, Dict[int, bool]] = {}  # paper_id -> problem_id -> matched
 
+        # 缓存难题精简摘要
+        self._problems_summary: Optional[List[Dict[str, Any]]] = None
+
     def _load_prompts(self) -> Dict[str, str]:
         """加载所有prompt文件"""
         prompts_dir = "prompts"
@@ -136,8 +139,12 @@ class Scorer:
 
             return json.loads(llm_text[start:end])
 
-    async def load_industry_problems(self, problems_file: str = "new_data/problem/kpi_gen_集成电路_debate_vgemini.json"):
-        """加载产业难题"""
+    async def load_industry_problems(
+        self,
+        problems_file: str = "new_data/problem/kpi_gen_集成电路_debate_vgemini.json",
+        summary_file: str = "new_data/problem/summaries.json"
+    ):
+        """加载产业难题及其精简摘要"""
         # 异步读取JSON文件
         def read_json_file():
             with open(problems_file, 'r', encoding='utf-8') as f:
@@ -155,6 +162,16 @@ class Scorer:
             problem.pop("error_message", None)
 
         self.industry_problems = problem_list
+
+        # 加载并缓存难题精简摘要（避免重复读取）
+        def read_summary_file():
+            with open(summary_file, 'r', encoding='utf-8') as f:
+                return json.load(f)
+
+        try:
+            self._problems_summary = await asyncio.to_thread(read_summary_file)
+        except FileNotFoundError:
+            self._problems_summary = None
 
         # 创建IndustryProblem对象
         for i, problem_data in enumerate(problem_list):
@@ -227,7 +244,7 @@ class Scorer:
         papers = await asyncio.gather(*tasks)
         return papers
 
-    async def match_paper_to_problems(self, paper: Paper) -> Dict[int, bool]:
+    async def match_paper_to_problems(self, paper: Paper) -> Dict[int, Any]:
         """
         匹配论文与产业难题（两阶段方案）
 
@@ -238,7 +255,7 @@ class Scorer:
             paper: Paper对象（包含paper_type属性）
 
         Returns:
-            匹配结果字典，problem_id -> matched (bool)
+            匹配结果字典，problem_id (int) -> {matched (bool), reason (str)}
         """
         paper_type = paper.paper_type
 
@@ -255,14 +272,8 @@ class Scorer:
         paper_content = json.dumps(paper.metadata['raw_data'], ensure_ascii=False, indent=2)
 
         # ========== 阶段1：初筛 ==========
-        # 加载精简摘要
-        summary_file = "new_data/problem/summaries.json"
-        try:
-            with open(summary_file, 'r', encoding='utf-8') as f:
-                problems_summary = json.load(f)
-        except FileNotFoundError:
-            # 如果精简摘要不存在，回退到详细匹配
-            problems_summary = None
+        # 使用缓存的精简摘要
+        problems_summary = self._problems_summary
 
         candidate_ids = list(range(len(self.industry_problems)))  # 默认全部
 
@@ -318,10 +329,12 @@ class Scorer:
                 problem_id = int(key)
                 # 只有在候选列表中的难题才会被标记为matched
                 matched = value.get('matched', False)
+                match_reason = value.get('reason', "")
                 # 如果不在候选列表中，强制设为False
                 if problem_id not in candidate_ids:
                     matched = False
-                match_results[problem_id] = matched
+                match_results[problem_id] = {"matched": matched, 
+                                             "reason": match_reason}
 
                 # 如果匹配，更新Paper和IndustryProblem对象
                 if matched:
@@ -385,17 +398,28 @@ class Scorer:
         # 解析结果
         score_result = self.safe_json_loads(resp.choices[0].message.content)
 
-        # 提取level和reason
-        level = score_result.get("level", 0) 
-        reason = score_result.get("reason", "")
+        # 提取value和reason
+        p_score_dict = score_result.get("p_score", {})
+        p_score_value = p_score_dict.get("value", 0) 
+        p_score_reason = p_score_dict.get("reason", "")
+
+        trl_dict = score_result.get("trl", {})
+        trl_value = trl_dict.get("value", 0) 
+        trl_reason = trl_dict.get("reason", "")
 
         # 根据level计算total_score
-        total_score = float(level)
+        total_score = float(p_score_value) * float(trl_value)
 
         # 构建完整结果
         result = {
-            "level": level,
-            "reason": reason,
+            "p_score": {
+                "value": p_score_value,
+                "reason": p_score_reason
+            },
+            "trl": {
+                "value": trl_value,
+                "reason": trl_reason
+            },
             "total_score": total_score,
             "problem_id": problem_id
         }
@@ -483,15 +507,15 @@ class Scorer:
 
         # 匹配论文与产业难题
         match_results = await self.match_paper_to_problems(paper)
-        matched_ids = [pid for pid, matched in match_results.items() if matched]
+        matched_ids = [pid for pid, res_dict in match_results.items() if res_dict.get("matched", False)]
 
         if not matched_ids:
             return {
-                "paper_id": paper.paper_id,
+                # "paper_id": paper.paper_id,
                 "paper_title": paper.title,
                 "matched": False,
-                "scores": {},
-                "metric_results": {}
+                "matched_problems": {},
+                # "metric_results": {}
             }
 
         # 并发评分
@@ -525,14 +549,25 @@ class Scorer:
         #         json.dump(reorganized_results, f, ensure_ascii=False, indent=4)
 
         # 构建最终结果
+        matched_problems = []
+        for score in score_results:
+            pid = score.get("problem_id")
+            if pid is not None:
+                score.pop("problem_id", None)  # 从score中移除problem_id字段
+                score.pop("total_score", None)  # 如果不需要在最终结果中展示total_score，可以选择移除
+                matched_problems.append({
+                    "problem_id": pid,
+                    "problem_detail": self.problems[pid].title,
+                    "matched_reason": match_results.get(pid, {}).get("reason", ""),
+                    "score": score,                    
+                    }
+                )
+
         result = {
-            "paper_id": paper.paper_id,
+            # "paper_id": paper.paper_id,
             "paper_title": paper.title,
             "matched": True,
-            "matched_problems": matched_ids,
-            "scores": [r["level"] for r in score_results],
-            "detailed_scores": score_results,
-            # "metric_results": {r["problem_id"]: r for r in metric_results} if metric_results else {}
+            "matched_problems": matched_problems,
         }
 
         return result

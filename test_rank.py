@@ -96,11 +96,15 @@ async def process_single_paper(scorer: Scorer, paper_file, paper_type: str = "�
         result = await scorer.process_paper(paper_file, paper_type=paper_type)
         print(f"\n处理{paper_type}文件: {result['paper_title']}")
         if result["matched"]:
-            print(f"  匹配到 {len(result['matched_problems'])} 个产业难题, ID 为 {result['matched_problems']}")
-            print(f"  Level 结果: {list(result['scores'])}")
+            print(f"  匹配到 {len(result['matched_problems'])} 个产业难题")
+            print(f"  匹配结果: {result['matched_problems']}")
             # print("  详细评分结果:", result['detailed_scores'])
         else:
             print("  未匹配到任何产业难题")
+
+        with open(f'match_res/{result["paper_title"]}.json', 'w', encoding='utf-8') as f:
+            json.dump(result, f, ensure_ascii=False, indent=4)
+
 
         return result
     except Exception as e:
@@ -115,7 +119,10 @@ async def main():
 
     print("加载产业难题...")
     try:
-        problems = await scorer.load_industry_problems("new_data/problem/kpi_gen_集成电路_debate_vgemini.json")
+        problems = await scorer.load_industry_problems(
+            "new_data/problem/checked_kpi_gen_集成电路_debate_vgemini.json",
+            "new_data/problem/checked_summaries.json"
+            )
         print(f"  成功加载 {len(problems)} 个产业难题")
     except FileNotFoundError:
         print("  错误：找不到产业难题文件")
@@ -130,9 +137,9 @@ async def main():
 
     # 选择少量论文进行测试
     import glob
-    paper_dir = "专利"
-    paper_type = "专利"
-    paper_files = glob.glob(f"new_data/{paper_dir}/*.json")
+    paper_dir = "中文文献"
+    paper_type = "论文"
+    paper_files = glob.glob(f"new_data/{paper_dir}/*.json")[:10]
 
     if not paper_files:
         print(f"错误：在 {paper_dir} 中找不到论文文件")
@@ -149,12 +156,12 @@ async def main():
     successful_results = [r for r in results if r is not None]
     print(f"\n成功处理 {len(successful_results)} 篇论文")
 
-    score_matrix, paper_titles = scorer.get_all_scores_matrix()
-    score_matrix = np.array(score_matrix, dtype = int)
-    # pass
-    plot_heatmap(score_matrix, 
-                 paper_names=paper_titles,
-                 save_path=f"{paper_dir}_heatmap.png")
+    # score_matrix, paper_titles = scorer.get_all_scores_matrix()
+    # score_matrix = np.array(score_matrix, dtype = int)
+    # # pass
+    # plot_heatmap(score_matrix, 
+    #              paper_names=paper_titles,
+    #              save_path=f"{paper_dir}_heatmap.png")
 
     # 测试排名功能
     # print("\n" + "="*60)
