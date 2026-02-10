@@ -491,19 +491,47 @@ class Scorer:
 
         return result
 
-    async def process_paper(self, paper_path: str, paper_type: str = "论文") -> Dict[str, Any]:
+    async def process_paper(
+        self,
+        paper_path: str,
+        paper_type: str = "论文",
+        use_cache: bool = True
+    ) -> Dict[str, Any]:
         """
         处理单篇论文的完整流程
 
         Args:
             paper_path: 论文文件路径
             paper_type: 论文类型
+            use_cache: 是否使用缓存（默认为True）
 
         Returns:
             处理结果
         """
         # 加载论文
         paper = await self.load_paper(paper_path, paper_type=paper_type)
+
+        # === 缓存检查：避免重复处理 ===
+        _from_cache = False
+        if use_cache:
+            valid_title = paper.title.replace('/', '_')
+            cache_file = f"match_res/{valid_title}.json"
+            if os.path.exists(cache_file):
+                try:
+                    with open(cache_file, 'r', encoding='utf-8') as f:
+                        cached = json.load(f)
+                    if cached.get("paper_title") == paper.title:
+                        cached["_from_cache"] = True
+                        return cached
+                except (json.JSONDecodeError, IOError):
+                    pass  # 缓存文件损坏，忽略并继续处理
+        else:
+            # 不使用缓存时，删除已有缓存确保重新处理
+            valid_title = paper.title.replace('/', '_')
+            cache_file = f"match_res/{valid_title}.json"
+            if os.path.exists(cache_file):
+                os.remove(cache_file)
+        # =================================
 
         # 匹配论文与产业难题
         match_results = await self.match_paper_to_problems(paper)
@@ -514,7 +542,8 @@ class Scorer:
                 # "paper_id": paper.paper_id,
                 "paper_title": paper.title,
                 "matched": False,
-                "matched_problems": {},
+                "matched_problems": [],
+                "_from_cache": False,
                 # "metric_results": {}
             }
 
@@ -552,7 +581,8 @@ class Scorer:
         matched_problems = []
         for score in score_results:
             pid = score.get("problem_id")
-            if pid is not None:
+            p_score = score.get("p_score", {}).get("value", 0) # 过滤为匹配度评分为 0 的难题
+            if pid is not None and p_score > 0:
                 score.pop("problem_id", None)  # 从score中移除problem_id字段
                 score.pop("total_score", None)  # 如果不需要在最终结果中展示total_score，可以选择移除
                 matched_problems.append({
@@ -562,12 +592,22 @@ class Scorer:
                     "score": score,                    
                     }
                 )
+        
+        if not matched_problems:
+            return {
+                # "paper_id": paper.paper_id,
+                "paper_title": paper.title,
+                "matched": False,
+                "matched_problems": [],
+                "_from_cache": False,
+            }
 
         result = {
             # "paper_id": paper.paper_id,
             "paper_title": paper.title,
             "matched": True,
             "matched_problems": matched_problems,
+            "_from_cache": False,
         }
 
         return result
